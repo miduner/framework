@@ -15,12 +15,16 @@
         "php": ">=7.0.1"
     },
     "autoload": {
+        "classmap": [
+            "database"
+        ],
         "files": [
             "src/Midun/Helpers/common.php",
             "src/Midun/Helpers/view.php"
         ],
         "psr-4": {
-            "Midun\\": "src/Midun/"
+            "Midun\\": "src/Midun/",
+            "App\\": "app/"
         }
     },
     "require-dev": {
