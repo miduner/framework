@@ -29,7 +29,9 @@ class Application
      */
     public function __construct()
     {
-        $this->config = \Midun\Container::getInstance()->make('config');
+        $this->config = \Midun\Container::getInstance()->make(\Midun\Configuration\Config::class);
+
+        new AliasLoader();
     }
 
     /**
