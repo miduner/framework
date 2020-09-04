@@ -37,7 +37,12 @@ class Kernel
     public function __construct()
     {
         $this->app = Container::getInstance();
+
         $this->bindingMiddlewares();
+
+        $application = $this->app->make(Application::class);
+
+        $application->run();
     }
 
     /**
@@ -71,12 +76,8 @@ class Kernel
     protected function dispatchToRouter()
     {
         return function () {
-            $application = $this->app->make(Application::class);
-
-            $application->run();
-
             $route = new Route;
-            
+
             return $route->run();
         };
     }
