@@ -73,7 +73,7 @@ class View
      */
     public function getDirectory()
     {
-        return $this->directory;
+        return str_replace("/", DIRECTORY_SEPARATOR, $this->directory);
     }
 
     /**
@@ -83,7 +83,7 @@ class View
      */
     public function getCachingDirectory()
     {
-        return $this->cacheDirectory;
+        return str_replace("/", DIRECTORY_SEPARATOR, $this->cacheDirectory);
     }
 
     /**
