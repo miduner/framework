@@ -23,6 +23,7 @@ use Midun\Console\Commands\Config\ConfigClearCommand;
 use Midun\Console\Commands\Make\MakeMigrationCommand;
 use Midun\Contracts\Console\Kernel as KernelContract;
 use Midun\Console\Commands\Make\MakeControllerCommand;
+use Midun\Console\Commands\Storage\StorageLinkCommand;
 use Midun\Console\Commands\Schedule\ScheduleRunCommand;
 use Midun\Console\Commands\Migrate\MigrateRollbackCommand;
 
@@ -82,7 +83,8 @@ class Kernel implements KernelContract
         ListOfCommand::class,
         ConfigCacheCommand::class,
         ViewClearCommand::class,
-        ConfigClearCommand::class
+        ConfigClearCommand::class,
+        StorageLinkCommand::class
     ];
 
     /**
