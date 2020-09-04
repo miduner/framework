@@ -1,0 +1,31 @@
+{
+    "name": "miduner/miduner",
+    "type": "framework",
+    "description": "Your package description goes here",
+    "keywords": ["miduner","framework","hustle","command", "command push", "laravel"],
+    "homepage": "https://github.com/danganh97",
+    "license": "None",
+    "authors": [
+        {
+            "name": "Vo Dang Anh",
+            "email": "danganh.dev@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.1"
+    },
+    "autoload": {
+        "files": [
+            "src/Midun/Helpers/common.php",
+            "src/Midun/Helpers/view.php"
+        ],
+        "psr-4": {
+            "Midun\\": "src/Midun/"
+        }
+    },
+    "require-dev": {
+        "firebase/php-jwt": "@dev"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
