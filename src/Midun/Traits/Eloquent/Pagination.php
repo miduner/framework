@@ -16,16 +16,81 @@ trait Pagination
      */
     public function paginate($perPage = null, $columns = null)
     {
-        $this->columns = $columns === null ? $this->columns : $columns;
-        $this->isPagination = true;
-        $perPage = $perPage === null ? config('settings.pagination') : $perPage;
+        $this->setColumns($columns);
+        $this->makePagination(true);
+
+        $perPage = $this->getPerPage($perPage);
         $pageUrl = $this->getPageUrl();
-        $total = $this->getTotalParentResources($this->getFullSql());
+
+        $total = $this->getTotalParentResources(
+            $this->getFullSql()
+        );
+
         $currentPage = Paginator::resolveCurrentPage();
-        $skip = (int) $currentPage == 1 ? 0 : ($currentPage - 1) * $perPage;
+
+        $skip = $this->getSkip(
+            $currentPage,
+            $perPage
+        );
+
         $this->take($perPage);
         $this->skip($skip);
-        return $this->makeRequest($pageUrl, $total, $currentPage, $perPage);
+
+        return $this->makeRequest(
+            $pageUrl,
+            $total,
+            $currentPage,
+            $perPage
+        );
+    }
+
+    /**
+     * Get skip
+     * 
+     * @param int $currentPage
+     * @param int $perPage
+     * 
+     * @return int
+     */
+    public function getSkip(int $currentPage, int $perPage)
+    {
+        return (int) $currentPage == 1 ? 0 : ($currentPage - 1) * $perPage;
+    }
+
+    /**
+     * Get per page pagination
+     * 
+     * @param int $perPage
+     * 
+     * @return int
+     */
+    public function getPerPage(int $perPage)
+    {
+        return $perPage === null ? config('settings.pagination') : $perPage;
+    }
+
+    /**
+     * Make pagination request
+     * 
+     * @param bool $status
+     * 
+     * @return void
+     */
+    public function makePagination(bool $status)
+    {
+        $this->isPagination = $status;
+    }
+
+    /**
+     * Set selecting columns
+     * 
+     * @param null|array
+     * 
+     * @return array
+     */
+    public function setColumns($columns)
+    {
+        $this->columns = $columns === null ? $this->columns : $columns;
     }
 
     /**
@@ -59,6 +124,8 @@ trait Pagination
 
     /**
      * Get page url from parameters
+     * 
+     * @return string
      */
     private function getPageUrl()
     {
@@ -71,6 +138,10 @@ trait Pagination
 
     /**
      * Get parent resources
+     * 
+     * @param string $sql
+     * 
+     * @return int
      */
     private function getTotalParentResources(string $sql)
     {
