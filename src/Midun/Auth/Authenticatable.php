@@ -175,9 +175,10 @@ class Authenticatable implements Authentication
         $this->object = $user;
 
         $guardDriver = config("auth.guards.{$this->guard}.driver");
+
         switch ($guardDriver) {
             case 'session':
-                Session::put('user', $this->object);
+                Session::set('user', $this->object);
                 break;
         }
         return true;
