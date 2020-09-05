@@ -123,7 +123,7 @@ class View
         if (false == is_dir($cacheDirectory)) {
             $dir = '';
             foreach (explode(DIRECTORY_SEPARATOR, $cacheDirectory) as $k => $f) {
-                $dir .= DIRECTORY_SEPARATOR . $f;
+                $dir .= $f . DIRECTORY_SEPARATOR;
                 if (false === is_dir($dir)) {
                     mkdir($dir);
                 }
@@ -164,17 +164,16 @@ class View
 
         foreach ($tickets as $f) {
             if ($f != '') {
-                $cacheDirectory .= DIRECTORY_SEPARATOR . $f;
+                $cacheDirectory .= $f . DIRECTORY_SEPARATOR;
             }
             if (!is_dir($cacheDirectory)) {
                 mkdir($cacheDirectory);
-                $cacheDirectory .= DIRECTORY_SEPARATOR;
             }
         }
         if (false == is_dir($cacheDirectory)) {
             mkdir($cacheDirectory);
         }
-        $cacheFilePath = $cacheDirectory . DIRECTORY_SEPARATOR . $file;
+        $cacheFilePath = $cacheDirectory . $file;
 
         $cacheFile = fopen($cacheFilePath, "w") or die("Unable to open file!");
         fwrite($cacheFile, $viewData);
