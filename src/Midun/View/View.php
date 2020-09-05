@@ -54,6 +54,26 @@ class View
     protected $sections = [];
 
     /**
+     * List of php start tags
+     * 
+     * @var array
+     */
+    const START_TAGS = [
+        "{{",
+        "@php"
+    ];
+
+    /**
+     * List of php end tags
+     * 
+     * @var array
+     */
+    const END_TAGS = [
+        "}}",
+        "@endphp"
+    ];
+
+    /**
      * Initial constructor of views
      * 
      * @param string $directory
@@ -111,7 +131,7 @@ class View
             ? str_replace('.php', '', $file)
             : $file;
 
-        $file = str_replace('.', '/', $file) . '.php';
+        $file = str_replace('.', DIRECTORY_SEPARATOR, $file) . '.php';
 
         $viewPath = $this->getDirectory() . DIRECTORY_SEPARATOR . $file;
         if (!file_exists($viewPath)) {
@@ -131,10 +151,13 @@ class View
         }
 
         $viewData = file_get_contents($viewPath);
-        $viewData = str_replace('{{', '<?php', $viewData);
-        $viewData = str_replace('}}', '?>', $viewData);
-        $viewData = str_replace('@php', '<?php', $viewData);
-        $viewData = str_replace('@endphp', '?>', $viewData);
+
+        foreach (self::START_TAGS as $tag) {
+            $viewData = str_replace($tag, '<?php', $viewData);
+        }
+        foreach (self::END_TAGS as $tag) {
+            $viewData = str_replace($tag, '?>', $viewData);
+        }
 
         $newViewData = [];
 

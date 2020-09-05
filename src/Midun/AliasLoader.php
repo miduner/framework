@@ -4,12 +4,24 @@ namespace Midun;
 
 class AliasLoader
 {
+    /**
+     * Initial miduner alias loader
+     * 
+     * @method aliasLoader()
+     */
     public function __construct()
     {
         spl_autoload_register([$this, 'aliasLoader']);
     }
 
-    public function aliasLoader($class)
+    /**
+     * Listen loading classes
+     * 
+     * @param string $class
+     * 
+     * @return void|bool
+     */
+    public function aliasLoader(string $class)
     {
         $alias = config('app.aliases');
 
