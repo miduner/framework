@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "php": ">=7.0.1"
+        "php": ">=7.0.1",
+        "firebase/php-jwt": "@dev"
     },
     "autoload": {
         "files": [
@@ -23,9 +24,6 @@
             "Midun\\": "src/Midun/",
             "App\\": "app/"
         }
-    },
-    "require-dev": {
-        "firebase/php-jwt": "@dev"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
