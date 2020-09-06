@@ -21,11 +21,11 @@ class Compile
     /**
      * Compile select columns
      * 
-     * @param array $columns
+     * @param array|null $columns
      * 
      * @return string
      */
-    public function compileColumns(array $columns)
+    public function compileColumns($columns)
     {
         return is_array($columns) ? implode(', ', $columns) : '*';
     }

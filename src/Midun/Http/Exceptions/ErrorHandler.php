@@ -1,11 +1,11 @@
 <?php
 
-namespace Midun\Exceptions;
+namespace Midun\Http\Exceptions;
 
 use Midun\Application;
 use Midun\Container;
 
-class Handler
+class ErrorHandler
 {
     private $log;
 

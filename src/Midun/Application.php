@@ -3,6 +3,7 @@
 namespace Midun;
 
 use Midun\Traits\Instance;
+use Midun\Http\Exceptions\ErrorHandler;
 
 class Application
 {
@@ -32,6 +33,8 @@ class Application
         $this->config = \Midun\Container::getInstance()->make(\Midun\Configuration\Config::class);
 
         new AliasLoader();
+
+        register_shutdown_function([$this, 'whenShutDown']);
     }
 
     /**
@@ -111,4 +114,15 @@ class Application
      */
     public function terminate()
     { }
+
+    /**
+     * Set error handler
+     * 
+     * @return void
+     */
+    public function whenShutDown()
+    {
+        $handler = \Midun\Container::getInstance()->make(ErrorHandler::class);
+        set_error_handler([$handler, 'errorHandler']);
+    }
 }
