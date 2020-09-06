@@ -46,7 +46,7 @@ class Authenticatable implements Authentication
      *
      * @return boolean
      */
-    public function attempt($options = [])
+    public function attempt(array $options = [])
     {
         $model = new $this->model;
         $columnPassword = $model->password();
