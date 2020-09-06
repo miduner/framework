@@ -187,7 +187,7 @@ class View
 
         foreach ($tickets as $f) {
             if ($f != '') {
-                $cacheDirectory .= $f . DIRECTORY_SEPARATOR;
+                $cacheDirectory .= DIRECTORY_SEPARATOR . $f;
             }
             if (!is_dir($cacheDirectory)) {
                 mkdir($cacheDirectory);
@@ -196,7 +196,7 @@ class View
         if (false == is_dir($cacheDirectory)) {
             mkdir($cacheDirectory);
         }
-        $cacheFilePath = $cacheDirectory . $file;
+        $cacheFilePath = $cacheDirectory . DIRECTORY_SEPARATOR . $file;
 
         $cacheFile = fopen($cacheFilePath, "w") or die("Unable to open file!");
         fwrite($cacheFile, $viewData);

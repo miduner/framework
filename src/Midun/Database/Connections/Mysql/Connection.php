@@ -20,7 +20,9 @@ class Connection
 
     public function __construct()
     {
-        $this->driver = config('database.default');
+        $this->setDriver(
+            $this->getDefaultDriver()
+        );
     }
 
     /**
@@ -28,12 +30,12 @@ class Connection
      */
     public function getConfig()
     {
-        $driver = config("database.connections.{$this->driver}.driver");
-        $host = config("database.connections.{$this->driver}.host");
-        $port = config("database.connections.{$this->driver}.port");
-        $database = config("database.connections.{$this->driver}.database");
-        $username = config("database.connections.{$this->driver}.username");
-        $password = config("database.connections.{$this->driver}.password");
+        $driver = $this->getConnectInfo('driver');
+        $host = $this->getConnectInfo('host');
+        $port = $this->getConnectInfo('port');
+        $database = $this->getConnectInfo('database');
+        $username = $this->getConnectInfo('username');
+        $password = $this->getConnectInfo('password');
         return [
             $driver,
             $host,
@@ -105,5 +107,37 @@ class Connection
             $this->makeInstance();
         }
         return $this->instance;
+    }
+
+    /**
+     * Get driver
+     * 
+     * @return string
+     */
+    protected function driver()
+    {
+        return $this->driver;
+    }
+
+    /**
+     * Get default driver
+     * 
+     * @return string
+     */
+    protected function getDefaultDriver()
+    {
+        return config('database.default');
+    }
+
+    /**
+     * Get connect driver
+     * 
+     * @param string $info
+     * 
+     * @return string
+     */
+    protected function getConnectInfo(string $info)
+    {
+        return config("database.connections.{$this->driver()}.{$info}");
     }
 }

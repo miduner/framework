@@ -55,7 +55,7 @@ class ConfigCacheCommand extends Command
         (new ConfigClearCommand)->handle();
 
         (new Kernel)->handle([
-            Kernel::FRAMEWORK_TYPE, (new ViewClearCommand)->getSignature()
+            (new ViewClearCommand)->getSignature()
         ]);
     }
 }

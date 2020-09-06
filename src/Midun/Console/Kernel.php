@@ -94,11 +94,7 @@ class Kernel implements KernelContract
     {
         global $argv;
 
-        $type = array_shift($argv);
-
-        if (Kernel::FRAMEWORK_TYPE !== $type) {
-            exit(1);
-        }
+        array_shift($argv);
 
         if (Kernel::FRAMEWORK_TYPE === end($argv)) array_push($argv, 'list');
 

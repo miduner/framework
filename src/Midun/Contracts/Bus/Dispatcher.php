@@ -10,5 +10,5 @@ interface Dispatcher
      * @param  mixed  $job
      * @return mixed
      */
-    public function dispatch($job);
+    public function dispatch(\Midun\Queues\Queue $job);
 }
