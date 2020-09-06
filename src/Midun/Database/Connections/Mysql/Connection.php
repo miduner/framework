@@ -4,54 +4,18 @@ namespace Midun\Database\Connections\Mysql;
 
 use \PDO;
 use \PDOException;
-use Midun\Database\Connections\Mysql\MysqlPdo;
+use Midun\Database\Connections\Connection as MidunConnection;
 
-class Connection
+class Connection extends MidunConnection
 {
     /**
-     * Driver database connection
-     */
-    private $driver;
-
-    /**
-     * Instance of connection
-     */
-    private $instance;
-
-    public function __construct()
-    {
-        $this->setDriver(
-            $this->getDefaultDriver()
-        );
-    }
-
-    /**
-     * Get list configuration from cache file
-     */
-    public function getConfig()
-    {
-        $driver = $this->getConnectInfo('driver');
-        $host = $this->getConnectInfo('host');
-        $port = $this->getConnectInfo('port');
-        $database = $this->getConnectInfo('database');
-        $username = $this->getConnectInfo('username');
-        $password = $this->getConnectInfo('password');
-        return [
-            $driver,
-            $host,
-            $port,
-            $database,
-            $username,
-            $password,
-        ];
-    }
-
-    /**
      * Reset driver
+     * 
+     * @param string $driver
      *
      * @return void
      */
-    public function setDriver($driver)
+    public function setDriver(string $driver)
     {
         $connections = config("database.connections");
         if (!isset($connections[$driver])) {
@@ -82,7 +46,7 @@ class Connection
      *
      * @return void
      */
-    private function makeInstance()
+    public function makeInstance()
     {
         try {
             list($driver, $host, $port, $database, $username, $password) = $this->getConfig();
@@ -94,50 +58,5 @@ class Connection
         } catch (PDOException $e) {
             throw new MysqlConnectionException($e->getMessage());
         }
-    }
-
-    /**
-     * Get the connection
-     *
-     * @return \PDOInstance
-     */
-    public function getConnection()
-    {
-        if (!$this->instance) {
-            $this->makeInstance();
-        }
-        return $this->instance;
-    }
-
-    /**
-     * Get driver
-     * 
-     * @return string
-     */
-    protected function driver()
-    {
-        return $this->driver;
-    }
-
-    /**
-     * Get default driver
-     * 
-     * @return string
-     */
-    protected function getDefaultDriver()
-    {
-        return config('database.default');
-    }
-
-    /**
-     * Get connect driver
-     * 
-     * @param string $info
-     * 
-     * @return string
-     */
-    protected function getConnectInfo(string $info)
-    {
-        return config("database.connections.{$this->driver()}.{$info}");
     }
 }

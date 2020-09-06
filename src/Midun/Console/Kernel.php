@@ -118,7 +118,6 @@ class Kernel implements KernelContract
     {
         $argv = empty($argv) ? $this->argv() : $argv;
         $type = strtolower(array_shift($argv));
-
         foreach ($this->all() as $command) {
 
             $command = $this->app->make($command);

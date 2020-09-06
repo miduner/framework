@@ -44,7 +44,7 @@ class Authenticatable implements Authentication
      *
      * @param array $options
      *
-     * @return bool
+     * @return boolean
      */
     public function attempt($options = [])
     {

@@ -134,6 +134,7 @@ class View
         $file = str_replace('.', DIRECTORY_SEPARATOR, $file) . '.php';
 
         $viewPath = $this->getDirectory() . DIRECTORY_SEPARATOR . $file;
+
         if (!file_exists($viewPath)) {
             throw new ViewException("View {$file} not found.");
         }

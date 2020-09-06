@@ -4,51 +4,18 @@ namespace Midun\Database\Connections\PostgreSQL;
 
 use \PDO;
 use \PDOException;
+use Midun\Database\Connections\Connection as MidunConnection;
 
-class Connection
+class Connection extends MidunConnection
 {
     /**
-     * Driver database connection
-     */
-    private $driver;
-
-    /**
-     * Instance of connection
-     */
-    private $instance;
-
-    public function __construct()
-    {
-        $this->driver = config('database.default');
-    }
-
-    /**
-     * Get list configuration from cache file
-     */
-    public function getConfig()
-    {
-        $driver = config("database.connections.{$this->driver}.driver");
-        $host = config("database.connections.{$this->driver}.host");
-        $port = config("database.connections.{$this->driver}.port");
-        $database = config("database.connections.{$this->driver}.database");
-        $username = config("database.connections.{$this->driver}.username");
-        $password = config("database.connections.{$this->driver}.password");
-        return [
-            $driver,
-            $host,
-            $port,
-            $database,
-            $username,
-            $password,
-        ];
-    }
-
-    /**
      * Reset driver
+     * 
+     * @param string $driver
      *
      * @return void
      */
-    public function setDriver($driver)
+    public function setDriver(string $driver)
     {
         $connections = config("database.connections");
         if (!isset($connections[$driver])) {
@@ -69,6 +36,7 @@ class Connection
             new PostgrePdo("$driver:host=$host;port=$port;dbname=$database", $username, $password, null);
             return true;
         } catch (PDOException $e) {
+            new PostgreConnectionException($e->getMessage());
             return false;
         }
     }
@@ -78,7 +46,7 @@ class Connection
      *
      * @return void
      */
-    private function makeInstance()
+    public function makeInstance()
     {
         try {
             list($driver, $host, $port, $database, $username, $password) = $this->getConfig();
@@ -90,18 +58,5 @@ class Connection
         } catch (PDOException $e) {
             throw new PostgreConnectionException($e->getMessage());
         }
-    }
-
-    /**
-     * Get the connection
-     *
-     * @return \PDOInstance
-     */
-    public function getConnection()
-    {
-        if (!$this->instance) {
-            $this->makeInstance();
-        }
-        return $this->instance;
     }
 }
