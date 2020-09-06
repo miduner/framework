@@ -5,6 +5,13 @@ namespace Midun\Logger;
 class Logger
 {
     /**
+     * File system
+     * 
+     * @var Midun\FileSystem\FileSystem
+     */
+    protected $fileSystem;
+
+    /**
      * Log directory
      * 
      * @var string
@@ -23,7 +30,11 @@ class Logger
      */
     public function __construct(string $directory = null)
     {
-        $this->directory = $directory;
+        if (!is_null($directory)) $this->setDirectory($directory);
+
+        $this->setFileSystem(
+            \Midun\Container::getInstance()->make('fileSystem')
+        );
     }
 
     /**
@@ -73,6 +84,28 @@ class Logger
     }
 
     /**
+     * Set file system
+     * 
+     * @param \Midun\FileSystem\FileSystem $fileSystem
+     * 
+     * @return void
+     */
+    protected function setFileSystem(\Midun\FileSystem\FileSystem $fileSystem)
+    {
+        $this->fileSystem = $fileSystem;
+    }
+
+    /**
+     * Get file system
+     * 
+     * @return \Midun\FileSystem\FileSystem
+     */
+    protected function getFileSystem()
+    {
+        return $this->fileSystem;
+    }
+
+    /**
      * Write down log message
      * 
      * @param string $level
@@ -85,19 +118,17 @@ class Logger
     public function writeLog($level, $message, $directory = null, $fileName = null, $byDate = null)
     {
         $directory = !is_null($directory) ? $directory : $this->getDirectory();
-
         $byDate = !is_null($byDate) ? $byDate : $this->isLogByDate();
-
         $time = date('Y-m-d H:i:s');
-
         $fileName = !is_null($fileName) ? $fileName : 'application';
-
         $file = $byDate ? $fileName . '-' . date('Y-m-d') . '.log' : $fileName . '.log';
 
-        return file_put_contents(
-            $directory . DIRECTORY_SEPARATOR . $file,
-            "[{$level}] [{$time}] {$message}" . PHP_EOL,
-            FILE_APPEND | LOCK_EX
+        $endPoint = $directory . DIRECTORY_SEPARATOR . $file;
+        $message = "[{$level}] [{$time}] {$message}" . PHP_EOL;
+
+        return $this->getFileSystem()->append(
+            $endPoint,
+            $message
         );
     }
 

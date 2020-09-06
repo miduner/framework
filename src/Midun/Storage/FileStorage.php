@@ -98,7 +98,7 @@ class FileStorage
 
         $this->size = $stat['size'];
 
-        $this->sizeString = $this->format_bytes($this->size);
+        $this->sizeString = $this->formatBytes($this->size);
 
         $this->atime = $stat['atime'];
 
@@ -110,7 +110,7 @@ class FileStorage
      * 
      * @return string
      */
-    private function format_bytes(int $size)
+    private function formatBytes(int $size)
     {
         $base = log($size, 1024);
         $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
