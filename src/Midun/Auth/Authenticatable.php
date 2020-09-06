@@ -44,7 +44,7 @@ class Authenticatable implements Authentication
      *
      * @param array $options
      *
-     * @return boolean
+     * @return bool
      */
     public function attempt($options = [])
     {
@@ -74,16 +74,18 @@ class Authenticatable implements Authentication
      */
     public function user()
     {
-        $guardDriver = config("auth.guards.{$this->guard}.driver");
+        if (!is_null($this->getObject())) {
+            return $this->getObject();
+        }
+
+        $guardDriver = $this->getConfigDriverFromGuard(
+            $this->getCurrentGuard()
+        );
 
         switch ($guardDriver) {
             case 'session':
                 return Session::get('user');
             case 'jwt':
-                if (!is_null($this->object)) {
-                    return $this->object;
-                }
-
                 $key = config('jwt.secret');
 
                 $hash = config('jwt.hash');
@@ -116,7 +118,12 @@ class Authenticatable implements Authentication
                     return $modelObject;
                 } catch (\Firebase\JWT\ExpiredException $e) {
                     throw new AuthenticationException($e->getMessage());
+                } catch (\Firebase\JWT\SignatureInvalidException $e) {
+                    throw new AuthenticationException($e->getMessage());
                 }
+                break;
+            default:
+                throw new AuthenticationException('Unknown authentication');
         }
     }
 
@@ -139,7 +146,10 @@ class Authenticatable implements Authentication
      */
     public function logout()
     {
-        $guardDriver = config("auth.guards.{$this->guard}.driver");
+        $guardDriver = $this->getConfigDriverFromGuard(
+            $this->getCurrentGuard()
+        );
+
         switch ($guardDriver) {
             case 'session':
                 return Session::unset('user');
@@ -172,14 +182,20 @@ class Authenticatable implements Authentication
      */
     private function setUserAuth(Model $user)
     {
-        $this->object = $user;
+        $this->setObject($user);
 
-        $guardDriver = config("auth.guards.{$this->guard}.driver");
+        $guardDriver = $this->getConfigDriverFromGuard(
+            $this->getCurrentGuard()
+        );
 
         switch ($guardDriver) {
             case 'session':
-                Session::set('user', $this->object);
+                Session::set('user', $this->getObject());
                 break;
+            case 'jwt':
+                break;
+            default:
+                throw new AuthenticationException("Unknown authentication");
         }
         return true;
     }
@@ -187,16 +203,113 @@ class Authenticatable implements Authentication
     /**
      * Set guard for authentication
      *
-     * @param string $name
+     * @param string $guard
      *
      * @return $this
      */
-    public function guard($name = null)
+    public function guard($guard = null)
     {
-        $this->guard = $name ?: $this->getDefaultGuard();
-        $this->provider = config("auth.guards.{$this->guard}.provider");
-        $this->model = config("auth.providers.{$this->provider}.model");
+        if (is_null($guard)) {
+            $guard = $this->getDefaultGuard();
+        }
+
+        $this->setGuard($guard);
+
+        $guard = $this->getCurrentGuard();
+
+        $this->setProvider(
+            $this->getConfigProviderFromGuard($guard)
+        );
+
+        $provider = $this->getProvider();
+
+        $this->setModel(
+            $this->getConfigModelFromProvider($provider)
+        );
+
         return $this;
+    }
+
+    /**
+     * Get configuration model from provider
+     * 
+     * @param string $provider
+     * 
+     * @return string
+     */
+    protected function getConfigModelFromProvider(string $provider)
+    {
+        return config("auth.providers.{$provider}.model");
+    }
+
+    /**
+     * Get configuration provider from guard
+     * 
+     * @param string $guard
+     * 
+     * @return string
+     */
+    protected function getConfigProviderFromGuard(string $guard)
+    {
+        return config("auth.guards.{$guard}.provider");
+    }
+
+    /**
+     * Get configuration provider from guard
+     * 
+     * @param string $guard
+     * 
+     * @return string
+     */
+    protected function getConfigDriverFromGuard(string $guard)
+    {
+        return config("auth.guards.{$guard}.driver");
+    }
+
+    /**
+     * Set model name
+     * 
+     * @param string $model
+     * 
+     * @return void
+     */
+    protected function setModel(string $model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * Get current provider
+     * 
+     * @return string
+     */
+    protected function getProvider()
+    {
+        return $this->provider;
+    }
+
+    /**
+     * Set provider
+     * 
+     * @param string $provider
+     * 
+     * @return void
+     */
+    public function setProvider(string $provider)
+    {
+        $this->provider = $provider;
+    }
+
+    /**
+     * Set guard
+     * 
+     * @param string $guard
+     * 
+     * @return void
+     */
+    public function setGuard(string $guard)
+    {
+        $this->guard = $guard;
     }
 
     /**
@@ -217,5 +330,27 @@ class Authenticatable implements Authentication
     public function getCurrentGuard()
     {
         return $this->guard;
+    }
+
+    /**
+     * Set object
+     * 
+     * @param object $object
+     * 
+     * @return void
+     */
+    protected function setObject(Model $object)
+    {
+        $this->object = $object;
+    }
+
+    /**
+     * Get current object bound
+     * 
+     * @return null|object
+     */
+    protected function getObject()
+    {
+        return $this->object;
     }
 }
