@@ -6,21 +6,49 @@ use Midun\Eloquent\Model;
 
 class Compile
 {
-    public function compileSelect($distinct)
+    /**
+     * Compile select distinct
+     * 
+     * @param bool $distinct
+     * 
+     * @return string
+     */
+    public function compileSelect(bool $distinct)
     {
         return $distinct ? "SELECT DISTINCT " : "SELECT ";
     }
 
-    public function compileColumns($columns)
+    /**
+     * Compile select columns
+     * 
+     * @param array $columns
+     * 
+     * @return string
+     */
+    public function compileColumns(array $columns)
     {
         return is_array($columns) ? implode(', ', $columns) : '*';
     }
 
-    public function compileFrom($table)
+    /**
+     * Compile from
+     * 
+     * @param string $table
+     * 
+     * @return string
+     */
+    public function compileFrom(string $table)
     {
         return " FROM {$table}";
     }
 
+    /**
+     * Compile join
+     * 
+     * @param array $joins
+     * 
+     * @return string
+     */
     public function compileJoins(array $joins)
     {
         foreach ($joins as $join) {
@@ -43,6 +71,13 @@ class Compile
         return $sql;
     }
 
+    /**
+     * Compile where
+     * 
+     * @param array $wheres
+     * 
+     * @return string
+     */
     public function compileWheres(array $wheres)
     {
         $sql = " WHERE";
@@ -89,12 +124,26 @@ class Compile
         return $sql;
     }
 
-    public function compileGroups($groups)
+    /**
+     * Compile group by
+     * 
+     * @param array $groups
+     * 
+     * @return string
+     */
+    public function compileGroups(array $groups)
     {
         $sql = " GROUP BY " . implode(', ', $groups);
         return $sql;
     }
 
+    /**
+     * Compile having
+     * 
+     * @param array $havings
+     * 
+     * @return string
+     */
     public function compileHavings(array $havings)
     {
         $sql = " HAVING";
@@ -107,6 +156,13 @@ class Compile
         return $sql;
     }
 
+    /**
+     * Compile order
+     * 
+     * @param array $orders
+     * 
+     * @return string
+     */
     public function compileOrders(array $orders)
     {
         $sql = " ORDER BY ";
@@ -119,17 +175,38 @@ class Compile
         return $sql;
     }
 
-    public function compileLimit($limit)
+    /**
+     * Compile limit
+     * 
+     * @param int $limit
+     * 
+     * @return string
+     */
+    public function compileLimit(int $limit)
     {
-        return ' LIMIT ' . (int) $limit;
+        return " LIMIT {$limit}";
     }
 
-    public function compileOffset($offset)
+    /**
+     * Compile offset
+     * 
+     * @param int $offset
+     * 
+     * @return string
+     */
+    public function compileOffset(int $offset)
     {
         return " OFFSET {$offset}";
     }
 
-    public function compileWhereIn($wherein)
+    /**
+     * Compile where in
+     * 
+     * @param array $wherein
+     * 
+     * @return string
+     */
+    public function compileWhereIn(array $wherein)
     {
         $array = explode(", ", $wherein[1]);
         foreach ($array as $key => $arr) {
@@ -143,6 +220,14 @@ class Compile
         return " WHERE {$wherein[0]} IN ({$string})";
     }
 
+    /**
+     * Compile insert
+     * 
+     * @param string $table
+     * @param array $data
+     * 
+     * @return string
+     */
     public function compileInsert($table, array $data)
     {
         $columns = [];
@@ -159,6 +244,17 @@ class Compile
         return "INSERT INTO $table($columns) VALUES ($values)";
     }
 
+    /**
+     * Compile create
+     * 
+     * @param Model $model
+     * @param array $fillable
+     * @param array $data
+     * 
+     * @return string
+     * 
+     * @throws QueryException
+     */
     public function compileCreate(Model $model, array $fillable, array $data)
     {
         try {
@@ -185,20 +281,26 @@ class Compile
         }
     }
 
-    public function compileLogin($table, array $cre)
-    {
-        foreach ($cre as $key => $dt) {
-            $columns[] = $key;
-            $values[] = "'$dt'";
-        }
-        return "SELECT * FROM {$table} WHERE {$columns[0]} = {$values[0]} AND {$columns[1]} = {$values[1]} LIMIT 1";
-    }
-
+    /**
+     * Compile delete
+     * 
+     * @param string $table
+     * 
+     * @return string
+     */
     public function compileDelete($table)
     {
         return "DELETE FROM {$table}";
     }
 
+    /**
+     * Compile update
+     * 
+     * @param string $table
+     * @param array $arg
+     * 
+     * @return string
+     */
     public function compileUpdate($table, array $arg)
     {
         $sql = "UPDATE {$table} SET ";

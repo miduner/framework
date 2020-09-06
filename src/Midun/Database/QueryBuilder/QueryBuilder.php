@@ -117,21 +117,29 @@ class QueryBuilder
 
     /**
      * Fails throw Exception
+     * 
+     * @var bool
      */
     private $isThrow = false;
 
     /**
      * Flag checking pagination
+     * 
+     * @var bool
      */
     private $isPagination = false;
 
     /**
      * Count row execute
+     * 
+     * @var int
      */
     private $rowCount = 0;
 
     /**
      * Compile instance
+     * 
+     * @var Compile
      */
     private $compile;
 

@@ -6,86 +6,120 @@ class ColumnBuilder
 {
     /**
      * List of columns
+     * 
+     * @var array
      */
     public $columns = [];
 
     /**
      * Name of current column
+     * 
+     * @var string
      */
     public $name;
 
     /**
      * Length of current column
+     * 
+     * @var int
      */
     public $length;
 
     /**
      * Data type of current column
+     * 
+     * @var string
      */
     public $dataType;
 
     /**
      * Flag nullable of current column
+     * 
+     * @var bool
      */
     public $nullable = false;
 
     /**
      * Flag unsigned of current column
+     * 
+     * @var bool
      */
     public $unsigned = false;
 
     /**
      * Flag primary key of current column
+     * 
+     * @var bool
      */
     public $pk = false;
 
     /**
      * Flag is timestamps
+     * 
+     * @var bool
      */
     public $timestamps = false;
 
     /**
      * Flag auto increments of current column
+     * 
+     * @var bool
      */
     public $autoIncrement = false;
 
     /**
      * Default value of current column
+     * 
+     * @var string
      */
     public $default = '';
 
     /**
      * Comment of current column
+     * 
+     * @var string
      */
     public $comment = '';
 
     /**
      * Flag uni of current column
+     * 
+     * @var bool
      */
     public $unique = false;
 
     /**
      * Set column foreign
+     * 
+     * @var string
      */
     public $foreignKey;
 
     /**
      * Set column references
+     * 
+     * @var string
      */
     public $references;
 
     /**
      * Set table references
+     * 
+     * @var string
      */
     public $on;
 
     /**
      * Flag on update
+     * 
+     * @var bool
      */
     public $onUpdate;
 
     /**
      * Flag on delete
+     * 
+     * @var bool
      */
     public $onDelete;
 
@@ -151,6 +185,7 @@ class ColumnBuilder
 
     /**
      * Set column foreign key
+     * 
      * @param string $foreignKey
      *
      * @return ColumnBuilder
@@ -164,11 +199,12 @@ class ColumnBuilder
 
     /**
      * Set column references
+     * 
      * @param string $references
      *
      * @return ColumnBuilder
      */
-    public function references($references)
+    public function references(string $references)
     {
         $this->references = $references;
         return $this;
@@ -176,11 +212,12 @@ class ColumnBuilder
 
     /**
      * Set table reference
+     * 
      * @param string $table
      *
      * @return ColumnBuilder
      */
-    public function on($table)
+    public function on(string $table)
     {
         $this->on = $table;
         return $this;
@@ -188,11 +225,12 @@ class ColumnBuilder
 
     /**
      * Set type on update
+     * 
      * @param string $onUpdate
      *
      * @return ColumnBuilder
      */
-    public function onUpdate($onUpdate)
+    public function onUpdate(string $onUpdate)
     {
         $this->onUpdate = $onUpdate;
         return $this;
@@ -200,11 +238,12 @@ class ColumnBuilder
 
     /**
      * Set type on delete
+     * 
      * @param string $onDelete
      *
      * @return ColumnBuilder
      */
-    public function onDelete($onDelete)
+    public function onDelete(string $onDelete)
     {
         $this->onDelete = $onDelete;
         return $this;
@@ -212,11 +251,12 @@ class ColumnBuilder
 
     /**
      * Set boolean
+     * 
      * @param string $boolean
      *
      * @return ColumnBuilder
      */
-    public function boolean($column)
+    public function boolean(string $column)
     {
         $this->addColumn();
         $this->name = $column;
@@ -226,11 +266,12 @@ class ColumnBuilder
 
     /**
      * Set bit
+     * 
      * @param string $bit
      *
      * @return ColumnBuilder
      */
-    public function bit($column)
+    public function bit(string $column)
     {
         $this->addColumn();
         $this->name = $column;
@@ -240,12 +281,13 @@ class ColumnBuilder
 
     /**
      * Set big integer
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function bigInteger($column, $length = 20)
+    public function bigInteger(string $column, int $length = 20)
     {
         $this->addColumn();
         $this->name = $column;
@@ -256,12 +298,13 @@ class ColumnBuilder
 
     /**
      * Set small integer
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function smallInteger($column, $length = 20)
+    public function smallInteger(string $column, int $length = 20)
     {
         $this->addColumn();
         $this->name = $column;
@@ -272,12 +315,13 @@ class ColumnBuilder
 
     /**
      * Set medium integer
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function mediumInteger($column, $length = 20)
+    public function mediumInteger(string $column, int $length = 20)
     {
         $this->addColumn();
         $this->name = $column;
@@ -288,12 +332,13 @@ class ColumnBuilder
 
     /**
      * Set decimal
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function decimal($column, $length = null)
+    public function decimal(string $column, int $length = null)
     {
         $this->addColumn();
         $this->name = $column;
@@ -304,11 +349,12 @@ class ColumnBuilder
 
     /**
      * Set date
+     * 
      * @param string $column
      *
      * @return ColumnBuilder
      */
-    public function date($column)
+    public function date(string $column)
     {
         $this->addColumn();
         $this->name = $column;
@@ -318,11 +364,12 @@ class ColumnBuilder
 
     /**
      * Set date time
+     * 
      * @param string $column
      *
      * @return ColumnBuilder
      */
-    public function dateTime($column)
+    public function dateTime(string $column)
     {
         $this->addColumn();
         $this->name = $column;
@@ -332,11 +379,12 @@ class ColumnBuilder
 
     /**
      * Set timestamp
+     * 
      * @param string $column
      *
      * @return ColumnBuilder
      */
-    public function timestamp($column)
+    public function timestamp(string $column)
     {
         $this->addColumn();
         $this->name = $column;
@@ -350,7 +398,7 @@ class ColumnBuilder
      *
      * @return ColumnBuilder
      */
-    public function time($column)
+    public function time(string $column)
     {
         $this->addColumn();
         $this->name = $column;
@@ -360,11 +408,12 @@ class ColumnBuilder
 
     /**
      * Set year
+     * 
      * @param string $column
      *
      * @return ColumnBuilder
      */
-    public function year($column)
+    public function year(string $column)
     {
         $this->addColumn();
         $this->name = $column;
@@ -374,12 +423,13 @@ class ColumnBuilder
 
     /**
      * Set integer
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function integer($column, $length = 11)
+    public function integer(string $column, int $length = 11)
     {
         $this->addColumn();
         $this->name = $column;
@@ -390,12 +440,13 @@ class ColumnBuilder
 
     /**
      * Set tiny integer
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function tinyInteger($column, $length = 2)
+    public function tinyInteger(string $column, int $length = 2)
     {
         $this->addColumn();
         $this->name = $column;
@@ -418,12 +469,13 @@ class ColumnBuilder
 
     /**
      * Set big increments
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function bigIncrements($column = 'id', $length = 20)
+    public function bigIncrements(string $column = 'id', int $length = 20)
     {
         $this->addColumn();
         $this->name = $column;
@@ -436,12 +488,13 @@ class ColumnBuilder
 
     /**
      * Set increments
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function increments($column = 'id', $length = 11)
+    public function increments(string $column = 'id', int $length = 11)
     {
         $this->addColumn();
         $this->name = $column;
@@ -459,7 +512,7 @@ class ColumnBuilder
      *
      * @return ColumnBuilder
      */
-    public function string($column, $length = 255)
+    public function string(string $column, int $length = 255)
     {
         $this->addColumn();
         $this->name = $column;
@@ -470,12 +523,13 @@ class ColumnBuilder
 
     /**
      * Set text
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function text($column, $length = 1000)
+    public function text(string $column, int $length = 1000)
     {
         $this->addColumn();
         $this->name = $column;
@@ -486,12 +540,13 @@ class ColumnBuilder
 
     /**
      * Set long text
+     * 
      * @param string $column
      * @param integer $length
      *
      * @return ColumnBuilder
      */
-    public function longText($column, $length = null)
+    public function longText(string $column, int $length = null)
     {
         $this->addColumn();
         $this->name = $column;
@@ -513,11 +568,13 @@ class ColumnBuilder
 
     /**
      * Set default
+     * 
      * @param string $value
      *
      * @return ColumnBuilder
      */
-    function default(string $value) {
+    function default(string $value)
+    {
         $this->default = $value;
         return $this;
     }

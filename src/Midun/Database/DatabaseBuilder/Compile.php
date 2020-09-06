@@ -6,11 +6,14 @@ class Compile
 {
     /**
      * List of rows
+     * 
+     * @var array
      */
     public $rows = [];
 
     /**
      * Execute building columns
+     * 
      * @param array $columns
      * 
      * @return array

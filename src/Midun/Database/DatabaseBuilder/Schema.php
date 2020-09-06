@@ -10,12 +10,13 @@ class Schema
 
     /**
      * Handle call static
+     * 
      * @param string $method
      * @param array $arguments
      * 
      * @return void
      */
-    public static function __callStatic($method, $arguments)
+    public static function __callStatic(string $method, array $arguments)
     {
         switch ($method) {
             case 'create':
