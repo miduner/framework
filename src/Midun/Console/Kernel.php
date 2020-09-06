@@ -94,9 +94,15 @@ class Kernel implements KernelContract
     {
         global $argv;
 
+        $type = array_shift($argv);
+
+        if (Kernel::FRAMEWORK_TYPE !== $type) {
+            exit(1);
+        }
+
         if (Kernel::FRAMEWORK_TYPE === end($argv)) array_push($argv, 'list');
 
-        $this->argv = $argv;
+        $this->setArgv($argv);
 
         $this->app = Container::getInstance();
 
@@ -114,18 +120,14 @@ class Kernel implements KernelContract
      */
     public function handle(array $argv = [])
     {
-        $argv = empty($argv) ? $this->argv : $argv;
+        $argv = empty($argv) ? $this->argv() : $argv;
+        $type = strtolower(array_shift($argv));
 
         foreach ($this->all() as $command) {
 
             $command = $this->app->make($command);
 
-            $type = strtolower($argv[1]);
-
             if ($type == $command->getSignature() || in_array($type, $command->getOtherSignatures())) {
-                unset($argv[0]);
-                unset($argv[1]);
-
                 if (!empty($argv)) {
                     $command->setOptions(array_values($argv));
                 }
@@ -153,10 +155,13 @@ class Kernel implements KernelContract
                     }
                     $this->application->run();
                 }
+                $command->setArgv($this->argv);
+
                 return $command->handle();
             }
         }
-        $this->output->printError("Bash {$argv[1]} is not supported.");
+
+        $this->output->printError("Bash {$type} is not supported.");
     }
 
     /**
@@ -166,13 +171,9 @@ class Kernel implements KernelContract
      * 
      * @return void
      */
-    public function call(string $command, string $type = null, array $options = [])
+    public function call(string $command, array $options = [])
     {
         $command = $this->app->make($command);
-
-        if (!is_null($type)) {
-            $command->setType($type);
-        }
 
         if (!empty($options)) {
             $command->setOptions($options);
@@ -184,6 +185,7 @@ class Kernel implements KernelContract
             }
             $this->application->run();
         }
+        $command->getArgv($this->argv);
 
         return $command->handle();
     }
@@ -206,5 +208,25 @@ class Kernel implements KernelContract
     public function all()
     {
         return array_merge($this->commands, $this->appCommands);
+    }
+
+    /**
+     * Get argv
+     * 
+     * @return array
+     */
+    public function argv()
+    {
+        return $this->argv;
+    }
+
+    /**
+     * Set argv
+     * 
+     * @param array $argv
+     */
+    protected function setArgv(array $argv)
+    {
+        $this->argv = $argv;
     }
 }

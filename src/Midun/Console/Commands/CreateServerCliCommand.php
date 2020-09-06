@@ -49,7 +49,7 @@ class CreateServerCliCommand extends Command
         $host = '127.0.0.1';
         $port = '8000';
         $open = false;
-        foreach ($this->argv as $param) {
+        foreach ($this->argv() as $param) {
             if (strpos($param, '-h=') !== false || strpos($param, '--host=') !== false) {
                 $host = str_replace('--host=', '', $param);
             }

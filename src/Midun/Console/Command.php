@@ -22,13 +22,6 @@ abstract class Command implements CommandContract
     protected $description;
 
     /**
-     * Type of passed command
-     * 
-     * @var string
-     */
-    protected $type;
-
-    /**
      * Options in options
      * 
      * @var array
@@ -84,12 +77,10 @@ abstract class Command implements CommandContract
      */
     public function __construct()
     {
-        $this->output = new \Midun\Supports\ConsoleOutput;
-
         global $argv;
 
-        $this->argv = $argv;
-
+        $this->output = new \Midun\Supports\ConsoleOutput;
+        $this->setArgv($argv);
         $this->app = Container::getInstance();
     }
 
@@ -99,6 +90,26 @@ abstract class Command implements CommandContract
      * @return mixed
      */
     abstract public function handle();
+
+    /**
+     * Set argv
+     * 
+     * @param array $argv
+     */
+    public function setArgv($argv = [])
+    {
+        $this->argv = $argv;
+    }
+
+    /**
+     * Get argv
+     * 
+     * @return array
+     */
+    public function argv()
+    {
+        return $this->argv;
+    }
 
     /**
      * Get signature

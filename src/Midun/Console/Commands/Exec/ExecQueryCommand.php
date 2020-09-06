@@ -51,11 +51,7 @@ class ExecQueryCommand extends Command
      */
     public function handle()
     {
-        $queryOption = array_filter($this->argv, function ($option) {
-            return strpos($option, '--query') !== false;
-        });
-
-        $query = str_replace('--query=', '', array_shift($queryOption));
+        $query = $this->getOptions('query');
 
         try {
             $connection = app('connection')->getConnection();
