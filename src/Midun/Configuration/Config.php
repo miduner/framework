@@ -55,11 +55,23 @@ class Config
         return $value;
     }
 
+    /**
+     * Check exists config
+     * 
+     * @param string $key
+     * 
+     * @return bool
+     */
     public function checkConfig(string $key)
     {
         return isset($this->storage[$key]);
     }
 
+    /**
+     * Get all configs
+     * 
+     * @return array
+     */
     public function all()
     {
         return $this->storage;

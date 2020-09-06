@@ -2,8 +2,9 @@
 
 namespace Midun\Bus;
 
-use Midun\Contracts\Bus\Dispatcher as DispatcherContract;
 use DB;
+use Midun\Queues\Queue;
+use Midun\Contracts\Bus\Dispatcher as DispatcherContract;
 
 class Dispatcher implements DispatcherContract
 {
@@ -13,7 +14,7 @@ class Dispatcher implements DispatcherContract
      * @param  mixed  $job
      * @return mixed
      */
-    public function dispatch($job)
+    public function dispatch(Queue $job)
     {
         try {
             return DB::table('jobs')->insert([
