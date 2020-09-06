@@ -2,8 +2,9 @@
 
 namespace Midun;
 
-use Midun\Traits\Instance;
 use Midun\Http\Exceptions\ErrorHandler;
+use Midun\Http\Exceptions\RuntimeException;
+use Midun\Traits\Instance;
 
 class Application
 {
@@ -35,6 +36,8 @@ class Application
         new AliasLoader();
 
         register_shutdown_function([$this, 'whenShutDown']);
+
+        $this->setErrorHandler();
     }
 
     /**
@@ -122,7 +125,21 @@ class Application
      */
     public function whenShutDown()
     {
-        $handler = \Midun\Container::getInstance()->make(ErrorHandler::class);
-        set_error_handler([$handler, 'errorHandler']);
+        $last_error = error_get_last();
+        if (!is_null($last_error)) {
+            throw new RuntimeException($last_error['message']);
+        }
+    }
+
+    /**
+     * Set error handler
+     */
+    public function setErrorHandler()
+    {
+        set_error_handler(function () {
+            $handler = new ErrorHandler;
+
+            return $handler->errorHandler(...func_get_args());
+        });
     }
 }
