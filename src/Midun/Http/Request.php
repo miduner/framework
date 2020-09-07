@@ -9,7 +9,7 @@ class Request
 {
     public function __construct()
     {
-        foreach (self::getRequest() as $key => $value) {
+        foreach ($this->getRequest() as $key => $value) {
             $this->$key = $value;
         }
         foreach ($_FILES as $key => $value) {
@@ -43,7 +43,7 @@ class Request
      */
     public function all()
     {
-        return self::getRequest();
+        return $this->getRequest();
     }
 
     /**
@@ -62,7 +62,7 @@ class Request
      */
     public function input($input)
     {
-        return isset(self::getRequest()[$input]) ? self::getRequest()[$input] : null;
+        return isset($this->getRequest()[$input]) ? $this->getRequest()[$input] : null;
     }
 
     /**
@@ -84,7 +84,7 @@ class Request
      */
     public function only($array_input)
     {
-        foreach (self::getRequest() as $name => $value) {
+        foreach ($this->getRequest() as $name => $value) {
             if (in_array($name, $array_input)) {
                 $request[$name] = $value;
             }
@@ -100,7 +100,7 @@ class Request
      */
     public function except($array_input)
     {
-        foreach (self::getRequest() as $name => $value) {
+        foreach ($this->getRequest() as $name => $value) {
             if (!in_array($name, $array_input)) {
                 $request[$name] = $value;
             }
