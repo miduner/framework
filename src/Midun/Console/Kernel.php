@@ -27,6 +27,7 @@ use Midun\Console\Commands\Make\MakeControllerCommand;
 use Midun\Console\Commands\Storage\StorageLinkCommand;
 use Midun\Console\Commands\Schedule\ScheduleRunCommand;
 use Midun\Console\Commands\Migrate\MigrateRollbackCommand;
+use Midun\Console\Commands\Development\DevelopmentModeCommand;
 
 class Kernel implements KernelContract
 {
@@ -85,7 +86,8 @@ class Kernel implements KernelContract
         ConfigCacheCommand::class,
         ViewClearCommand::class,
         ConfigClearCommand::class,
-        StorageLinkCommand::class
+        StorageLinkCommand::class,
+        DevelopmentModeCommand::class
     ];
 
     /**
@@ -97,7 +99,7 @@ class Kernel implements KernelContract
 
         array_shift($argv);
 
-        if (Kernel::FRAMEWORK_TYPE === end($argv)) array_push($argv, 'list');
+        if (empty($argv)) array_push($argv, 'list');
 
         $this->setArgv($argv);
 
