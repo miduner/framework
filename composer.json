@@ -1,7 +1,7 @@
 {
     "name": "miduner/miduner",
     "type": "framework",
-    "description": "Your package description goes here",
+    "description": "Miduner framework is a strong framework for web applications",
     "keywords": ["miduner","framework","hustle","command", "command push", "laravel"],
     "homepage": "https://github.com/danganh97",
     "license": "None",
