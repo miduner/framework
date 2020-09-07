@@ -9,6 +9,14 @@ use Midun\Traits\Instance;
 class Application
 {
     use Instance;
+
+    /**
+     * Container instance
+     * 
+     * @var \Midun\Container
+     */
+    private $container;
+
     /**
      * Instance of configuration
      * 
@@ -27,11 +35,17 @@ class Application
     /**
      * Initial constructor
      * 
+     * @param \Midun\Container $container
+     * 
      * Set configuration instance
+     * 
+     * @return mixed
      */
-    public function __construct()
+    public function __construct(Container $container)
     {
-        $this->config = \Midun\Container::getInstance()->make(\Midun\Configuration\Config::class);
+        $this->container = $container;
+
+        $this->registerConfigProvider();
 
         new AliasLoader();
 
@@ -47,7 +61,7 @@ class Application
      */
     public function registerServiceProvider()
     {
-        $providers = $this->config->getConfig('app.providers');
+        $providers = $this->container->make('config')->getConfig('app.providers');
 
         if (!empty($providers)) {
             foreach ($providers as $provider) {
@@ -59,6 +73,18 @@ class Application
                 $provider->boot();
             }
         }
+    }
+
+    /**
+     * Register initial configuration provider
+     * 
+     * @return void
+     */
+    private function registerConfigProvider()
+    {
+        $this->container->singleton('config', function () {
+            return new \Midun\Configuration\Config();
+        });
     }
 
     /**
@@ -75,6 +101,8 @@ class Application
      * Set state load provider
      * 
      * @param bool $isLoad
+     * 
+     * @return bool
      */
     private function setLoadState(bool $isLoad)
     {
@@ -96,7 +124,7 @@ class Application
 
             $value = require cache_path($item);
 
-            $this->config->setConfig($key, $value);
+            $this->container->make('config')->setConfig($key, $value);
         }
     }
 

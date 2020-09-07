@@ -22,7 +22,7 @@ class ConfigurationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('config', function () {
-            return $this->app->make(\Midun\Configuration\Config::class);
+            return $this->app->make('config');
         });
     }
 }

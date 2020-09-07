@@ -199,8 +199,45 @@ class Container
         }
 
         $object = $this->build($entity);
-        $this->resolved[$entity] = $object;
+
+        if (
+            $this->bound($entity)
+            && $this->takeBound($entity)['shared'] === true
+            && !$this->isResolved($entity)
+        ) {
+            $this->putToResolved($entity, $object);
+        }
+
         return $object;
+    }
+
+    /**
+     * Put to resolved
+     * 
+     * @param string $abstract
+     * @param mixed $concrete
+     * 
+     * @return void
+     */
+    private function putToResolved(string $abstract, $concrete)
+    {
+        if ($this->isResolved($abstract)) {
+            throw new AppException("Duplicated abstract resolve `{$abstract}`");
+        }
+
+        $this->resolved[$abstract] = $concrete;
+    }
+
+    /**
+     * Check is resolved
+     * 
+     * @param string $abstract
+     * 
+     * @return bool
+     */
+    private function isResolved(string $abstract)
+    {
+        return isset($this->resolved[$abstract]);
     }
 
     /**
@@ -238,17 +275,18 @@ class Container
      */
     public function singleton($abstract, $concrete)
     {
-        $this->bind($abstract, $concrete);
+        $this->bind($abstract, $concrete, true);
     }
 
     /**
      * Binding abstract to classes
      * @param string $abstract
      * @param string $concrete
+     * @param bool $shared
      *
      * @return void
      */
-    public function bind($abstract, $concrete = null)
+    public function bind($abstract, $concrete = null, $shared = false)
     {
         if (is_null($concrete)) {
             $concrete = $abstract;
@@ -256,7 +294,7 @@ class Container
         if (!$concrete instanceof Closure) {
             $concrete = $this->getClosure($concrete);
         }
-        $this->bindings[$abstract] = $concrete;
+        $this->bindings[$abstract] = compact('concrete', 'shared');
     }
 
     /**
@@ -289,11 +327,11 @@ class Container
         }
 
         if ($concrete instanceof Closure) {
-            return call_user_func($concrete);
+            return call_user_func($concrete, $this);
         }
         if ($this->bound($concrete)) {
             return $this->build(
-                $this->takeBound($concrete)
+                $this->takeBound($concrete)['concrete']
             );
         }
 
@@ -410,7 +448,7 @@ class Container
     private function buildStacks($object)
     {
         try {
-            $object = app()->build($object);
+            $object = $this->build($object);
             if ($object instanceof FormRequest) {
                 $object->executeValidate();
             }

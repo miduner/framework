@@ -40,6 +40,10 @@ class Kernel
 
         $this->bindingMiddlewares();
 
+        $this->app->singleton(Application::class, function ($app) {
+            return new Application($app);
+        });
+
         $application = $this->app->make(Application::class);
 
         $application->run();

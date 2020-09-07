@@ -3,6 +3,7 @@
 namespace Midun\Console;
 
 use Midun\Container;
+use Midun\Application;
 use Midun\Console\Commands\ListOfCommand;
 use Midun\Console\Commands\MigrateCommand;
 use Midun\Console\Commands\Db\DbSeedCommand;
@@ -104,7 +105,11 @@ class Kernel implements KernelContract
 
         $this->output = new \Midun\Supports\ConsoleOutput;
 
-        $this->application = $this->app->make(\Midun\Application::class);
+        $this->app->singleton(Application::class, function ($app) {
+            return new Application($app);
+        });
+
+        $this->application = $this->app->make(Application::class);
     }
 
     /**
