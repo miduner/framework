@@ -54,7 +54,7 @@ trait HandleCompileWithBuilder
                         if (method_exists($objectModel, $buildScope)) {
                             return $objectModel->$buildScope($object, ...$args);
                         }
-                        throw new AppException("Method {$method} does not exist");
+                        throw new AppException("Method `{$method}` does not exist");
                     } catch (\TypeError $e) {
                         throw new \Exception($e->getMessage());
                     }

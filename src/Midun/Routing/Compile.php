@@ -2,7 +2,27 @@
 
 namespace Midun\Routing;
 
+use Midun\View\ViewException;
+use Midun\Hashing\HashException;
+use Midun\Logger\LoggerException;
+use Midun\Bus\DispatcherException;
+use Midun\Console\ConsoleException;
+use Midun\Storage\StorageException;
+use Midun\Eloquent\EloquentException;
+use Midun\Auth\AuthenticationException;
+use Midun\Http\Exceptions\AppException;
+use Midun\FileSystem\FileSystemException;
+use Midun\Translator\TranslationException;
 use Midun\Http\Exceptions\RuntimeException;
+use Midun\Http\Exceptions\UnknownException;
+use Midun\Http\Validation\ValidationException;
+use Midun\Configuration\ConfigurationException;
+use Midun\Database\QueryBuilder\QueryException;
+use Midun\Http\Middlewares\MiddlewareException;
+use Midun\Http\Exceptions\UnauthorizedException;
+use Midun\Database\DatabaseBuilder\DatabaseBuilderException;
+use Midun\Database\Connections\Mysql\MysqlConnectionException;
+use Midun\Database\Connections\PostgreSQL\PostgreConnectionException;
 
 class Compile
 {
@@ -33,12 +53,20 @@ class Compile
      * @var array
      */
     private $params = [];
+
     /**
      * Specific character
      * 
      * @var string
      */
     const DEFAULT_SPECIFIC = '@';
+
+    /**
+     * Invoke method name
+     * 
+     * @var string
+     */
+    const __INVOKE = '__invoke';
 
     /**
      * Initial constructor
@@ -86,7 +114,35 @@ class Compile
 
             return call_user_func_array([$object, $method], $params);
         } catch (\Exception $e) {
-            throw new RuntimeException($e->getMessage());
+            switch (true) {
+                case $e instanceof AppException:
+                case $e instanceof HashException:
+                case $e instanceof ViewException:
+                case $e instanceof RouteException:
+                case $e instanceof QueryException:
+                case $e instanceof LoggerException:
+                case $e instanceof RuntimeException:
+                case $e instanceof ConsoleException:
+                case $e instanceof StorageException:
+                case $e instanceof EloquentException:
+                case $e instanceof DispatcherException:
+                case $e instanceof FileSystemException:
+                case $e instanceof MiddlewareException:
+                case $e instanceof ValidationException:
+                case $e instanceof TranslationException:
+                case $e instanceof UnauthorizedException:
+                case $e instanceof UnauthorizedException:
+                case $e instanceof ConfigurationException:
+                case $e instanceof AuthenticationException:
+                case $e instanceof DatabaseBuilderException:
+                case $e instanceof MysqlConnectionException:
+                case $e instanceof PostgreConnectionException:
+                    throw $e;
+                    break;
+                default:
+                    throw new UnknownException($e->getMessage());
+                    break;
+            }
         } catch (\Error $e) {
             throw new RuntimeException($e->getMessage());
         }
@@ -101,21 +157,13 @@ class Compile
      */
     private function findingTarget($action)
     {
-        if (!is_array($action)) {
-            $action = explode(Compile::DEFAULT_SPECIFIC, $action);
-        }
-        switch (count($action)) {
-            case 2:
-                list($controller, $method) = $action;
-                break;
-            case 1:
-                list($controller) = $action;
-                $method = '__invoke';
-                break;
-            default:
-                throw new RouteException("Controller wrong format !");
-                break;
-        }
+        list($controller, $method) = is_array($action)
+            ? (count($action) === 1
+                ? [array_shift($action), Compile::__INVOKE]
+                : $action)
+            : (count(explode(Compile::DEFAULT_SPECIFIC, $action)) === 1
+                ? [$action, Compile::__INVOKE]
+                : explode(Compile::DEFAULT_SPECIFIC, $action));
 
         $this->setMethod($method);
         $this->setController($controller);
@@ -204,7 +252,16 @@ class Compile
      */
     private function getAction()
     {
-        return $this->getRoute()->{__FUNCTION__}();
+        $action = $this->getRoute()->{__FUNCTION__}();
+        if (empty($action)) {
+            $name = $this->getRoute()->getName();
+            if (empty($name) || is_null($name)) {
+                $name = $this->getRoute()->getUri();
+            }
+            throw new RouteException("Routing is matched ! But missing action. Please set the action.");
+        }
+
+        return $action;
     }
 
     /**
