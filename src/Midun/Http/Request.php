@@ -73,7 +73,7 @@ class Request
      */
     public function get($input)
     {
-        return self::input($input);
+        return $this->input($input);
     }
 
     /**
