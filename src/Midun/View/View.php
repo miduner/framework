@@ -59,7 +59,6 @@ class View
      * @var array
      */
     const START_TAGS = [
-        "{{",
         "@php"
     ];
 
@@ -69,7 +68,6 @@ class View
      * @var array
      */
     const END_TAGS = [
-        "}}",
         "@endphp"
     ];
 
@@ -127,11 +125,7 @@ class View
      */
     public function makeCache(string $file)
     {
-        $file = strpos($file, '.php') !== false
-            ? str_replace('.php', '', $file)
-            : $file;
-
-        $file = str_replace('.', DIRECTORY_SEPARATOR, $file) . '.php';
+        $file = $this->getTrueFormat($file);
 
         $viewPath = $this->getDirectory() . DIRECTORY_SEPARATOR . $file;
 
@@ -139,52 +133,17 @@ class View
             throw new ViewException("View {$file} not found.");
         }
 
-        $cacheDirectory = $this->getCachingDirectory();
+        $html = $this->compileHtml($viewPath);
 
-        if (false == is_dir($cacheDirectory)) {
-            $dir = '';
-            foreach (explode(DIRECTORY_SEPARATOR, $cacheDirectory) as $k => $f) {
-                $dir .= $f . DIRECTORY_SEPARATOR;
-                if (false === is_dir($dir)) {
-                    mkdir($dir);
-                }
-            }
-        }
-
-        $viewData = file_get_contents($viewPath);
-
-        foreach (self::START_TAGS as $tag) {
-            $viewData = str_replace($tag, '<?php', $viewData);
-        }
-        foreach (self::END_TAGS as $tag) {
-            $viewData = str_replace($tag, '?>', $viewData);
-        }
-
-        $newViewData = [];
-
-        foreach (explode(PHP_EOL, $viewData) as $line) {
-            switch (true) {
-                case strpos($line, '@if(') !== false:
-                case strpos($line, '@foreach(') !== false:
-                    $line = str_replace('@', '', $line);
-                    $newViewData[] = "<?php {$line}: ?>";
-                    break;
-                case strpos($line, '@endif') !== false:
-                case strpos($line, '@endforeach') !== false:
-                    $line = str_replace('@', '', $line);
-                    $newViewData[] = "<?php {$line}; ?>";
-                    break;
-                default:
-                    $newViewData[] = $line;
-                    break;
-            }
-        }
-
-        $viewData = implode(PHP_EOL, $newViewData);
+        $this->makeCachingDirectory(
+            $this->getCachingDirectory()
+        );
 
         $tickets = explode(DIRECTORY_SEPARATOR, $file);
 
         $file = array_pop($tickets);
+
+        $cacheDirectory = $this->getCachingDirectory();
 
         foreach ($tickets as $f) {
             if ($f != '') {
@@ -197,11 +156,70 @@ class View
         if (false == is_dir($cacheDirectory)) {
             mkdir($cacheDirectory);
         }
-        $cacheFilePath = $cacheDirectory . DIRECTORY_SEPARATOR . $file;
+        $filePath = $cacheDirectory . DIRECTORY_SEPARATOR . $file;
 
-        $cacheFile = fopen($cacheFilePath, "w") or die("Unable to open file!");
-        fwrite($cacheFile, $viewData);
+        $cacheFile = fopen($filePath, "w") or die("Unable to open file!");
+        fwrite($cacheFile, $html);
         fclose($cacheFile);
+    }
+
+    /**
+     * Make caching directory
+     * 
+     * @param string $directory
+     * 
+     * @return void
+     */
+    protected function makeCachingDirectory(string $directory)
+    {
+        if (false == is_dir($directory)) {
+            $dir = '';
+            foreach (explode(DIRECTORY_SEPARATOR, $directory) as $k => $f) {
+                $dir .= $f . DIRECTORY_SEPARATOR;
+                if (false === is_dir($dir)) {
+                    mkdir($dir);
+                }
+            }
+        }
+    }
+
+    /**
+     * Compile html
+     * 
+     * @param string $file
+     * 
+     * @return string
+     */
+    protected function compileHtml(string $path)
+    {
+        $compiler = new ViewCompiler($path);
+
+        $compiler->compilePhpTag(self::START_TAGS, self::END_TAGS);
+
+        $compiler->compileComment();
+        
+        $compiler->compileEcho();
+
+        $compiler->compileSpecialTags();
+
+
+        return $compiler->getHtml();
+    }
+
+    /**
+     * Get true format for view file
+     * 
+     * @param string $file
+     * 
+     * @return string
+     */
+    protected function getTrueFormat(string $file)
+    {
+        $file = strpos($file, '.php') !== false
+            ? str_replace('.php', '', $file)
+            : $file;
+
+        return str_replace('.', DIRECTORY_SEPARATOR, $file) . '.php';
     }
 
     /**
