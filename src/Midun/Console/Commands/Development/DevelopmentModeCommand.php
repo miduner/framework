@@ -47,7 +47,8 @@ class DevelopmentModeCommand extends Command
     public function handle()
     {
         if (file_exists(base_path('Midun'))) {
-        	$this->output->printError('The "{miduner}/Midun" directory already exists.');
+        	$this->output->printError('The `{miduner}/Midun` directory already exists.');
+        	exit(1);
         }
 
         $this->app->make('fileSystem')->link(

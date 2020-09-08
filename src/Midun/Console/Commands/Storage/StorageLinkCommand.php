@@ -39,6 +39,7 @@ class StorageLinkCommand extends Command
     {
         if (file_exists(public_path('storage'))) {
         	$this->output->printError('The "public/storage" directory already exists.');
+        	exit(1);
         }
 
         $this->app->make('fileSystem')->link(

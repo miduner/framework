@@ -58,7 +58,7 @@ class ExecQueryCommand extends Command
 
 			$start = microtime(true);
 
-			if (explode(' ', $query)[0] != 'select') {
+			if(explode(' ', $query)[0] != 'select') {
 				$this->output->printError('Only execute SELECT SQL');
 				exit(1);
 			}
@@ -71,16 +71,16 @@ class ExecQueryCommand extends Command
 
 			$end = microtime(true);
 
-			$execution_time = (float) ($end - $start);
+			$execution_time = (float)($end - $start);
 
-			$execution_time = number_format((float) $execution_time, 10);
+			$execution_time = number_format((float)$execution_time, 10);
 
 			$this->output->print($result);
 
 			$this->output->print("Ran query: $query");
 			$this->output->print("Ran time: " . $execution_time . ' seconds');
 			$this->output->print("Touched object: $touched");
-		} catch (\PDOException $e) {
+		} catch(\PDOException $e) {
 			$this->output->printError($e->getMessage());
 		}
 	}
