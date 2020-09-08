@@ -15,7 +15,7 @@
         "php": ">=7.0.1",
         "ext-pdo": "*",
         "ext-readline": "*",
-        "ext-json": "*"
+        "ext-json": "*",
         "firebase/php-jwt": "@dev"
     },
     "autoload": {
