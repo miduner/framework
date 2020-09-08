@@ -122,6 +122,8 @@ class View
      * @param string $file
      * 
      * @return void
+	 *
+	 * @throws ViewException
      */
     public function makeCache(string $file)
     {
@@ -146,14 +148,14 @@ class View
         $cacheDirectory = $this->getCachingDirectory();
 
         foreach ($tickets as $f) {
-            if ($f != '') {
+            if ($f !== '') {
                 $cacheDirectory .= DIRECTORY_SEPARATOR . $f;
             }
             if (!is_dir($cacheDirectory)) {
                 mkdir($cacheDirectory);
             }
         }
-        if (false == is_dir($cacheDirectory)) {
+        if (false === is_dir($cacheDirectory)) {
             mkdir($cacheDirectory);
         }
         $filePath = $cacheDirectory . DIRECTORY_SEPARATOR . $file;
@@ -172,7 +174,7 @@ class View
      */
     protected function makeCachingDirectory(string $directory)
     {
-        if (false == is_dir($directory)) {
+        if (false === is_dir($directory)) {
             $dir = '';
             foreach (explode(DIRECTORY_SEPARATOR, $directory) as $k => $f) {
                 $dir .= $f . DIRECTORY_SEPARATOR;
@@ -229,6 +231,8 @@ class View
      * @param array $arguments
      * 
      * @return string
+	 * 
+	 * @throws ViewException
      */
     public function getContentFromCacheWithArguments(string $file, array $arguments)
     {
@@ -355,7 +359,9 @@ class View
      * @param string $file
      * @param array $arguments
      * 
-     * @return void
+     * @return mixed
+	 *
+	 * @throws ViewException
      */
     public function render(string $file, array $arguments = [], string $mode = '')
     {
@@ -363,13 +369,17 @@ class View
 
         switch ($mode) {
             case View::CACHE:
-                return $this->cachingRendering($file, $arguments);
+            	$this->cachingRendering($file, $arguments);
+            	break;
             case View::SYNC:
-                return $this->syncRendering($file, $arguments);
+            	$this->syncRendering($file, $arguments);
+            	break;
             default:
                 $exception = new ViewException("Unknown view rendering mode `{$mode}`");
                 return $this->render('exception', compact('exception'), View::SYNC);
         }
+
+        exit(0);
     }
 
     /**
@@ -379,7 +389,9 @@ class View
      * @param array $arguments
      * 
      * @return void
-     */
+	 *
+	 * @throws ViewException
+	 */
     private function syncRendering(string $file, array $arguments)
     {
         $this->makeCache($file);
@@ -415,6 +427,8 @@ class View
      * @param array $arguments
      * 
      * @return void
+	 *
+	 * @throws ViewException
      */
     private function cachingRendering(string $file, array $arguments)
     {

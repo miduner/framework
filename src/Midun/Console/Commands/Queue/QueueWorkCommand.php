@@ -35,6 +35,8 @@ class QueueWorkCommand extends Command
      * Handle the command
      * 
      * @return void
+	 *
+	 * @throws \ReflectionException
      */
     public function handle()
     {

@@ -31,6 +31,8 @@ class Config
      * @param string $key
      * 
      * @return mixed
+	 *
+	 * @throws ConfigurationException
      */
     public function getConfig(string $key)
     {

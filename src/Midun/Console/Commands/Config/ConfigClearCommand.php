@@ -125,7 +125,7 @@ class ConfigClearCommand extends Command
      * Handle array config
      * 
      * @param string $key
-     * @param string $myfile
+     * @param mixed $myfile
      * @param array $values
      * 
      * @return void

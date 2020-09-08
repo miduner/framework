@@ -4,6 +4,7 @@ namespace Midun\Console\Commands\Config;
 
 use Midun\Console\Command;
 use Midun\Console\Commands\View\ViewClearCommand;
+use Midun\Console\ConsoleException;
 use Midun\Console\Kernel;
 
 class ConfigCacheCommand extends Command
@@ -49,6 +50,8 @@ class ConfigCacheCommand extends Command
      * Handle the command
      * 
      * @return void
+	 *
+	 * @throws ConsoleException
      */
     public function handle()
     {

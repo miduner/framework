@@ -2,10 +2,15 @@
 
 namespace Midun\Console\Scheduling;
 
+use Midun\Console\ConsoleException;
 use Midun\Container;
 
 class Schedule
 {
+	/**
+	 * @var \Midun\Container
+	 */
+	protected $app;
     /**
      * List of crontab entries
      * 
@@ -177,6 +182,8 @@ class Schedule
      * @param array $args
      * 
      * @return self
+	 * 
+	 * @throws ConsoleException
      */
     public function __call($function, $args)
     {
@@ -223,14 +230,14 @@ class Schedule
                     $expression = $args;
                     break;
                 default:
-                    throw new \Exception("Method {$function} does not exist");
+                    throw new ConsoleException("Method {$function} does not exist");
             }
 
             $this->expression = $expression;
 
             return $this;
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+        } catch (ConsoleException $e) {
+            throw new ConsoleException($e->getMessage());
         }
     }
 }

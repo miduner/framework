@@ -31,6 +31,18 @@ use Midun\Console\Commands\Development\DevelopmentModeCommand;
 
 class Kernel implements KernelContract
 {
+	/**
+	 * @var Container
+	 */
+	protected $app;
+
+	/**
+	 * Console output
+	 *
+	 * @var \Midun\Supports\ConsoleOutput
+	 */
+	protected $output;
+
     /**
      * Argv of shell
      * 
@@ -107,7 +119,7 @@ class Kernel implements KernelContract
 
         $this->output = new \Midun\Supports\ConsoleOutput;
 
-        $this->app->singleton(Application::class, function ($app) {
+		$this->app->singleton(Application::class, function ($app) {
             return new Application($app);
         });
 
@@ -140,7 +152,8 @@ class Kernel implements KernelContract
                     } else {
                         $message = $command->getFormat();
                     }
-                    return $this->output->printSuccess($message);
+                    $this->output->printSuccess($message);
+                    exit(0);
                 }
 
                 if (!$command->isVerified()) {
@@ -149,7 +162,8 @@ class Kernel implements KernelContract
                     } else {
                         $message = "You're missing some arguments when run command " . $command->getDescription();
                     }
-                    return $this->output->printWarning($message);
+                    $this->output->printWarning($message);
+                    exit(0);
                 }
                 if ($command->isUsingCache()) {
                     if (!$this->caching()) {
@@ -159,7 +173,8 @@ class Kernel implements KernelContract
                 }
                 $command->setArgv($this->argv);
 
-                return $command->handle();
+                $command->handle();
+                exit(1);
             }
         }
 
@@ -172,6 +187,8 @@ class Kernel implements KernelContract
      * @param string $command
      * 
      * @return void
+	 *
+	 * @throws ConsoleException
      */
     public function call(string $command, array $options = [])
     {
@@ -189,7 +206,8 @@ class Kernel implements KernelContract
         }
         $command->getArgv($this->argv);
 
-        return $command->handle();
+        $command->handle();
+        exit(1);
     }
 
     /**

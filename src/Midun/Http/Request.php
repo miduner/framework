@@ -80,7 +80,7 @@ class Request
      * Response only data input from array input.
      *
      * @param array $input
-     * @return array string input value
+     * @return object input value
      */
     public function only($array_input)
     {
@@ -96,10 +96,11 @@ class Request
      * Response data input except array input.
      *
      * @param array $input
-     * @return array string input value
+     * @return object
      */
-    public function except($array_input)
+    public function except(array $array_input)
     {
+        $request = new \stdClass();
         foreach ($this->getRequest() as $name => $value) {
             if (!in_array($name, $array_input)) {
                 $request[$name] = $value;

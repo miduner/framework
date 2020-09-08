@@ -84,6 +84,8 @@ if (!function_exists('env')) {
      * 
      * @param string $variable
      * @param string $ndvalue
+	 *
+	 * @return string
      */
     function env(string $variable, string $ndvalue = null)
     {
@@ -216,11 +218,12 @@ if (!function_exists('dd')) {
      *
      * @return die
      */
-    function dd()
+    function dd($x)
     {
-        array_map(function ($x) {
+        $x = is_array($x) ? $x : func_get_args();
+        array_map(static function ($x) {
             var_dump($x);
-        }, func_get_args());
+        }, $x);
         die;
     }
 }

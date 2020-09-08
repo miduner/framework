@@ -10,7 +10,7 @@ trait JsonResponse
      * @param $data
      * @param int $statusCode
      * @param array $headers
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
     protected function respond($data, $statusCode = 200, $headers = [])
     {
@@ -21,7 +21,7 @@ trait JsonResponse
      * Respond with created.
      *
      * @param $data
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
     protected function respondCreated($data)
     {
@@ -33,7 +33,7 @@ trait JsonResponse
      *
      * @param $data
      * @param int $statusCode
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
     protected function respondSuccess($data, $statusCode = 200)
     {
@@ -49,7 +49,7 @@ trait JsonResponse
      *
      * @param $message
      * @param $statusCode
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
     protected function respondError($message = 'Bad request', $statusCode = 400)
     {
@@ -64,7 +64,7 @@ trait JsonResponse
     /**
      * Respond with no content.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
     protected function respondNoContent()
     {
@@ -75,9 +75,9 @@ trait JsonResponse
      * Respond with unauthorized.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
-    protected function respondUnauthorized($message = 'Unauthorized')
+	protected function respondUnauthorized($message = 'Unauthorized')
     {
         return $this->respondError($message, 401);
     }
@@ -86,7 +86,7 @@ trait JsonResponse
      * Respond with forbidden.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
     protected function respondForbidden($message = 'Forbidden')
     {
@@ -94,12 +94,12 @@ trait JsonResponse
     }
 
     /**
-     * Respond with not found.
+	 * Respond with not found.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
-    protected function respondNotFound($message = 'Not Found')
+	protected function respondNotFound($message = 'Not Found')
     {
         return $this->respondError($message, 404);
     }
@@ -108,7 +108,7 @@ trait JsonResponse
      * Respond with internal error.
      *
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Midun\Http\JsonResponse
      */
     protected function respondInternalError($message = 'Internal Error')
     {

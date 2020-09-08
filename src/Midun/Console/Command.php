@@ -7,6 +7,23 @@ use Midun\Contracts\Console\Command as CommandContract;
 
 abstract class Command implements CommandContract
 {
+	/**
+	 * Ouput of command
+	 *
+	 * @var string
+	 */
+	protected $output;
+
+	/**
+	 * @var Container
+	 */
+	protected $app;
+
+	/**
+	 * @var string
+	 */
+	protected $type;
+
     /**
      * The name and signature of the console command.
      *
@@ -182,7 +199,7 @@ abstract class Command implements CommandContract
     /**
      * Get options of passed command
      * 
-     * @return string
+     * @return mixed
      */
     public function getOptions(string $property = null)
     {

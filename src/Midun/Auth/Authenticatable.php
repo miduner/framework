@@ -4,11 +4,17 @@ namespace Midun\Auth;
 
 use DB;
 use Hash;
+use Midun\Http\Exceptions\AppException;
 use Session;
 use Firebase\JWT\JWT;
 use Midun\Eloquent\Model;
 use Midun\Contracts\Auth\Authentication;
 
+/**
+ * Class Authenticatable
+ *
+ * @package Midun\Auth
+ */
 class Authenticatable implements Authentication
 {
     /**
@@ -45,6 +51,8 @@ class Authenticatable implements Authentication
      * @param array $options
      *
      * @return boolean
+	 *
+	 * @throws AuthenticationException
      */
     public function attempt(array $options = [])
     {
@@ -61,7 +69,7 @@ class Authenticatable implements Authentication
         }
 
         return $this->setUserAuth(
-            $this->model::where($options)->firstOrFail()
+            $this->model->where($options)->firstOrFail()
         );
     }
 
@@ -113,7 +121,7 @@ class Authenticatable implements Authentication
 
                     $primaryKey = app()->make($this->model)->primaryKey();
 
-                    $modelObject = $this->model::findOrFail($decode->object->{$primaryKey});
+                    $modelObject = $this->model->findOrFail($decode->object->{$primaryKey});
 
                     return $modelObject;
                 } catch (\Firebase\JWT\ExpiredException $e) {
@@ -142,7 +150,7 @@ class Authenticatable implements Authentication
     /**
      * Logout user
      *
-     * @return void
+     * @return bool
      */
     public function logout()
     {
@@ -164,6 +172,8 @@ class Authenticatable implements Authentication
      * Checking has user login
      *
      * @return boolean
+	 *
+	 * @throws AppException
      */
     public function check()
     {
@@ -179,6 +189,8 @@ class Authenticatable implements Authentication
      * @param Model $user
      *
      * @return true
+	 *
+	 * @throws AuthenticationException
      */
     private function setUserAuth(Model $user)
     {
