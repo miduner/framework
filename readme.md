@@ -208,4 +208,3 @@ If you wanna become contributor, let's run:
 ```bash
    php hustle development:enable
 ```
-.
