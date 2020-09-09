@@ -197,13 +197,12 @@ class View
         $compiler = new ViewCompiler($path);
 
         $compiler->compilePhpTag(self::START_TAGS, self::END_TAGS);
-
-        $compiler->compileComment();
         
         $compiler->compileEcho();
 
         $compiler->compileSpecialTags();
 
+        $compiler->compileComment();
 
         return $compiler->getHtml();
     }
