@@ -7,7 +7,7 @@ use Midun\Container;
 
 class ErrorHandler
 {
-    private $log;
+    private \Midun\Logger\Logger $log;
 
     public function __construct()
     {
@@ -20,7 +20,17 @@ class ErrorHandler
         }
     }
 
-    public function errorHandler($errno, $errstr, $file, $line)
+    /**
+     * Error handler
+     * 
+     * @param int $errno
+     * @param string $errstr
+     * @param string $file
+     * @param int $line
+     * 
+     * @return void
+     */
+    public function errorHandler(int $errno, string $errstr, string $file, int $line): void
     {
         $msg = "{$errstr} on line {$line} in file {$file}";
 

@@ -10,41 +10,41 @@ class Schedule
 	/**
 	 * @var \Midun\Container
 	 */
-	protected $app;
+	protected Container $app;
     /**
      * List of crontab entries
      * 
      * @var array
      */
-    protected $tasks = [];
+    protected array $tasks = [];
 
     /**
      * Signature of command line
      * 
      * @var string
      */
-    protected $command;
+    protected string $command = "";
 
     /**
      * Expression crontab
      * 
      * @var string
      */
-    protected $expression;
+    protected string $expression = "";
 
     /**
      * Cli php using command
      * 
      * @var string
      */
-    protected $cli = 'php';
+    protected string $cli = 'php';
 
     /**
      * Output of command
      * 
      * @var string
      */
-    protected $output;
+    protected string $output = "";
 
     /**
      * Constructor of Schedule
@@ -61,7 +61,7 @@ class Schedule
      * 
      * @return self
      */
-    public function command(string $command)
+    public function command(string $command): Schedule
     {
         $this->setScheduleAndClear();
         $this->command = $this->app->make($command)->getSignature();
@@ -73,7 +73,7 @@ class Schedule
      * 
      * @return void
      */
-    public function setScheduleAndClear()
+    public function setScheduleAndClear(): void
     {
         $this->tasks[] = [
             'command' => $this->getCommand(),
@@ -90,12 +90,12 @@ class Schedule
      * 
      * @return void
      */
-    private function refreshProps()
+    private function refreshProps(): void
     {
-        $this->command = null;
-        $this->expression = null;
+        $this->command = "";
+        $this->expression = "";
         $this->cli = 'php';
-        $this->output = null;
+        $this->output = "";
     }
 
     /**
@@ -103,7 +103,7 @@ class Schedule
      * 
      * @return string
      */
-    private function getCommand()
+    private function getCommand(): string
     {
         return $this->command;
     }
@@ -113,7 +113,7 @@ class Schedule
      * 
      * @return string
      */
-    private function getExpression()
+    private function getExpression(): string
     {
         return $this->expression;
     }
@@ -123,7 +123,7 @@ class Schedule
      * 
      * @return string
      */
-    private function getOutput()
+    private function getOutput(): string
     {
         return !is_null($this->output) ? $this->output : storage_path('logs/schedule.log');
     }
@@ -133,7 +133,7 @@ class Schedule
      * 
      * @return string
      */
-    private function getCli()
+    private function getCli(): string
     {
         return $this->cli;
     }
@@ -143,7 +143,7 @@ class Schedule
      * 
      * @return array
      */
-    public function collect()
+    public function collect(): array
     {
         $this->setScheduleAndClear();
         return $this->tasks;
@@ -156,7 +156,7 @@ class Schedule
      * 
      * @return self
      */
-    public function output(string $output)
+    public function output(string $output): Schedule
     {
         $this->output = $output;
         return $this;
@@ -169,7 +169,7 @@ class Schedule
      * 
      * @return self
      */
-    public function cli(string $cli)
+    public function cli(string $cli): Schedule
     {
         $this->cli = $cli;
         return $this;
@@ -185,7 +185,7 @@ class Schedule
 	 * 
 	 * @throws ConsoleException
      */
-    public function __call($function, $args)
+    public function __call(string $function, array $args): Schedule
     {
         try {
             $args = isset($args[0]) ? $args[0] : null;

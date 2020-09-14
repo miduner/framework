@@ -6,6 +6,7 @@ use Midun\View\ViewException;
 use Midun\Hashing\HashException;
 use Midun\Logger\LoggerException;
 use Midun\Bus\DispatcherException;
+use Midun\Routing\RouteCollection;
 use Midun\Console\ConsoleException;
 use Midun\Storage\StorageException;
 use Midun\Eloquent\EloquentException;
@@ -31,28 +32,28 @@ class Compile
      * 
      * @var string
      */
-    private $method;
+    private string $method;
 
     /**
      * Controller execute
      * 
      * @var string
      */
-    private $controller;
+    private string $controller;
 
     /**
      * Instance of matched routing
      * 
-     * @var \Midun\Routing\RouteCollection
+     * @var RouteCollection
      */
-    private $route;
+    private RouteCollection $route;
 
     /**
      * List of parameters
      * 
      * @var array
      */
-    private $params = [];
+    private array $params = [];
 
     /**
      * Specific character
@@ -89,7 +90,7 @@ class Compile
     /**
      * Handle route action
      *
-     * @return void
+     * @return mixed
      * 
      * @throws RouteException
      * @throws RuntimeException
@@ -144,7 +145,9 @@ class Compile
                     break;
             }
         } catch (\Error $e) {
-            throw new RuntimeException($e->getMessage());
+            throw $e;
+            // dd($e->getMessage());
+            // throw new RuntimeException($e->getMessage());
         }
     }
 
@@ -155,7 +158,7 @@ class Compile
      * 
      * @return void
      */
-    private function findingTarget($action)
+    private function findingTarget($action): void
     {
         list($controller, $method) = is_array($action)
             ? (count($action) === 1
@@ -176,7 +179,7 @@ class Compile
      * 
      * @return void
      */
-    private function setMethod(string $method)
+    private function setMethod(string $method): void
     {
         $this->method = $method;
     }
@@ -186,7 +189,7 @@ class Compile
      * 
      * @return string
      */
-    private function getMethod()
+    private function getMethod(): string
     {
         return $this->method;
     }
@@ -198,7 +201,7 @@ class Compile
      * 
      * @return void
      */
-    private function setController(string $controller)
+    private function setController(string $controller): void
     {
         $this->controller = $controller;
     }
@@ -208,7 +211,7 @@ class Compile
      * 
      * @return string
      */
-    private function getController()
+    private function getController(): string
     {
         return $this->controller;
     }
@@ -220,7 +223,7 @@ class Compile
      * 
      * @return void
      */
-    private function makeRoute(RouteCollection $route)
+    private function makeRoute(RouteCollection $route): void
     {
         $this->route = $route;
     }
@@ -228,9 +231,9 @@ class Compile
     /**
      * Get params value
      * 
-     * @return array|null
+     * @return array
      */
-    private function getParams()
+    private function getParams(): array
     {
         return $this->params;
     }
@@ -240,7 +243,7 @@ class Compile
      * 
      * @return RouteCollection
      */
-    private function getRoute()
+    private function getRoute(): RouteCollection
     {
         return $this->route;
     }
@@ -271,7 +274,7 @@ class Compile
      * 
      * @return string
      */
-    private function getFullNamespace(string $controller)
+    private function getFullNamespace(string $controller): string
     {
         $namespace = $this->getRoute()->getNamespace();
 
@@ -287,7 +290,7 @@ class Compile
      * 
      * @return void
      */
-    private function makeParams(array $params)
+    private function makeParams(array $params): void
     {
         $this->params = $params;
     }

@@ -9,7 +9,7 @@ class Storage
      * 
      * @var string
      */
-    protected $disk;
+    protected string $disk;
 
     /**
      * Set disk setting
@@ -18,7 +18,7 @@ class Storage
      * 
      * @return self
      */
-    public function disk(string $disk)
+    public function disk(string $disk): Storage
     {
         $this->disk = $disk;
         return $this;
@@ -31,9 +31,31 @@ class Storage
      * 
      * @return boolean
      */
-    public function exists(string $fileName)
+    public function exists(string $fileName): bool
     {
-        return file_exists($this->getWorkingDirectory() . $fileName);
+        return file_exists($this->getFullDirectoryWithDisk($fileName));
+    }
+
+    /**
+     * Get current disk
+     * 
+     * @return string
+     */
+    public function getDisk(): string
+    {
+        return $this->disk;
+    }
+
+    /**
+     * Get full directory with disk
+     * 
+     * @param string $fileName
+     * 
+     * @return string
+     */
+    public function getFullDirectoryWithDisk(string $fileName = ""): string
+    {
+        return ($this->getWorkingDirectory() . DIRECTORY_SEPARATOR . $this->getDisk()) . ($fileName ? DIRECTORY_SEPARATOR . $fileName : "");
     }
 
     /**
@@ -43,7 +65,7 @@ class Storage
      * 
      * @return string
      */
-    public function url(string $fileName)
+    public function url(string $fileName): string
     {
         return config('app.url') . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . $fileName;
     }
@@ -53,9 +75,9 @@ class Storage
      * 
      * @param string $fileName
      * 
-     * @return \Midun\Storage\FileStorage/null
+     * @return array|null
      */
-    public function info(string $fileName)
+    public function info(string $fileName): ?array
     {
         if ($this->exists($fileName)) {
             $filePath = $this->getWorkingDirectory() . $fileName;
@@ -72,9 +94,9 @@ class Storage
      * 
      * @param string $fileName
      * 
-     * @return string/null
+     * @return string|null
      */
-    public function realPath(string $fileName)
+    public function realPath(string $fileName): ?string
     {
         if ($this->exists($fileName)) {
             $filePath = $this->getWorkingDirectory() . $fileName;
@@ -96,7 +118,7 @@ class Storage
      * 
      * @return bool
      */
-    public function copy(string $fileName, string $target)
+    public function copy(string $fileName, string $target): bool
     {
         try {
             if ($this->exists($fileName)) {
@@ -124,7 +146,7 @@ class Storage
      * 
      * @return bool
      */
-    public function move(string $fileName, string $target)
+    public function move(string $fileName, string $target): bool
     {
         try {
             if ($this->exists($fileName)) {
@@ -149,9 +171,11 @@ class Storage
      * @param string $fileName
      * @param string $directory
      * 
-     * @return string/false
+     * @return string|null
+     * 
+     * @throws StorageException
      */
-    public function put(\Midun\Services\File $file, $fileName = null, string $directory = null)
+    public function put(\Midun\Services\File $file, ?string $fileName = null, ?string $directory = null): ?string
     {
         try {
             $tmpName = $file->getTmpName();
@@ -167,7 +191,7 @@ class Storage
                 return $fileName;
             }
 
-            return false;
+            return null;
         } catch (\Exception $e) {
             throw new StorageException($e->getMessage());
         }
@@ -180,9 +204,9 @@ class Storage
      * @param string $fileName
      * @param string $directory
      * 
-     * @return string/false
+     * @return string|null
      */
-    public function putAs(\Midun\Services\File $file, string $directory, string $fileName)
+    public function putAs(\Midun\Services\File $file, string $directory, string $fileName): ?string
     {
         $fullDir = $this->getWorkingDirectory();
 
@@ -197,7 +221,16 @@ class Storage
         return $this->put($file, $fileName, $directory);
     }
 
-    public function delete(string $fileName)
+    /**
+     * Delete file storage
+     * 
+     * @param string $fileName
+     * 
+     * @return bool
+     * 
+     * @throws StorageException
+     */
+    public function delete(string $fileName): bool
     {
         try {
             if ($this->exists($fileName)) {
@@ -220,25 +253,34 @@ class Storage
      * 
      * @throws StorageException
      * 
-     * @return \Midun\Storage\FileStorage
+     * @return FileStorage
      */
-    public function get(string $fileName)
+    public function get(string $fileName): FileStorage
     {
         if ($this->exists($fileName)) {
-            $filePath = $this->getWorkingDirectory() . $fileName;
-
+            $filePath = $this->getFullDirectoryWithDisk($fileName);
             return new FileStorage($filePath);
         }
 
         throw new StorageException("file {$fileName} doesn't exists");
     }
 
-    public function getCurrentDisk()
+    /**
+     * Get current disk
+     * 
+     * @return string
+     */
+    public function getCurrentDisk(): string
     {
         return $this->disk;
     }
 
-    public function getWorkingDirectory()
+    /**
+     * Get working directory
+     * 
+     * @return string
+     */
+    public function getWorkingDirectory(): string
     {
         return config("storage.{$this->disk}.root");
     }

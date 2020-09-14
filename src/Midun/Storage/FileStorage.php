@@ -9,67 +9,67 @@ class FileStorage
      * 
      * @var string
      */
-    protected $dirName;
+    protected string $dirName;
     /**
      * File name 
      * 
      * @var string
      */
-    protected $fileName;
+    protected string $fileName;
     /**
      * Extension 
      * 
      * @var string
      */
-    protected $extension;
+    protected string $extension;
     /**
      * Base name 
      * 
      * @var string
      */
-    protected $baseName;
+    protected string $baseName;
     /**
      * Real path 
      * 
      * @var string
      */
-    protected $realPath;
+    protected string $realPath;
     /**
      * Mime 
      * 
      * @var string
      */
-    protected $mime;
+    protected string $mime;
     /**
      * Encoding 
      * 
      * @var string
      */
-    protected $encoding;
+    protected string $encoding;
     /**
      * File size 
      * 
      * @var int
      */
-    protected $size;
+    protected int $size;
     /**
      * File size string 
      * 
      * @var string
      */
-    protected $sizeString;
+    protected string $sizeString;
     /**
      * Added time 
      * 
      * @var int
      */
-    protected $atime;
+    protected int $atime;
     /**
      * Modified time 
      * 
      * @var int
      */
-    protected $mtime;
+    protected int $mtime;
 
     /**
      * Constructor of File Storage
@@ -84,7 +84,7 @@ class FileStorage
 
         $this->fileName = $info['filename'];
 
-        $this->extension = $info['extension'];
+        $this->extension = $info['extension'] ??= "";
 
         $this->baseName = $info['basename'];
 
@@ -110,7 +110,7 @@ class FileStorage
      * 
      * @return string
      */
-    private function formatBytes(int $size)
+    private function formatBytes(int $size): string
     {
         $base = log($size, 1024);
         $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
@@ -122,7 +122,7 @@ class FileStorage
      * 
      * @return string
      */
-    public function getDirName()
+    public function getDirName(): string
     {
         return $this->dirName;
     }
@@ -132,7 +132,7 @@ class FileStorage
      * 
      * @return string
      */
-    public function getFileName()
+    public function getFileName(): string
     {
         return $this->fileName;
     }
@@ -142,7 +142,7 @@ class FileStorage
      * 
      * @return string
      */
-    public function getExtension()
+    public function getExtension(): string
     {
         return $this->extension;
     }
@@ -152,7 +152,7 @@ class FileStorage
      * 
      * @return string
      */
-    public function getBaseName()
+    public function getBaseName(): string
     {
         return $this->baseName;
     }
@@ -162,7 +162,7 @@ class FileStorage
      * 
      * @return string
      */
-    public function getRealPath()
+    public function getRealPath(): string
     {
         return $this->realPath;
     }
@@ -172,7 +172,7 @@ class FileStorage
      * 
      * @return string
      */
-    public function getMime()
+    public function getMime(): string
     {
         return $this->mime;
     }
@@ -182,7 +182,7 @@ class FileStorage
      * 
      * @return string
      */
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->encoding;
     }
@@ -192,7 +192,7 @@ class FileStorage
      * 
      * @return int
      */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }
@@ -202,7 +202,7 @@ class FileStorage
      * 
      * @return string
      */
-    public function getSizeString()
+    public function getSizeString(): string
     {
         return $this->sizeString;
     }
@@ -212,7 +212,7 @@ class FileStorage
      * 
      * @return int
      */
-    public function getAddedTime()
+    public function getAddedTime(): int
     {
         return $this->atime;
     }
@@ -222,7 +222,7 @@ class FileStorage
      * 
      * @return int
      */
-    public function getModifiedTime()
+    public function getModifiedTime(): int
     {
         return $this->mtime;
     }
@@ -232,7 +232,7 @@ class FileStorage
      * 
      * @return array
      */
-    public function getFileStorageInfo()
+    public function getFileStorageInfo(): array
     {
         return [
             'dir_name' => $this->getDirName(),

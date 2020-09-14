@@ -34,35 +34,35 @@ class Kernel implements KernelContract
 	/**
 	 * @var Container
 	 */
-	protected $app;
+	protected Container $app;
 
 	/**
 	 * Console output
 	 *
 	 * @var \Midun\Supports\ConsoleOutput
 	 */
-	protected $output;
+	protected \Midun\Supports\ConsoleOutput $output;
 
     /**
      * Argv of shell
      * 
      * @var array
      */
-    protected $argv;
+    protected array $argv;
 
     /**
      * List of after run application commands
      * 
      * @var array
      */
-    protected $commands = [];
+    protected array $commands = [];
 
     /**
      * Instance of the application
      * 
      * @var \Midun\Application
      */
-    protected $application;
+    protected \Midun\Application $application;
 
     /**
      * Framework type
@@ -76,7 +76,7 @@ class Kernel implements KernelContract
      * 
      * @var array
      */
-    protected $appCommands = [
+    protected array $appCommands = [
         MigrateCommand::class,
         MigrateRollbackCommand::class,
         CreateServerCliCommand::class,
@@ -133,7 +133,7 @@ class Kernel implements KernelContract
      * 
      * @throws ConsoleException
      */
-    public function handle(array $argv = [])
+    public function handle(array $argv = []): void
     {
         $argv = empty($argv) ? $this->argv() : $argv;
         $type = strtolower(array_shift($argv));
@@ -190,7 +190,7 @@ class Kernel implements KernelContract
 	 *
 	 * @throws ConsoleException
      */
-    public function call(string $command, array $options = [])
+    public function call(string $command, array $options = []): void
     {
         $command = $this->app->make($command);
 
@@ -215,7 +215,7 @@ class Kernel implements KernelContract
      * 
      * @return boolean
      */
-    public function caching()
+    public function caching(): bool
     {
         return cacheExists('app.php');
     }
@@ -225,9 +225,9 @@ class Kernel implements KernelContract
      * 
      * @return array
      */
-    public function all()
+    public function all(): array
     {
-        return array_merge($this->commands, $this->appCommands);
+        return [...$this->commands, ...$this->appCommands];
     }
 
     /**
@@ -235,7 +235,7 @@ class Kernel implements KernelContract
      * 
      * @return array
      */
-    public function argv()
+    public function argv(): array
     {
         return $this->argv;
     }
@@ -244,8 +244,10 @@ class Kernel implements KernelContract
      * Set argv
      * 
      * @param array $argv
+     * 
+     * @return void
      */
-    protected function setArgv(array $argv)
+    protected function setArgv(array $argv): void
     {
         $this->argv = $argv;
     }

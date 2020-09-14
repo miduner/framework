@@ -11,14 +11,14 @@ class ScheduleRunCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'schedule:run';
+    protected string $signature = 'schedule:run';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Handle task scheduling';
+    protected string $description = 'Handle task scheduling';
 
     /**
      * Create a new command instance.
@@ -35,7 +35,7 @@ class ScheduleRunCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         error_reporting(0);
 
@@ -100,7 +100,7 @@ class ScheduleRunCommand extends Command
      * 
      * @return string
      */
-    public function getLastErrorMsg()
+    public function getLastErrorMsg(): string
     {
         return error_get_last()['message'] . ' in ' . error_get_last()['file'] . ' line ' . error_get_last()['line'];
     }

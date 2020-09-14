@@ -9,7 +9,7 @@ final class Paginator
      * 
      * @return int
      */
-    public static function resolveCurrentPage()
+    public static function resolveCurrentPage(): int
     {
         return request()->get('page') ?: 1;
     }
@@ -22,7 +22,7 @@ final class Paginator
      * 
      * @return array
      */
-    public static function resolvePagePagination($total, $perPage, $pageUrl)
+    public static function resolvePagePagination(int $total, int $perPage, string $pageUrl): array
     {
         $lastPage = self::resolveLastPage($total, $perPage);
         $currentPage = self::resolveCurrentPage();
@@ -43,7 +43,7 @@ final class Paginator
      * 
      * @return array
      */
-    public static function buildPagination($lastPage, $firstPage, $nextPage, $prevPage, $currentPage, $pageUrl)
+    public static function buildPagination(int $lastPage, int $firstPage, int $nextPage, int $prevPage, int $currentPage, string $pageUrl): array
     {
         $parseUrl = parse_url($pageUrl);
 
@@ -83,7 +83,7 @@ final class Paginator
      * 
      * @return int
      */
-    public static function resolveLastPage($total, $perPage)
+    public static function resolveLastPage(int $total, int $perPage): int
     {
         $lastPage = (string) $total / $perPage;
         $lastPage = explode('.', $lastPage);
@@ -96,7 +96,7 @@ final class Paginator
      * 
      * @return int
      */
-    public static function resolveFirstPage()
+    public static function resolveFirstPage(): int
     {
         return 1;
     }
@@ -109,7 +109,7 @@ final class Paginator
      * 
      * @return int/null
      */
-    public static function resolveNextPage($currentPage, $lastPage)
+    public static function resolveNextPage(int $currentPage, int $lastPage): ?int
     {
         return $currentPage + 1 <= $lastPage ? $currentPage + 1 : null;
     }
@@ -121,7 +121,7 @@ final class Paginator
      * 
      * @return int/null
      */
-    public static function resolvePreviousPage($currentPage)
+    public static function resolvePreviousPage(int $currentPage): ?int
     {
         return $currentPage > 1 ? $currentPage - 1 : null;
     }
@@ -134,7 +134,7 @@ final class Paginator
      * 
      * @return int
      */
-    public static function resolveFrom($currentPage, $perPage)
+    public static function resolveFrom(int $currentPage, int $perPage): int
     {
         return (int) ($currentPage - 1) * $perPage + 1;
     }
@@ -149,7 +149,7 @@ final class Paginator
      * 
      * @return int
      */
-    public static function resolveTo($currentPage, $perPage, int $total, int $lastPage)
+    public static function resolveTo(int $currentPage, int $perPage, int $total, int $lastPage): ints
     {
         if ($currentPage == $lastPage) {
             return $total;

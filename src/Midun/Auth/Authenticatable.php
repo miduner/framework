@@ -22,28 +22,28 @@ class Authenticatable implements Authentication
      * 
      * @var string
      */
-    private $guard;
+    private string $guard = "";
 
     /**
      * Provider of guard
      * 
      * @var string
      */
-    private $provider;
+    private string $provider = "";
 
     /**
      * Model of user
      * 
      * @var string
      */
-    private $model;
+    private string $model = "";
 
     /**
      * Model object bound
      * 
-     * @var object
+     * @var Model
      */
-    private $object;
+    private ?Model $object = null;
 
     /**
      * Check condition and set user
@@ -54,7 +54,7 @@ class Authenticatable implements Authentication
 	 *
 	 * @throws AuthenticationException
      */
-    public function attempt(array $options = [])
+    public function attempt(array $options = []): bool
     {
         $model = new $this->model;
         $columnPassword = $model->password();
@@ -69,18 +69,18 @@ class Authenticatable implements Authentication
         }
 
         return $this->setUserAuth(
-            $this->model->where($options)->firstOrFail()
+            $this->model::where($options)->firstOrFail()
         );
     }
 
     /**
      * Get user available
      * 
-     * @throws \Midun\Http\Exceptions\AppException
+     * @throws AppException
      *
-     * @return object/null
+     * @return Model/null
      */
-    public function user()
+    public function user(): ?Model
     {
         if (!is_null($this->getObject())) {
             return $this->getObject();
@@ -121,7 +121,7 @@ class Authenticatable implements Authentication
 
                     $primaryKey = app()->make($this->model)->primaryKey();
 
-                    $modelObject = $this->model->findOrFail($decode->object->{$primaryKey});
+                    $modelObject = $this->model::findOrFail($decode->object->{$primaryKey});
 
                     return $modelObject;
                 } catch (\Firebase\JWT\ExpiredException $e) {
@@ -142,7 +142,7 @@ class Authenticatable implements Authentication
      * 
      * @return string
      */
-    public function trueFormatKey(string $key)
+    public function trueFormatKey(string $key): string
     {
         return base64_decode(strtr($key, '-_', '+/'));
     }
@@ -150,9 +150,9 @@ class Authenticatable implements Authentication
     /**
      * Logout user
      *
-     * @return bool
+     * @return void
      */
-    public function logout()
+    public function logout(): void
     {
         $guardDriver = $this->getConfigDriverFromGuard(
             $this->getCurrentGuard()
@@ -160,10 +160,9 @@ class Authenticatable implements Authentication
 
         switch ($guardDriver) {
             case 'session':
-                return Session::unset('user');
+                Session::unset('user');
                 break;
             case 'jwt':
-                return true;
                 break;
         }
     }
@@ -175,7 +174,7 @@ class Authenticatable implements Authentication
 	 *
 	 * @throws AppException
      */
-    public function check()
+    public function check(): bool
     {
         if (!is_null($this->user()) && !empty($this->user())) {
             return true;
@@ -188,11 +187,11 @@ class Authenticatable implements Authentication
      *
      * @param Model $user
      *
-     * @return true
+     * @return bool
 	 *
 	 * @throws AuthenticationException
      */
-    private function setUserAuth(Model $user)
+    private function setUserAuth(Model $user): bool
     {
         $this->setObject($user);
 
@@ -209,6 +208,7 @@ class Authenticatable implements Authentication
             default:
                 throw new AuthenticationException("Unknown authentication");
         }
+
         return true;
     }
 
@@ -219,9 +219,9 @@ class Authenticatable implements Authentication
      *
      * @return $this
      */
-    public function guard($guard = null)
+    public function guard($guard = ""): Authenticatable
     {
-        if (is_null($guard)) {
+        if (empty($guard)) {
             $guard = $this->getDefaultGuard();
         }
 
@@ -249,7 +249,7 @@ class Authenticatable implements Authentication
      * 
      * @return string
      */
-    protected function getConfigModelFromProvider(string $provider)
+    protected function getConfigModelFromProvider(string $provider): string
     {
         return config("auth.providers.{$provider}.model");
     }
@@ -261,7 +261,7 @@ class Authenticatable implements Authentication
      * 
      * @return string
      */
-    protected function getConfigProviderFromGuard(string $guard)
+    protected function getConfigProviderFromGuard(string $guard): string
     {
         return config("auth.guards.{$guard}.provider");
     }
@@ -273,7 +273,7 @@ class Authenticatable implements Authentication
      * 
      * @return string
      */
-    protected function getConfigDriverFromGuard(string $guard)
+    protected function getConfigDriverFromGuard(string $guard): string
     {
         return config("auth.guards.{$guard}.driver");
     }
@@ -285,7 +285,7 @@ class Authenticatable implements Authentication
      * 
      * @return void
      */
-    protected function setModel(string $model)
+    protected function setModel(string $model): void
     {
         $this->model = $model;
     }
@@ -295,7 +295,7 @@ class Authenticatable implements Authentication
      * 
      * @return string
      */
-    protected function getProvider()
+    protected function getProvider(): string
     {
         return $this->provider;
     }
@@ -307,7 +307,7 @@ class Authenticatable implements Authentication
      * 
      * @return void
      */
-    public function setProvider(string $provider)
+    public function setProvider(string $provider): void
     {
         $this->provider = $provider;
     }
@@ -319,7 +319,7 @@ class Authenticatable implements Authentication
      * 
      * @return void
      */
-    public function setGuard(string $guard)
+    public function setGuard(string $guard): void
     {
         $this->guard = $guard;
     }
@@ -329,7 +329,7 @@ class Authenticatable implements Authentication
      * 
      * @return string
      */
-    private function getDefaultGuard()
+    private function getDefaultGuard(): string
     {
         return config('auth.defaults.guard');
     }
@@ -339,7 +339,7 @@ class Authenticatable implements Authentication
      * 
      * @return string
      */
-    public function getCurrentGuard()
+    public function getCurrentGuard(): string
     {
         return $this->guard;
     }
@@ -351,7 +351,7 @@ class Authenticatable implements Authentication
      * 
      * @return void
      */
-    protected function setObject(Model $object)
+    protected function setObject(Model $object): void
     {
         $this->object = $object;
     }
@@ -359,9 +359,9 @@ class Authenticatable implements Authentication
     /**
      * Get current object bound
      * 
-     * @return null|object
+     * @return null|Model
      */
-    protected function getObject()
+    protected function getObject(): ?Model
     {
         return $this->object;
     }

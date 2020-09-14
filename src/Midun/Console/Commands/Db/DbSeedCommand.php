@@ -11,14 +11,14 @@ class DbSeedCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'db:seed';
+    protected string $signature = 'db:seed';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Run seeding data database';
+    protected string $description = 'Run seeding data database';
 
     /**
      * Create a new command instance.
@@ -35,7 +35,7 @@ class DbSeedCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->output->printSuccess("Seeded successfully.");
     }

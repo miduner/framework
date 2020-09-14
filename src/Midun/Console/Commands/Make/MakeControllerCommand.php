@@ -11,14 +11,14 @@ class MakeControllerCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:controller';
+    protected string $signature = 'make:controller';
 
     /**
      * The console controller description.
      *
      * @var string
      */
-    protected $description = 'Making controller service';
+    protected string $description = 'Making controller service';
 
     /**
      * Create a new command instance.
@@ -35,7 +35,7 @@ class MakeControllerCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $options = $this->getOptions();
 

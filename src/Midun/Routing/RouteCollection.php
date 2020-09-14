@@ -9,14 +9,14 @@ class RouteCollection
      * 
      * @var string
      */
-    private $methods;
+    private string $methods;
 
     /**
      * Uri of routing
      * 
      * @var string
      */
-    private $uri;
+    private string $uri;
 
     /**
      * Action
@@ -30,28 +30,28 @@ class RouteCollection
      * 
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * List of middlewares
      * 
      * @var array
      */
-    private $middlewares = [];
+    private array $middlewares = [];
 
     /**
      * Prefix
      * 
      * @var array
      */
-    private $prefix = [];
+    private array $prefix = [];
 
     /**
      * Namespace
      * 
      * @var array
      */
-    private $namespaces = [];
+    private array $namespaces = [];
 
     /**
      * Initial constructor
@@ -79,8 +79,8 @@ class RouteCollection
         $this->name = $name;
         $this->action = $action;
         $this->middlewares = $middlewares;
-        $this->prefix = is_array($prefix) ? $prefix : is_string($prefix) ? [$prefix] : null;
-        $this->namespaces = is_array($namespaces) ? $namespaces : is_string($namespaces) ? [$namespaces] : null;
+        $this->prefix = is_array($prefix) && !empty($prefix) ? $prefix : [$prefix];
+        $this->namespaces = (is_array($namespaces) ? $namespaces : is_string($namespaces)) ? [$namespaces] : null;
     }
 
     /**
@@ -90,7 +90,7 @@ class RouteCollection
      * 
      * @return self
      */
-    public function middleware($middleware)
+    public function middleware($middleware): RouteCollection
     {
         if (!is_array($middleware)) {
             array_push($this->middlewares, $middleware);
@@ -107,7 +107,7 @@ class RouteCollection
      * 
      * @return self
      */
-    public function namespace($namespace)
+    public function namespace($namespace): RouteCollection
     {
         $this->namespaces[] = $namespace;
         return $this;
@@ -120,7 +120,7 @@ class RouteCollection
      * 
      * @return self
      */
-    public function name($name)
+    public function name($name): RouteCollection
     {
         $this->name .= $name;
         return $this;
@@ -133,7 +133,7 @@ class RouteCollection
      * 
      * @return self
      */
-    public function prefix($prefix)
+    public function prefix($prefix): RouteCollection
     {
         $this->prefix[] = $prefix;
         return $this;
@@ -144,7 +144,7 @@ class RouteCollection
      * 
      * @return string
      */
-    public function getUri()
+    public function getUri(): string
     {
         return empty($this->uri)
             || !empty($this->uri)
@@ -159,7 +159,7 @@ class RouteCollection
      * 
      * @return string
      */
-    public function getMethods()
+    public function getMethods(): string
     {
         return $this->methods;
     }
@@ -169,7 +169,7 @@ class RouteCollection
      * 
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -189,7 +189,7 @@ class RouteCollection
      * 
      * @return array
      */
-    public function getMiddlewares()
+    public function getMiddlewares(): array
     {
         return $this->middlewares;
     }
@@ -199,9 +199,9 @@ class RouteCollection
      * 
      * @return array
      */
-    public function getPrefix()
+    public function getPrefix(): array
     {
-        return $this->prefix;
+        return !empty($this->prefix && !empty($this->prefix[0])) ? $this->prefix : [];
     }
 
     /**
@@ -209,7 +209,7 @@ class RouteCollection
      * 
      * @return array
      */
-    public function getNamespace()
+    public function getNamespace(): array
     {
         return $this->namespaces;
     }

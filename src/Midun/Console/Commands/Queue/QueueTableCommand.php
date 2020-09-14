@@ -13,14 +13,14 @@ class QueueTableCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'queue:table';
+    protected string $signature = 'queue:table';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Install queue table';
+    protected string $description = 'Install queue table';
 
     /**
      * Create a new command instance.
@@ -37,7 +37,7 @@ class QueueTableCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         Schema::create('jobs', function (ColumnBuilder $table) {
             $table->increments('id');

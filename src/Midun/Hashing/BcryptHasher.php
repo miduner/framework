@@ -15,7 +15,7 @@ class BcryptHasher implements Hasher
      *
      * @throws \Midun\Hashing\HashException
      */
-    public function make($value, array $options = [])
+    public function make(string $value, array $options = []): string
     {
         $hash = password_hash($value, PASSWORD_BCRYPT, $options);
         if ($hash === false) {
@@ -33,7 +33,7 @@ class BcryptHasher implements Hasher
      * @param  array   $options
      * @return bool
      */
-    public function check($value, $hashedValue, array $options = [])
+    public function check(string $value, string $hashedValue, array $options = []): bool
     {
         if (strlen($hashedValue) === 0) {
             return false;

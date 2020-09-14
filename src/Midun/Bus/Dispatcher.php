@@ -13,6 +13,8 @@ class Dispatcher implements DispatcherContract
      *
      * @param  mixed  $job
      * @return mixed
+     * 
+     * @throws DispatcherException
      */
     public function dispatch(Queue $job)
     {

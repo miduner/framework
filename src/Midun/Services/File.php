@@ -16,28 +16,28 @@ class File
      * 
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * Extension
      * 
      * @var string
      */
-    private $ext;
+    private string $ext;
 
     /**
      * Size
      * 
      * @var int
      */
-    private $size;
+    private int $size;
 
     /**
      * Tmp name of file
      * 
      * @var string
      */
-    private $tmp_name;
+    private string $tmp_name;
 
     /**
      * Constructor
@@ -78,7 +78,7 @@ class File
      * 
      * @return string
      */
-    public function getFileName()
+    public function getFileName(): string
     {
         return $this->name;
     }
@@ -88,7 +88,7 @@ class File
      * 
      * @return string
      */
-    public function getFileExtension()
+    public function getFileExtension(): string
     {
         return $this->ext;
     }
@@ -98,7 +98,7 @@ class File
      * 
      * @return int
      */
-    public function getFileSize()
+    public function getFileSize(): int
     {
         return $this->size;
     }
@@ -108,7 +108,7 @@ class File
      * 
      * @return string
      */
-    public function getTmpName()
+    public function getTmpName(): string
     {
         return $this->tmp_name;
     }

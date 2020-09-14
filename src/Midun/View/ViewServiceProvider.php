@@ -6,10 +6,7 @@ use Midun\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
 {
-    public function boot()
-    { }
-
-    public function register()
+    public function register(): void
     {
         $this->app->singleton('view', function () {
             $directory = base_path('resources/views');

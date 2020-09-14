@@ -6,38 +6,51 @@ final class ModelBindingObject
 {
     /**
      * Flag checking binding one resource
+     * 
+     * @var bool
      */
-    private $oneOf = false;
+    private bool $oneOf = false;
 
     /**
      * Flag checking binding list resource
+     * 
+     * @var bool
      */
-    private $listOf = false;
+    private bool $listOf = false;
 
     /**
      * List instance object model binding
+     * 
+     * @var array
      */
-    private $resources;
+    private array $resources = [];
+
+    /**
+     * List instance object model binding
+     * 
+     * @var object
+     */
+    private object $resource;
 
     /**
      * Model binding
      */
-    private $model = null;
+    private string $model = "";
 
     /**
      * List of args
      */
-    private $args = [];
+    private array $args = [];
 
     /**
      * Flag checking is throwable
      */
-    private $isThrow = false;
+    private bool $isThrow = false;
 
     /**
      * Initial constructor
      */
-    public function __construct($resources)
+    public function __construct(array $resources)
     {
         $this->resources = $resources;
     }
@@ -46,6 +59,8 @@ final class ModelBindingObject
      * Receive parameters
      *
      * @param mixed list of parameters
+     * 
+     * @return mixed
      */
     public function receive()
     {
@@ -60,6 +75,8 @@ final class ModelBindingObject
 
     /**
      * Checking empty resources
+     * 
+     * @return object
      */
     private function checkEmpty()
     {
@@ -67,16 +84,17 @@ final class ModelBindingObject
             if ($this->oneOf && !$this->listOf && $this->isThrow) {
                 throw new EloquentException("Resource not found", 404);
             }
-            return null;
         }
         if ($this->oneOf && !$this->listOf) {
-            $this->resources = array_shift($this->resources);
+            $this->resource = array_shift($this->resources);
         }
         return $this->handle();
     }
 
     /**
      * Execute condition and directional
+     * 
+     * @return mixed
      */
     private function handle()
     {
@@ -95,7 +113,7 @@ final class ModelBindingObject
      *
      * @return Model
      */
-    private function bindOne(Model $object)
+    private function bindOne(Model $object): Model
     {
         if (isset($this->args['with']) && !empty($this->args['with'])) {
             foreach ($this->args['with'] as $with) {
@@ -117,7 +135,7 @@ final class ModelBindingObject
      *
      * @return Collection
      */
-    private function bindMultiple(array $resources)
+    private function bindMultiple(array $resources): Collection
     {
         foreach ($resources as $resource) {
             $resource->callServiceHidden();

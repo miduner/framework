@@ -9,7 +9,7 @@ class TranslatorServiceProvider extends ServiceProvider
     /**
      * Register 3rd-party services
      */
-    public function boot()
+    public function boot(): void
     {
         $cache = items_in_folder(base_path('resources/lang'), false);
 
@@ -26,7 +26,7 @@ class TranslatorServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton('translator', function () {
             return $this->app->make(\Midun\Translator\Translator::class);

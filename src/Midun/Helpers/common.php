@@ -10,7 +10,7 @@ if (!function_exists('redirect')) {
      * 
      * @return void
      */
-    function redirect(string $url)
+    function redirect(string $url): void
     {
         header('Location: ' . $url);
     }
@@ -22,7 +22,7 @@ if (!function_exists('response')) {
      * 
      * @return \Midun\Supports\Response\DataResponse
      */
-    function response()
+    function response(): \Midun\Supports\Response\DataResponse
     {
         return app()->make(__FUNCTION__);
     }
@@ -34,7 +34,7 @@ if (!function_exists('session')) {
      * 
      * @return \Midun\Session\Session
      */
-    function session()
+    function session(): \Midun\Session\Session
     {
         return app()->make(__FUNCTION__);
     }
@@ -45,10 +45,12 @@ if (!function_exists('unsetsession')) {
      * Calling unset_session method in Session
      * 
      * @param string $key
+     * 
+     * @return void
      */
-    function unsetsession(string $key)
+    function unsetsession(string $key): void
     {
-        app()->make('session')->unset_session($key);
+        app()->make('session')->unset($key);
     }
 }
 
@@ -58,7 +60,7 @@ if (!function_exists('request')) {
      * 
      * @return \Midun\Http\Request
      */
-    function request()
+    function request(): \Midun\Http\Request
     {
         return app()->make(__FUNCTION__);
     }
@@ -67,8 +69,10 @@ if (!function_exists('request')) {
 if (!function_exists('readDotENV')) {
     /**
      * Reading .env file
+     * 
+     * @return array
      */
-    function readDotENV()
+    function readDotENV(): array
     {
         $path = base_path('.env');
         if (!file_exists($path)) {
@@ -87,7 +91,7 @@ if (!function_exists('env')) {
 	 *
 	 * @return string
      */
-    function env(string $variable, string $ndvalue = null)
+    function env(string $variable, string $ndvalue = ""): string
     {
         $path = cache_path('environments.php');
         if (!file_exists($path)) {
@@ -123,7 +127,7 @@ if (!function_exists('trans')) {
      * 
      * @return string
      */
-    function trans($variable, $params = [], $lang = 'en')
+    function trans(string $variable, array $params = [], string $lang = 'en'): string
     {
         return app()->make('translator')->trans($variable, $params, $lang);
     }
@@ -133,7 +137,7 @@ if (!function_exists('__')) {
     /**
      * Get translate value without params
      */
-    function __($variable, $lang = 'en')
+    function __(string $variable, string $lang = 'en')
     {
         return trans($variable, [], $lang);
     }
@@ -146,7 +150,7 @@ if (!function_exists('action')) {
      * @param mixed $action
      * @param array @params
      * 
-     * @return void
+     * @return mixed
      */
     function action(array $action, array $params = [])
     {
@@ -161,8 +165,10 @@ if (!function_exists('route')) {
      * @param string $name
      * 
      * @return string
+     * 
+     * @throws \Exception
      */
-    function route(string $name)
+    function route(string $name): string
     {
         $routes =  app()->make(__FUNCTION__)->collect();
         $flag = false;
@@ -174,9 +180,9 @@ if (!function_exists('route')) {
             }
         }
         if ($flag === true) {
-            echo $uri;
+            return $uri;
         } else {
-            throw new Exception("The route " . '"' . $name . '"' . " doesn't exists");
+            throw new \Exception("The route " . '"' . $name . '"' . " doesn't exists");
         }
     }
 }
@@ -185,13 +191,13 @@ if (!function_exists('app')) {
     /**
      * Get instance of Container or make somethings
      * 
-     * @param $entity
+     * @param string $entity
      * 
      * @return mixed
      */
-    function app($entity = null)
+    function app(string $entity = "")
     {
-        if (is_null($entity)) {
+        if (empty($entity)) {
             return \Midun\Container::getInstance();
         }
         return \Midun\Container::getInstance()->make($entity);
@@ -206,7 +212,7 @@ if (!function_exists('is_json')) {
      * 
      * @return boolean
      */
-    function is_json($argument)
+    function is_json($argument): bool
     {
         return (json_decode(json_encode($argument)) != null) ? true : false;
     }
@@ -218,12 +224,11 @@ if (!function_exists('dd')) {
      *
      * @return die
      */
-    function dd($x)
+    function dd(): void
     {
-        $x = is_array($x) ? $x : func_get_args();
         array_map(static function ($x) {
             var_dump($x);
-        }, $x);
+        }, func_get_args());
         die;
     }
 }
@@ -235,17 +240,14 @@ if (!function_exists('assets')) {
      * @param string $path
      * 
      * @return string
-     * 
-     * @throws \Exception
      */
-    function assets($path)
+    function assets(string $path): string
     {
         if (php_sapi_name() == 'cli-server') {
             return "/public/$path";
         } else {
             return $path;
         }
-        throw new Exception("");
     }
 }
 
@@ -255,7 +257,7 @@ if (!function_exists('auth')) {
      * 
      * @return \Midun\Auth\Authenticatable
      */
-    function auth()
+    function auth(): \Midun\Auth\Authenticatable
     {
         return app()->make(__FUNCTION__);
     }
@@ -267,7 +269,7 @@ if (!function_exists('getallheaders')) {
      * 
      * @return array
      */
-    function getallheaders()
+    function getallheaders(): array
     {
         $headers = [];
         foreach ($_SERVER as $name => $value) {
@@ -287,7 +289,7 @@ if (!function_exists('compileWatchingViews')) {
      * 
      * @return void
      */
-    function compileWatchingViews($view)
+    function compileWatchingViews(string $view): void
     {
         $folder = explode('/', $view);
         $file = array_pop($folder);
@@ -305,7 +307,7 @@ if (!function_exists('writeCache')) {
      * 
      * @return void
      */
-    function writeCache(string $folder, string $file)
+    function writeCache(string $folder, string $file): void
     {
         $cacheDir = 'storage/cache/';
 
@@ -340,8 +342,10 @@ if (!function_exists('objectToArray')) {
      * Convert object to array
      * 
      * @param array $inputs
+     * 
+     * @return array
      */
-    function objectToArray($inputs)
+    function objectToArray(array $inputs): array
     {
         $array = [];
 
@@ -359,7 +363,7 @@ if (!function_exists('dispatch')) {
      * 
      * @param \Midun\Queues\Queue
      * 
-     * @return void
+     * @return mixed
      */
     function dispatch(\Midun\Queues\Queue $queue)
     {
@@ -375,7 +379,7 @@ if (!function_exists('realTimeOutput')) {
      * 
      * @return void
      */
-    function realTimeOutput(array $output)
+    function realTimeOutput(array $output): void
     {
         static $oldLines = 0;
         $numNewLines = count($output) - 1;
@@ -395,8 +399,10 @@ if (!function_exists('realTimeOutput')) {
 if (!function_exists('logger')) {
     /**
      * Get instance of logger
+     * 
+     * @return \Midun\Logger\Logger
      */
-    function logger()
+    function logger(): \Midun\Logger\Logger
     {
         return app()->make('log');
     }
@@ -410,7 +416,7 @@ if (!function_exists('check_file')) {
      * 
      * @return boolean
      */
-    function check_file(string $file)
+    function check_file(string $file): bool
     {
         return file_exists(base_path($file));
     }
@@ -424,7 +430,7 @@ if (!function_exists('check_dir')) {
      * 
      * @return boolean
      */
-    function check_dir(string $dir)
+    function check_dir(string $dir): bool
     {
         return is_dir(base_path($dir));
     }
@@ -437,7 +443,7 @@ if (!function_exists('public_path')) {
      * 
      * @return string
      */
-    function public_path($path = '')
+    function public_path($path = ''): string
     {
         return app('path.public') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -450,7 +456,7 @@ if (!function_exists('cache_path')) {
      * 
      * @return string
      */
-    function cache_path($path = '')
+    function cache_path($path = ''): string
     {
         return app('path.cache') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -463,7 +469,7 @@ if (!function_exists('config_path')) {
      * 
      * @return string
      */
-    function config_path($path = '')
+    function config_path($path = ''): string
     {
         return app('path.config') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -476,7 +482,7 @@ if (!function_exists('database_path')) {
      * 
      * @return string
      */
-    function database_path($path = '')
+    function database_path($path = ''): string
     {
         return app('path.database') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -490,7 +496,7 @@ if (!function_exists('storage_path')) {
      * 
      * @return string
      */
-    function storage_path($path = '')
+    function storage_path($path = ''): string
     {
         return app('path.storage') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -504,7 +510,7 @@ if (!function_exists('route_path')) {
      * 
      * @return string
      */
-    function route_path($path = '')
+    function route_path(string $path = ''): string
     {
         return app('path.route') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -518,7 +524,7 @@ if (!function_exists('base_path')) {
      * 
      * @return string
      */
-    function base_path(string $path = '')
+    function base_path(string $path = ''): string
     {
         return app()->basePath() . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -534,7 +540,7 @@ if (!function_exists('make_dir')) {
      * 
      * @return bool
      */
-    function make_dir($dir, $mode = 0777, $recursive = false)
+    function make_dir(string $dir, int $mode = 0777, bool $recursive = false): bool
     {
         return mkdir(base_path($dir), $mode, $recursive);
     }
@@ -548,7 +554,7 @@ if (!function_exists('cacheExists')) {
      * 
      * @return bool
      */
-    function cacheExists(string $cacheFile)
+    function cacheExists(string $cacheFile): bool
     {
         return check_file('storage/cache/' . $cacheFile);
     }
@@ -562,7 +568,7 @@ if (!function_exists('generateRandomString')) {
      * 
      * @return string
      */
-    function generateRandomString($length = 10)
+    function generateRandomString(int $length = 10): string
     {
         $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
@@ -586,7 +592,7 @@ if (!function_exists('stringToKeywords')) {
      * 
      * @return array
      */
-    function stringToKeywords(string $str, int $min = 1, int $max = null)
+    function stringToKeywords(string $str, int $min = 1, ?int $max = null)
     {
         $array = explode(' ', $str);
 
@@ -646,7 +652,7 @@ if (!function_exists('delete_directory')) {
      *
      * @return boolean
      */
-    function delete_directory($dir)
+    function delete_directory(string $dir): bool
     {
         if (!file_exists($dir)) {
             return true;
@@ -679,7 +685,7 @@ if (!function_exists('items_in_folder')) {
      * 
      * @return array
      */
-    function items_in_folder(string $folder, bool $included = true)
+    function items_in_folder(string $folder, bool $included = true): array
     {
         $dir = new \RecursiveDirectoryIterator(
             $folder,
@@ -712,6 +718,8 @@ if (!function_exists('items_in_folder')) {
 if(!function_exists('get_client_ip')) {
     /**
      * Get client ip
+     * 
+     * @return mixed
      */
     function get_client_ip() {
         $ip = '';

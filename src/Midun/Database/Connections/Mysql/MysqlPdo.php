@@ -4,6 +4,7 @@ namespace Midun\Database\Connections\Mysql;
 
 use PDO;
 use PDOException;
+use PDOStatement;
 
 class MysqlPdo extends PDO
 {
@@ -17,7 +18,7 @@ class MysqlPdo extends PDO
      * 
      * @return mixed
      */
-    public function __construct($dns, $username = null, $password = null, array $options = null)
+    public function __construct($dns, $username, $password, $options = [])
     {
         parent::__construct($dns, $username, $password, $options);
     }
@@ -28,7 +29,7 @@ class MysqlPdo extends PDO
      * @param string $statement
      * @param array $options 
      * 
-     * @return PDOStatement|bool
+     * @return PDOStatement|true
      */
     public function prepare($statement, $options = [])
     {
@@ -40,7 +41,7 @@ class MysqlPdo extends PDO
      * 
      * @return bool
      */
-    public function execute()
+    public function execute(): bool
     {
         return parent::execute();
     }
@@ -50,9 +51,9 @@ class MysqlPdo extends PDO
      * 
      * @param string $statement
      * 
-     * @return PDOStatement|false
+     * @return PDOStatement
      */
-    public function query(string $statement)
+    public function query($statement): PDOStatement
     {
         return parent::query($statement);
     }
@@ -62,7 +63,7 @@ class MysqlPdo extends PDO
      * 
      * @return int
      */
-    public function rowCount()
+    public function rowCount(): int
     {
         return parent::rowCount();
     }
@@ -86,7 +87,7 @@ class MysqlPdo extends PDO
      * 
      * @return bool
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return parent::beginTransaction();
     }
@@ -98,7 +99,7 @@ class MysqlPdo extends PDO
      * 
      * @throws PDOException
      */
-    public function commit()
+    public function commit(): bool
     {
         return parent::commit();
     }
@@ -110,7 +111,7 @@ class MysqlPdo extends PDO
      * 
      * @throws PDOException
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         return parent::rollBack();
     }

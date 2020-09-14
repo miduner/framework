@@ -6,17 +6,13 @@ use Midun\ServiceProvider;
 
 class AuthenticationServiceProvider extends ServiceProvider
 {
-    public function boot()
-    {
-
-    }
-
     /**
-     * Register the service provider.
+     * Register all of the service providers that you
+     * import in config/app.php -> providers
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton('auth', function () {
             return new Authenticatable;

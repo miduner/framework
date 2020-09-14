@@ -14,25 +14,25 @@ class ConfigCacheCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'config:cache';
+    protected string $signature = 'config:cache';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Clear and rewrite caching, views, config';
+    protected string $description = 'Clear and rewrite caching, views, config';
 
     /**
      * Flag check using cache
      * @var boolean
      */
-    protected $usingCache = false;
+    protected bool $usingCache = false;
 
     /**
      * Other called signatures
      */
-    protected $otherSignatures = [
+    protected array $otherSignatures = [
         'c:c'
     ];
 
@@ -53,7 +53,7 @@ class ConfigCacheCommand extends Command
 	 *
 	 * @throws ConsoleException
      */
-    public function handle()
+    public function handle(): void
     {
         (new ConfigClearCommand)->handle();
 

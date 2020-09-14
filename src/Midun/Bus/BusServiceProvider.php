@@ -7,17 +7,12 @@ use Midun\ServiceProvider;
 class BusServiceProvider extends ServiceProvider
 {
     /**
-     * Register 3rd-party services
-     */
-    public function boot()
-    { }
-
-    /**
-     * Register the service provider.
-     *
+     * Register all of the service providers that you
+     * import in config/app.php -> providers
+     * 
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind(\Midun\Contracts\Bus\Dispatcher::class, \Midun\Bus\Dispatcher::class);
     }

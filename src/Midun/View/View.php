@@ -23,35 +23,35 @@ class View
      * 
      * @var string
      */
-    protected $masterLayout;
+    protected string $masterLayout = "";
 
     /**
      * Directory of views
      * 
      * @var string
      */
-    protected $directory;
+    protected string $directory;
 
     /**
      * Directory of cache views
      * 
      * @var string
      */
-    protected $cacheDirectory;
+    protected string $cacheDirectory;
 
     /**
      * Current working section
      * 
      * @var string
      */
-    protected $section;
+    protected string $section = "";
 
     /**
      * List of sections
      * 
      * @var array
      */
-    protected $sections = [];
+    protected array $sections = [];
 
     /**
      * List of php start tags
@@ -89,7 +89,7 @@ class View
      * 
      * @return string
      */
-    public function getDirectory()
+    public function getDirectory(): string
     {
         return str_replace("/", DIRECTORY_SEPARATOR, $this->directory);
     }
@@ -99,7 +99,7 @@ class View
      * 
      * @return string
      */
-    public function getCachingDirectory()
+    public function getCachingDirectory(): string
     {
         return str_replace("/", DIRECTORY_SEPARATOR, $this->cacheDirectory);
     }
@@ -111,7 +111,7 @@ class View
      * 
      * @return void
      */
-    public function setMaster(string $masterLayout)
+    public function setMaster(string $masterLayout): void
     {
         $this->masterLayout = $masterLayout;
     }
@@ -125,7 +125,7 @@ class View
 	 *
 	 * @throws ViewException
      */
-    public function makeCache(string $file)
+    public function makeCache(string $file): void
     {
         $file = $this->getTrueFormat($file);
 
@@ -172,7 +172,7 @@ class View
      * 
      * @return void
      */
-    protected function makeCachingDirectory(string $directory)
+    protected function makeCachingDirectory(string $directory): void
     {
         if (false === is_dir($directory)) {
             $dir = '';
@@ -192,7 +192,7 @@ class View
      * 
      * @return string
      */
-    protected function compileHtml(string $path)
+    protected function compileHtml(string $path): string
     {
         $compiler = new ViewCompiler($path);
 
@@ -214,7 +214,7 @@ class View
      * 
      * @return string
      */
-    protected function getTrueFormat(string $file)
+    protected function getTrueFormat(string $file): string
     {
         $file = strpos($file, '.php') !== false
             ? str_replace('.php', '', $file)
@@ -233,7 +233,7 @@ class View
 	 * 
 	 * @throws ViewException
      */
-    public function getContentFromCacheWithArguments(string $file, array $arguments)
+    public function getContentFromCacheWithArguments(string $file, array $arguments): string
     {
         $file = str_replace('.', '/', $file) . '.php';
 
@@ -261,7 +261,7 @@ class View
      * 
      * @throws ViewException
      */
-    public function setCurrentSection($section)
+    public function setCurrentSection($section): void
     {
         if ($this->existsSection()) {
             throw new ViewException("Missing tag `endsection` before start new section.<br>Current section `{$this->section}`");
@@ -274,9 +274,9 @@ class View
      * 
      * @return bool
      */
-    private function existsSection()
+    private function existsSection(): bool
     {
-        return !is_null(
+        return !empty(
             $this->getCurrentSection()
         );
     }
@@ -289,7 +289,7 @@ class View
      * 
      * @return void
      */
-    public function setSectionWithData(string $section, $data)
+    public function setSectionWithData(string $section, $data): void
     {
         $this->sections[$section] = $data;
     }
@@ -297,9 +297,9 @@ class View
     /**
      * Get current section
      * 
-     * @return string|null
+     * @return string
      */
-    private function getCurrentSection()
+    private function getCurrentSection(): string
     {
         return $this->section;
     }
@@ -311,10 +311,10 @@ class View
      * 
      * @return void
      */
-    public function setDataForSection($data)
+    public function setDataForSection($data): void
     {
         $this->sections[$this->section] = htmlentities($data);
-        $this->section = null;
+        $this->section = "";
     }
 
     /**
@@ -322,7 +322,7 @@ class View
      * 
      * @return array
      */
-    protected function getSections()
+    protected function getSections(): array
     {
         return $this->sections;
     }
@@ -330,9 +330,9 @@ class View
     /**
      * Get master layouts
      * 
-     * @return string|null
+     * @return string
      */
-    protected function getMasterLayout()
+    protected function getMasterLayout(): string
     {
         return $this->masterLayout;
     }
@@ -391,7 +391,7 @@ class View
 	 *
 	 * @throws ViewException
 	 */
-    private function syncRendering(string $file, array $arguments)
+    private function syncRendering(string $file, array $arguments): void
     {
         $this->makeCache($file);
 
@@ -404,7 +404,7 @@ class View
 
         ob_get_clean();
 
-        if ($this->getMasterLayout()) {
+        if (!empty($this->getMasterLayout())) {
 
             $this->makeCache(
                 $this->getMasterLayout()
@@ -429,7 +429,7 @@ class View
 	 *
 	 * @throws ViewException
      */
-    private function cachingRendering(string $file, array $arguments)
+    private function cachingRendering(string $file, array $arguments): void
     {
         ob_start();
 
@@ -440,7 +440,7 @@ class View
 
         ob_get_clean();
 
-        if ($this->getMasterLayout()) {
+        if (!empty($this->getMasterLayout())) {
 
             $content = $this->getContentFromCacheWithArguments(
                 $this->getMasterLayout(),

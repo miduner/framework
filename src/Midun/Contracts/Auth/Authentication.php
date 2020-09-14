@@ -11,37 +11,37 @@ interface Authentication
      * 
      * @return boolean
      */
-    public function attempt(array $options = []);
+    public function attempt(array $options = []): bool;
 
     /**
      * Get user available
      * 
      * @throws \Midun\Http\Exceptions\AppException
      *
-     * @return object/null
+     * @return \Midun\Eloquent\Model|null
      */
-    public function user();
+    public function user(): ?\Midun\Eloquent\Model;
 
     /**
      * Logout user
      *
      * @return void
      */
-    public function logout();
+    public function logout(): void;
 
     /**
      * Checking has user login
      *
      * @return boolean
      */
-    public function check();
+    public function check(): bool;
 
     /**
      * Set guard for authentication
      *
      * @param string $guard
      *
-     * @return $this
+     * @return self
      */
-    public function guard($guard = null);
+    public function guard($guard = ""): Authentication;
 }

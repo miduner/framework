@@ -2,33 +2,37 @@
 
 namespace Midun\Logger;
 
+use Midun\FileSystem\FileSystem;
+
 class Logger
 {
     /**
      * File system
      * 
-     * @var Midun\FileSystem\FileSystem
+     * @var FileSystem
      */
-    protected $fileSystem;
+    protected FileSystem $fileSystem;
 
     /**
      * Log directory
      * 
      * @var string
      */
-    protected $directory;
+    protected string $directory;
 
     /**
      * Create log file by date
      * 
      * @var boolean
      */
-    protected $byDate = false;
+    protected bool $byDate = false;
 
     /**
      * Constructor of Logger
+     * 
+     * @param string $directory
      */
-    public function __construct(string $directory = null)
+    public function __construct(?string $directory = null)
     {
         if (!is_null($directory)) $this->setDirectory($directory);
 
@@ -44,7 +48,7 @@ class Logger
      * 
      * @return self
      */
-    public function setDirectory(string $directory)
+    public function setDirectory(string $directory): Logger
     {
         $this->directory = $directory;
         return $this;
@@ -55,7 +59,7 @@ class Logger
      * 
      * @return string
      */
-    public function getDirectory()
+    public function getDirectory(): string
     {
         return $this->directory;
     }
@@ -67,7 +71,7 @@ class Logger
      * 
      * @return self
      */
-    public function setWriteLogByDate(int $byDate)
+    public function setWriteLogByDate(int $byDate): Logger
     {
         $this->byDate = $byDate;
         return $this;
@@ -78,7 +82,7 @@ class Logger
      * 
      * @return boolean
      */
-    public function isLogByDate()
+    public function isLogByDate(): bool
     {
         return $this->byDate;
     }
@@ -86,11 +90,11 @@ class Logger
     /**
      * Set file system
      * 
-     * @param \Midun\FileSystem\FileSystem $fileSystem
+     * @param FileSystem $fileSystem
      * 
      * @return void
      */
-    protected function setFileSystem(\Midun\FileSystem\FileSystem $fileSystem)
+    protected function setFileSystem(FileSystem $fileSystem): void
     {
         $this->fileSystem = $fileSystem;
     }
@@ -98,9 +102,9 @@ class Logger
     /**
      * Get file system
      * 
-     * @return \Midun\FileSystem\FileSystem
+     * @return FileSystem
      */
-    protected function getFileSystem()
+    protected function getFileSystem(): FileSystem
     {
         return $this->fileSystem;
     }
@@ -111,11 +115,12 @@ class Logger
      * @param string $level
      * @param mixed $message
      * @param string $directory = null
+     * @param string $fileName
      * @param bool $byDate
      * 
-     * @return int/false
+     * @return int
      */
-    public function writeLog($level, $message, $directory = null, $fileName = null, $byDate = null)
+    public function writeLog(string $level, $message, ?string $directory = null, ?string $fileName = null, ?bool $byDate = null): int
     {
         $directory = !is_null($directory) ? $directory : $this->getDirectory();
         $byDate = !is_null($byDate) ? $byDate : $this->isLogByDate();
@@ -139,8 +144,10 @@ class Logger
      * @param array $args
      * 
      * @return mixed
+     * 
+     * @throws LoggerException
      */
-    public function __call($method, $args)
+    public function __call(string $method, array $args)
     {
         switch ($method) {
             case 'info':

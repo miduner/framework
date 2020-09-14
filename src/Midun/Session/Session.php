@@ -12,7 +12,7 @@ class Session
      * 
      * @return bool
      */
-    public function isset(string $key)
+    public function isset(string $key): bool
     {
         return isset($_SESSION[$key]);
     }
@@ -25,9 +25,9 @@ class Session
      * 
      * @return void
      */
-    public function set(string $key, $value)
+    public function set(string $key, $value): void
     {
-        return $_SESSION[$key] = $value;
+        $_SESSION[$key] = $value;
     }
 
     /**
@@ -35,9 +35,9 @@ class Session
      * 
      * @param string $key
      * 
-     * return void
+     * @return void
      */
-    public function unset(string $key)
+    public function unset(string $key): void
     {
         unset($_SESSION[$key]);
     }
@@ -57,9 +57,9 @@ class Session
     /**
      * Get all session storage
      * 
-     * @return array|null
+     * @return array
      */
-    public function storage()
+    public function storage(): array
     {
         return $_SESSION;
     }

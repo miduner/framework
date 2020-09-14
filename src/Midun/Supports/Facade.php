@@ -13,9 +13,9 @@ abstract class Facade
 	 *
 	 * @throws AppException
 	 */
-	protected static function getFacadeAccessor()
+	protected static function getFacadeAccessor(): string
 	{
-		throw new AppException("Method " . __METHOD__ . " is not overide.");
+		throw new AppException("Method " . __METHOD__ . " is not override.");
 	}
 
 	/**

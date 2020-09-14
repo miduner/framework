@@ -2,9 +2,11 @@
 
 namespace Midun;
 
+use Midun\Container;
+use Midun\Traits\Instance;
+use Midun\Configuration\Config;
 use Midun\Http\Exceptions\ErrorHandler;
 use Midun\Http\Exceptions\RuntimeException;
-use Midun\Traits\Instance;
 
 class Application
 {
@@ -13,16 +15,16 @@ class Application
     /**
      * Container instance
      * 
-     * @var \Midun\Container
+     * @var Container
      */
-    private $container;
+    private Container $container;
 
     /**
      * Instance of configuration
      * 
-     * @var \Midun\Configuration\Config
+     * @var Config
      */
-    private $config;
+    private Config $config;
 
 
     /**
@@ -30,12 +32,12 @@ class Application
      * 
      * @var bool
      */
-    private $loaded = false;
+    private bool $loaded = false;
 
     /**
      * Initial constructor
      * 
-     * @param \Midun\Container $container
+     * @param Container $container
      * 
      * Set configuration instance
      * 
@@ -59,7 +61,7 @@ class Application
      * 
      * @return void
      */
-    public function registerServiceProvider()
+    public function registerServiceProvider(): void
     {
         $providers = $this->container->make('config')->getConfig('app.providers');
 
@@ -80,7 +82,7 @@ class Application
      * 
      * @return void
      */
-    private function registerConfigProvider()
+    private function registerConfigProvider(): void
     {
         $this->container->singleton('config', function () {
             return new \Midun\Configuration\Config();
@@ -92,7 +94,7 @@ class Application
      * 
      * @return bool
      */
-    public function isLoaded()
+    public function isLoaded(): bool
     {
         return $this->loaded;
     }
@@ -102,9 +104,9 @@ class Application
      * 
      * @param bool $isLoad
      * 
-     * @return bool
+     * @return void
      */
-    private function setLoadState(bool $isLoad)
+    private function setLoadState(bool $isLoad): void
     {
         $this->loaded = $isLoad;
     }
@@ -114,7 +116,7 @@ class Application
      * 
      * @return void
      */
-    private function loadConfiguration()
+    private function loadConfiguration(): void
     {
         $cache = array_filter(scandir(cache_path()), function ($item) {
             return strpos($item, '.php') !== false;
@@ -133,7 +135,7 @@ class Application
      * 
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->loadConfiguration();
         $this->registerServiceProvider();
@@ -143,15 +145,17 @@ class Application
     /**
      * Terminate the application
      */
-    public function terminate()
+    public function terminate(): void
     { }
 
     /**
      * Set error handler
      * 
      * @return void
+     * 
+     * @throws RuntimeException
      */
-    public function whenShutDown()
+    public function whenShutDown(): void
     {
         $last_error = error_get_last();
         if (!is_null($last_error)) {
@@ -161,6 +165,8 @@ class Application
 
     /**
      * Set error handler
+     * 
+     * @return mixed
      */
     public function setErrorHandler()
     {

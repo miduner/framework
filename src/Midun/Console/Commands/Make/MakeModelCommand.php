@@ -11,14 +11,14 @@ class MakeModelCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:model';
+    protected string $signature = 'make:model';
 
     /**
      * The console model description.
      *
      * @var string
      */
-    protected $description = 'Making model service';
+    protected string $description = 'Making model service';
 
     /**
      * Create a new command instance.
@@ -35,7 +35,7 @@ class MakeModelCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $options = $this->getOptions();
 

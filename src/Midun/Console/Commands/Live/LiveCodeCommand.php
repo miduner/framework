@@ -11,21 +11,21 @@ class LiveCodeCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'live:code';
+    protected string $signature = 'live:code';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Live code';
+    protected string $description = 'Live code';
 
     /**
      * Other called signatures
      * 
      * @var array
      */
-    protected $otherSignatures = [
+    protected array $otherSignatures = [
         'tinker',
         'code',
         'go'
@@ -36,7 +36,7 @@ class LiveCodeCommand extends Command
      * 
      * @var string
      */
-    protected $temp;
+    protected string $temp = "";
 
     /**
      * Expression of dd
@@ -101,7 +101,7 @@ class LiveCodeCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         if (!function_exists('readline')) {
             $this->output->printError("You're php environments is not allowed readline(), please make sure it's work.");
@@ -147,12 +147,26 @@ class LiveCodeCommand extends Command
         }
     }
 
-    public function writeLog($message)
+    /**
+     * Write log output
+     * 
+     * @param string $message
+     * 
+     * @return void
+     */
+    public function writeLog(string $message): void
     {
         file_put_contents($this->temp, $message);
     }
 
-    public function reWriteTemp($content = null)
+    /**
+     * Re-write temp file
+     * 
+     * @param string $content
+     * 
+     * @return void
+     */
+    public function reWriteTemp($content = ""): void
     {
         @unlink($this->temp);
 

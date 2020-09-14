@@ -4,6 +4,7 @@ namespace Midun\Pipeline;
 
 use Closure;
 use Midun\Container;
+use Midun\Http\Request;
 use Midun\Contracts\Pipeline\Pipeline as MainPipeline;
 
 class Pipeline implements MainPipeline
@@ -11,38 +12,38 @@ class Pipeline implements MainPipeline
     /**
      * The container implementation.
      *
-     * @var \Midun\Container
+     * @var Container
      */
-    protected $container;
+    protected Container $container;
 
     /**
      * The object being passed through the pipeline.
      *
      * @var mixed
      */
-    protected $passable;
+    protected Request $passable;
 
     /**
      * The array of class pipes.
      *
      * @var array
      */
-    protected $pipes = [];
+    protected array $pipes = [];
 
     /**
      * The method to call on each pipe.
      *
      * @var string
      */
-    protected $method = 'handle';
+    protected string $method = 'handle';
 
     /**
      * Create a new class instance.
      *
-     * @param  \Midun\Container|null  $container
+     * @param  \Midun\Container  $container
      * @return void
      */
-    public function __construct(Container $container = null)
+    public function __construct(?Container $container = null)
     {
         $this->container = $container ?: Container::getInstance();
     }
@@ -50,10 +51,10 @@ class Pipeline implements MainPipeline
     /**
      * Set the object being sent through the pipeline.
      *
-     * @param  mixed  $passable
+     * @param  Request  $passable
      * @return $this
      */
-    public function send($passable)
+    public function send(Request $passable): Pipeline
     {
         $this->passable = $passable;
 
@@ -63,10 +64,10 @@ class Pipeline implements MainPipeline
     /**
      * Set the array of pipes.
      *
-     * @param  array|mixed  $pipes
+     * @param  array|string  $pipes
      * @return $this
      */
-    public function through($pipes)
+    public function through($pipes): Pipeline
     {
         $this->pipes = is_array($pipes) ? $pipes : func_get_args();
 
@@ -79,7 +80,7 @@ class Pipeline implements MainPipeline
      * @param  string  $method
      * @return $this
      */
-    public function via($method)
+    public function via(string $method): Pipeline
     {
         $this->method = $method;
 
@@ -106,7 +107,7 @@ class Pipeline implements MainPipeline
      * @param  \Closure  $handleRouting
      * @return \Closure
      */
-    protected function preparehandleRouting(Closure $handleRouting)
+    protected function preparehandleRouting(Closure $handleRouting): \Closure
     {
         return function () use ($handleRouting) {
             return $handleRouting();
@@ -118,7 +119,7 @@ class Pipeline implements MainPipeline
      *
      * @return \Closure
      */
-    protected function carry()
+    protected function carry(): \Closure
     {
         return function ($stack, $pipe) {
             return function ($passable) use ($stack, $pipe) {

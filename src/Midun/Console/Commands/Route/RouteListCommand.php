@@ -23,21 +23,21 @@ class RouteListCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'route:list';
+	protected string $signature = 'route:list';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Display list of registered routes';
+	protected string $description = 'Display list of registered routes';
 
 	/**
 	 * True format for command
 	 *
 	 * @var string
 	 */
-	protected $format = '>>hustle route:{type}';
+	protected string $format = '>>hustle route:{type}';
 
 	/**
 	 * Create a new command instance.
@@ -54,11 +54,11 @@ class RouteListCommand extends Command
 	 *
 	 * @return void
 	 */
-	public function handle()
+	public function handle(): void
 	{
 		$routes = app()->make('route')->collect();
 
-		switch($this->getOptions('format')) {
+		switch($this->getOption('format')) {
 			case 'array':
 				print_r($routes);
 				break;
@@ -81,8 +81,10 @@ class RouteListCommand extends Command
 
 					$route = (object)$route;
 
-					if(!empty($route->getPrefix())) {
-						$uri = \Midun\Routing\Routing::ROUTING_SEPARATOR . implode('/', $route->getPrefix()) . $route->getUri();
+					$prefix = $route->getPrefix();
+
+					if(!empty($prefix)) {
+						$uri = \Midun\Routing\Routing::ROUTING_SEPARATOR . implode("/", $prefix) . $route->getUri();
 					} else {
 						$uri = $route->getUri();
 					}
@@ -122,7 +124,7 @@ class RouteListCommand extends Command
 	 *
 	 * @return void
 	 */
-	private function handleViewJsonFormat(array $routes)
+	private function handleViewJsonFormat(array $routes): void
 	{
 		foreach($routes as $route) {
 			echo str_replace("\\", "", json_encode(['uri' => $route->getUri(), 'action' => $route->getAction(), 'method' => $route->getMethods(), 'name' => $route->getName(), 'middlewares' => $route->getMiddlewares()])) . PHP_EOL;
@@ -137,7 +139,7 @@ class RouteListCommand extends Command
 	 *
 	 * @return string
 	 */
-	public function makeSpace(int $max, string $specific = ' ')
+	public function makeSpace(int $max, string $specific = " "): string
 	{
 		$space = '';
 

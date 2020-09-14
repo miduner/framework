@@ -19,14 +19,16 @@ class AliasLoader
      * 
      * @param string $class
      * 
-     * @return void|bool
+     * @return bool
      */
-    public function aliasLoader(string $class)
+    public function aliasLoader(string $class): bool
     {
         $alias = config('app.aliases');
 
         if (isset($alias[$class])) {
             return class_alias($alias[$class], $class);
         }
+
+        return true;
     }
 }

@@ -16,7 +16,7 @@ class Routing
      * 
      * @var array
      */
-    private $routes = [];
+    private array $routes = [];
     /**
      * Constructor of the Routing
      * 
@@ -30,7 +30,7 @@ class Routing
     /**
      * Finding matching route
      * 
-     * @return void
+     * @return mixed
      */
     public function find()
     {
@@ -38,6 +38,7 @@ class Routing
         $requestUrl = $this->getRequestURL();
         $requestMethod = $this->getRequestMethod();
         $requestParams = explode(Routing::ROUTING_SEPARATOR, $requestUrl);
+
         foreach ($routes as $route) {
             $uri = $route->getUri();
             $method = $route->getMethods();
@@ -63,7 +64,7 @@ class Routing
     /**
      * Handle not found
      * 
-     * @return void
+     * @return mixed
      */
     private function handleNotFound()
     {
@@ -72,9 +73,10 @@ class Routing
 
     /**
      * Get request url
+     * 
      * @return string
      */
-    private function getRequestURL()
+    private function getRequestURL(): string
     {
         $uri = urldecode(
             parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
@@ -86,7 +88,7 @@ class Routing
      * Get request method
      * @return string
      */
-    private function getRequestMethod()
+    private function getRequestMethod(): string
     {
         return isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : "GET";
     }

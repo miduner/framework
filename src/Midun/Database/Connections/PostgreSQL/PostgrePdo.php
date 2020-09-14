@@ -17,7 +17,7 @@ class PostgrePdo extends PDO
      * 
      * @return mixed
      */
-    public function __construct($dns, $username = null, $password = null, array $options = null)
+    public function __construct($dns, $username, $password, $options = [])
     {
         parent::__construct($dns, $username, $password, $options);
     }
@@ -40,7 +40,7 @@ class PostgrePdo extends PDO
      * 
      * @return bool
      */
-    public function execute()
+    public function execute(): bool
     {
         return parent::execute();
     }
@@ -52,7 +52,7 @@ class PostgrePdo extends PDO
      * 
      * @return PDOStatement|false
      */
-    public function query(string $statement)
+    public function query($statement)
     {
         return parent::query($statement);
     }
@@ -62,7 +62,7 @@ class PostgrePdo extends PDO
      * 
      * @return int
      */
-    public function rowCount()
+    public function rowCount(): int
     {
         return parent::rowCount();
     }
@@ -74,7 +74,7 @@ class PostgrePdo extends PDO
      * 
      * @return int|false
      */
-    public function exec($statement)
+    public function exec(string $statement)
     {
         return parent::exec($statement);
     }
@@ -86,7 +86,7 @@ class PostgrePdo extends PDO
      * 
      * @return bool
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return parent::beginTransaction();
     }
@@ -98,7 +98,7 @@ class PostgrePdo extends PDO
      * 
      * @throws PDOException
      */
-    public function commit()
+    public function commit(): bool
     {
         return parent::commit();
     }
@@ -110,7 +110,7 @@ class PostgrePdo extends PDO
      * 
      * @throws PDOException
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         return parent::rollBack();
     }

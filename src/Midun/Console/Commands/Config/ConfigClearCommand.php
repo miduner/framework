@@ -11,20 +11,20 @@ class ConfigClearCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'config:clear';
+    protected string $signature = 'config:clear';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Clear and rewrite config, caching';
+    protected string $description = 'Clear and rewrite config, caching';
 
     /**
      * Flag check using cache
      * @var boolean
      */
-    protected $usingCache = false;
+    protected bool $usingCache = false;
 
     /**
      * Create a new command instance.
@@ -41,7 +41,7 @@ class ConfigClearCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->execClearCache();
         $this->writeEnvironmentCache();
@@ -53,9 +53,8 @@ class ConfigClearCommand extends Command
      * Clear cache
      * 
      * @return void
-     * 
      */
-    public function execClearCache()
+    public function execClearCache(): void
     {
         $path = cache_path();
 
@@ -75,9 +74,8 @@ class ConfigClearCommand extends Command
      * Write the caching
      * 
      * @return void
-     * 
      */
-    public function writeEnvironmentCache()
+    public function writeEnvironmentCache(): void
     {
         $env = readDotENV();
         $cacheEnvironmentPath = cache_path('environments.php');
@@ -97,9 +95,8 @@ class ConfigClearCommand extends Command
      * Write config caching
      * 
      * @return void
-     * 
      */
-    public function execWriteConfigCache()
+    public function execWriteConfigCache(): void
     {
         $cachePath = cache_path();
         $configPath = config_path();
@@ -129,9 +126,8 @@ class ConfigClearCommand extends Command
      * @param array $values
      * 
      * @return void
-     * 
      */
-    public function _handleArrayConfig($key, $myfile, array $values)
+    public function _handleArrayConfig(string $key, $myfile, array $values): void
     {
         fwrite($myfile, "'{$key}' => array(\n");
         foreach ($values as $k => $v) {

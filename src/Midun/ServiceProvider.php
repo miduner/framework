@@ -7,15 +7,15 @@ use Midun\Container;
 abstract class ServiceProvider
 {
     /**
-     * Instance of \Midun\Container
-     * 
-     * @var \Midun\Container
+     * Instance of Container
+     *
+     * @var Container
      */
-    protected $app;
+    protected Container $app;
 
     /**
      * Initial constructor
-     * 
+     *
      * @var \Midun\Container $app
      */
     public function __construct()
@@ -27,12 +27,19 @@ abstract class ServiceProvider
      * Run after the application already registered service,
      * if you want to use 3rd or outside service,
      * please implement them to the boot method.
+     * 
+     * @return void
      */
-    abstract public function boot();
+    public function boot(): void
+    {
+
+    }
 
     /**
      * Register all of the service providers that you
      * import in config/app.php -> providers
+     * 
+     * @return void
      */
-    abstract public function register();
+    abstract public function register(): void;
 }

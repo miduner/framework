@@ -11,14 +11,14 @@ class MigrateRollbackCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'migrate:rollback';
+    protected string $signature = 'migrate:rollback';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rollback the migration database tables';
+    protected string $description = 'Rollback the migration database tables';
 
     /**
      * Create a new command instance.
@@ -35,7 +35,7 @@ class MigrateRollbackCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $files = scandir(database_path('migration'), 1);
         arsort($files);

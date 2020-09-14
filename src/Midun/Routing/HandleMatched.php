@@ -11,7 +11,7 @@ class HandleMatched
      * 
      * @var bool
      */
-    var $isMatched = false;
+    public bool $isMatched = false;
 
     /**
      * Constructor of HandleMatched
@@ -19,7 +19,7 @@ class HandleMatched
      * @param string $routeParams
      * @param string $requestParams
      */
-    public function __construct($routeParams, $requestParams)
+    public function __construct(string $routeParams, string $requestParams)
     {
         $changeROUTE = preg_replace('/\{\w+\}/', '*', $routeParams);
         $pazeREQUEST = explode('/', $requestParams);

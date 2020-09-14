@@ -3,89 +3,85 @@
 namespace Midun\Console;
 
 use Midun\Container;
+use Midun\Supports\ConsoleOutput;
 use Midun\Contracts\Console\Command as CommandContract;
 
 abstract class Command implements CommandContract
 {
 	/**
-	 * Ouput of command
+	 * Output of command
 	 *
-	 * @var string
+	 * @var ConsoleOutput
 	 */
-	protected $output;
+	protected ConsoleOutput $output;
 
 	/**
 	 * @var Container
 	 */
-	protected $app;
-
-	/**
-	 * @var string
-	 */
-	protected $type;
+	protected Container $app;
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature;
+    protected string $signature = "";
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description;
+    protected string $description = "";
 
     /**
      * Options in options
      * 
      * @var array
      */
-    protected $options;
+    protected array $options = [];
 
     /**
      * Argv
      * 
      * @var array
      */
-    protected $argv;
+    protected array $argv = [];
 
     /**
      * Flag is using cache
      * 
      * @var bool
      */
-    protected $usingCache = true;
+    protected bool $usingCache = true;
 
     /**
      * Other called signatures
      * 
      * @var array
      */
-    protected $otherSignatures = [];
+    protected array $otherSignatures = [];
 
     /**
      * Option required
      * 
      * @var array
      */
-    protected $required = [];
+    protected array $required = [];
 
     /**
      * True format for command
      * 
      * @var string
      */
-    protected $format = '';
+    protected string $format = "";
 
     /**
      * Helper for using command
      * 
      * @var string
      */
-    protected $helper = '';
+    protected string $helper = "";
 
     /**
      * Create a new command instance.
@@ -96,7 +92,7 @@ abstract class Command implements CommandContract
     {
         global $argv;
 
-        $this->output = new \Midun\Supports\ConsoleOutput;
+        $this->output = new ConsoleOutput;
         $this->setArgv($argv);
         $this->app = Container::getInstance();
     }
@@ -104,16 +100,18 @@ abstract class Command implements CommandContract
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
-    abstract public function handle();
+    abstract public function handle(): void;
 
     /**
      * Set argv
      * 
      * @param array $argv
+     * 
+     * @return void
      */
-    public function setArgv($argv = [])
+    public function setArgv(array $argv = []): void
     {
         $this->argv = $argv;
     }
@@ -123,54 +121,39 @@ abstract class Command implements CommandContract
      * 
      * @return array
      */
-    public function argv()
+    public function argv(): array
     {
         return $this->argv;
     }
 
     /**
      * Get signature
+     * 
+     * @return string
      */
-    public function getSignature()
+    public function getSignature(): string
     {
         return $this->signature;
     }
 
     /**
      * Get other signatures
+     * 
+     * @return array
      */
-    public function getOtherSignatures()
+    public function getOtherSignatures(): array
     {
         return $this->otherSignatures;
     }
 
     /**
      * Get description
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set type of passed command
-     * @param string $type
-     * 
-     * @return void
-     */
-    public function setType(string $type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Get type of passed command
      * 
      * @return string
      */
-    public function getType()
+    public function getDescription(): string
     {
-        return $this->type;
+        return $this->description;
     }
 
     /**
@@ -179,7 +162,7 @@ abstract class Command implements CommandContract
      * 
      * @return void
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         $results = [];
 
@@ -199,15 +182,23 @@ abstract class Command implements CommandContract
     /**
      * Get options of passed command
      * 
-     * @return mixed
+     * @return array
      */
-    public function getOptions(string $property = null)
+    public function getOptions(): array
     {
-        if (!is_null($property)) {
-            return isset($this->options[$property]) ? $this->options[$property] : false;
-        }
-
         return $this->options;
+    }
+
+    /**
+     * Get options of passed command
+     * 
+     * @param string $property
+     * 
+     * @return string
+     */
+    public function getOption(string $property): ?string
+    {
+        return isset($this->options[$property]) ? $this->options[$property] : null;
     }
 
     /**
@@ -215,7 +206,7 @@ abstract class Command implements CommandContract
      * 
      * @return boolean
      */
-    public function isUsingCache()
+    public function isUsingCache(): bool
     {
         return $this->usingCache;
     }
@@ -225,7 +216,7 @@ abstract class Command implements CommandContract
      * 
      * @return bool
      */
-    public function isVerified()
+    public function isVerified(): bool
     {
         foreach ($this->required as $required) {
             if (!isset($this->options[$required])) {
@@ -241,7 +232,7 @@ abstract class Command implements CommandContract
      * 
      * @return string
      */
-    public function getFormat()
+    public function getFormat(): string
     {
         return $this->format;
     }
@@ -251,7 +242,7 @@ abstract class Command implements CommandContract
      * 
      * @return string
      */
-    public function getHelper()
+    public function getHelper(): string
     {
         return $this->helper;
     }

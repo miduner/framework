@@ -15,7 +15,7 @@ trait MigrateBuilder
      * 
      * @return void
      */
-    public function createMigrate($table, \Closure $closure)
+    public function createMigrate(string $table, \Closure $closure): void
     {
         try {
             $columnBuilder = new ColumnBuilder;
@@ -45,7 +45,7 @@ trait MigrateBuilder
      * 
      * @return void
      */
-    public function createIfNotExistsMigrate($table, $closure)
+    public function createIfNotExistsMigrate(string $table, $closure): void
     {
         try {
             $columnBuilder = new ColumnBuilder;
@@ -74,7 +74,7 @@ trait MigrateBuilder
      * 
      * @return void
      */
-    public function dropMigrate($table)
+    public function dropMigrate(string $table): void
     {
         try {
             $dropTableSql = "DROP TABLE $table";
@@ -92,7 +92,7 @@ trait MigrateBuilder
      * 
      * @return void
      */
-    public function dropIfExistsMigrate($table)
+    public function dropIfExistsMigrate(string $table): void
     {
         try {
             $dropTableSql = "DROP TABLE IF EXISTS $table";
@@ -110,7 +110,7 @@ trait MigrateBuilder
      * 
      * @return void
      */
-    public function truncateMigrate($table)
+    public function truncateMigrate(string $table): void
     {
         try {
             $dropTableSql = "TRUNCATE $table";
@@ -130,7 +130,7 @@ trait MigrateBuilder
      * 
      * @return void
      */
-    public function tableMigrate($table, ColumnBuilder $columns)
+    public function tableMigrate(string $table, ColumnBuilder $columns): void
     {
         $this->table = $table;
         $this->columns = $columns;

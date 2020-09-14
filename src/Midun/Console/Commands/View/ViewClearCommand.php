@@ -12,21 +12,21 @@ class ViewClearCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'view:clear';
+    protected string $signature = 'view:clear';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Clear view cache and rewrite';
+    protected string $description = 'Clear view cache and rewrite';
 
     /**
      * Flag is using cache
      * 
      * @var bool
      */
-    protected $usingCache = true;
+    protected bool $usingCache = true;
 
     /**
      * Create a new command instance.
@@ -43,7 +43,7 @@ class ViewClearCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $view = Container::getInstance()->make('view');
         $directory = $view->getDirectory();

@@ -4,12 +4,23 @@ namespace Midun\Http;
 
 class HttpResponseCode
 {
-    public function __construct($code)
+    /**
+     * Initial constructor of HttpResponseCode
+     * 
+     * @param int $code
+     * @method http_response_code()
+     */
+    public function __construct(int $code)
     {
         return $this->http_response_code($code);
     }
     
-    public function http_response_code($code = NULL) 
+    /**
+     * Create http response code
+     * 
+     * @param int $code
+     */
+    public function http_response_code(?int $code = NULL): ?int
     {
         if ($code !== NULL) {
 

@@ -9,7 +9,7 @@ class Config
      * 
      * @var array
      */
-    private $storage = [];
+    private array $storage = [];
 
     /**
      * Set config

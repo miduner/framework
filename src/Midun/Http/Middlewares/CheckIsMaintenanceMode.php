@@ -11,7 +11,7 @@ class CheckIsMaintenanceMode
      *
      * @var \Midun\Container
      */
-    protected $app;
+    protected \Midun\Container $app;
 
     /**
      * Create a new middleware instance.
@@ -32,7 +32,7 @@ class CheckIsMaintenanceMode
      *
      * @throws MiddlewareException
      */
-    public function handle($request, Closure $next)
+    public function handle(\Midun\Http\Request $request, Closure $next)
     {
         if ($this->app->isDownForMaintenance()) {
             die("This application is down for maintenance");

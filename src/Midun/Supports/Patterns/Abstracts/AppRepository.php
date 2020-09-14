@@ -2,14 +2,15 @@
 
 namespace Midun\Supports\Patterns\Abstracts;
 
+use Midun\Eloquent\Model;
 use Midun\Supports\Patterns\Interfaces\RepositoryInterface;
 
 abstract class AppRepository implements RepositoryInterface
 {
     /**
-     * @var \Midun\Eloquent\Model
+     * @var Model
      */
-    protected $model;
+    protected Model $model;
 
     /**
      * AppRepository constructor.
@@ -22,22 +23,26 @@ abstract class AppRepository implements RepositoryInterface
 
     /**
      * get model
-     * @return mixed
+     * @return string
      */
-    abstract public function model();
+    abstract public function model(): string;
 
     /**
      * Checking connection to database
+     * 
+     * @return bool
      */
-    final private function isConnected()
+    final private function isConnected(): bool
     {
         return app('connection')->isConnected();
     }
 
     /**
      * Set model
+     * 
+     * @return void
      */
-    public function makeModel()
+    public function makeModel(): void
     {
         if(!$this->isConnected()) {
             app('connection')->setDriver('backup');
@@ -57,7 +62,7 @@ abstract class AppRepository implements RepositoryInterface
      * @param string $method
      * @param array $args
      * 
-     * @return QueryBuilder
+     * @return QueryBuilder|mixed
      */
     public function __call($method, $args)
     {

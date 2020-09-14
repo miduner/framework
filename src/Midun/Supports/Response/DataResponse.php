@@ -14,7 +14,7 @@ class DataResponse
      * 
      * @return void
      */
-    public final function json($arguments, $code = 200)
+    public final function json($arguments, $code = 200): void
     {
         (new HttpResponseCode($code));
         header('Content-Type: application/json');

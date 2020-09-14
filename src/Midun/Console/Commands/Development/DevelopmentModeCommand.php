@@ -11,21 +11,21 @@ class DevelopmentModeCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'development:enable';
+    protected string $signature = 'development:enable';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Enable development mode';
+    protected string $description = 'Enable development mode';
 
     /**
      * Others signature
      * 
      * @var array
      */
-    protected $otherSignatures = [
+    protected array $otherSignatures = [
         "dev:mode"
     ];
 
@@ -44,7 +44,7 @@ class DevelopmentModeCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         if (file_exists(base_path('Midun'))) {
         	$this->output->printError('The `{miduner}/Midun` directory already exists.');

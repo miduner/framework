@@ -47,7 +47,7 @@ class LimitRequest
      *
      * @throws MiddlewareException
      */
-    public function handle($request, Closure $next, $max = 60, $seconds = 60, $waits = 10)
+    public function handle(\Midun\Http\Request $request, Closure $next, int $max = 60, int $seconds = 60, int $waits = 10)
     {
         $id = session_id();
         $session = $this->session->get($id);
@@ -84,7 +84,7 @@ class LimitRequest
      * 
      * @return void
      */
-    private function createNewClient(string $id)
+    private function createNewClient(string $id): void
     {
         $this->session->set($id, [
             LimitRequest::ATTEMPTS => 0,

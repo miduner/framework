@@ -11,14 +11,14 @@ class MakeRequestCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:request';
+    protected string $signature = 'make:request';
 
     /**
      * The console request description.
      *
      * @var string
      */
-    protected $description = 'Making request service';
+    protected string $description = 'Making request service';
 
     /**
      * Create a new command instance.
@@ -35,7 +35,7 @@ class MakeRequestCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $options = $this->getOptions();
 

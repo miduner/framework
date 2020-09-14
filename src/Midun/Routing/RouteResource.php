@@ -13,35 +13,35 @@ class RouteResource
      * 
      * @var array
      */
-    private $middlewares = [];
+    private array $middlewares = [];
 
     /**
      * Prefix of routes
      * 
-     * @var array
+     * @var mixed
      */
-    private $prefix = [];
+    private array $prefix = [];
 
     /**
      * Namespace of route
      * 
      * @var array
      */
-    private $namespaces = [];
+    private array $namespaces = [];
 
     /**
      * Resources of route
      * 
      * @var array
      */
-    private $resources = [];
+    private array $resources = [];
 
     /**
      * Except for route
      * 
      * @var array
      */
-    private $except = [];
+    private array $except = [];
 
     /**
      * Initial RouteResource
@@ -62,25 +62,32 @@ class RouteResource
             $namespaces
         ) = func_get_args();
 
-        $this->middlewares = $middlewares;
-        $this->prefix = $prefix;
-        $this->namespaces = $namespaces;
+        $this->middlewares = is_array($middlewares) ? $middlewares : [$middlewares];
+        $this->prefix = is_array($prefix) ? $prefix : [$prefix];
+        $this->namespaces = is_array($namespaces) ? $namespaces : [$namespaces];
         $this->name = $name;
-        $this->resources = $resource;
+        $this->resources = is_array($resource) ? $resource : [$resource];
     }
     /**
      * Except function
      * @param array $methods
      *
-     * @return $this
+     * @return self
      */
-    public function except(array $methods)
+    public function except(array $methods): RouteResource
     {
         $this->except = $methods;
         return $this;
     }
 
-    public function middleware($middleware)
+    /**
+     * Set middleware
+     * 
+     * @param mixed $middleware
+     * 
+     * @return self
+     */
+    public function middleware($middleware): RouteResource
     {
         if (!is_array($middleware)) {
             array_push($this->middlewares, $middleware);
@@ -97,7 +104,7 @@ class RouteResource
      * 
      * @return self
      */
-    public function namespace($namespace)
+    public function namespace(string $namespace): RouteResource
     {
         $this->namespaces[] = $namespace;
         return $this;
@@ -110,7 +117,7 @@ class RouteResource
      * 
      * @return self
      */
-    public function name($name)
+    public function name(string $name): RouteResource
     {
         $this->name .= $name;
         return $this;
@@ -123,7 +130,7 @@ class RouteResource
      * 
      * @return self
      */
-    public function prefix($prefix)
+    public function prefix(string $prefix): RouteResource
     {
         $this->prefix[] = $prefix;
         return $this;
@@ -134,7 +141,7 @@ class RouteResource
      * 
      * @return array
      */
-    public function parse()
+    public function parse(): array
     {
         $routes = [];
 
@@ -148,6 +155,6 @@ class RouteResource
             $routes[] = $this->makeDelete($resource);
         }
 
-        return array_filter($routes, function ($route) {return !is_null($route);});
+        return array_filter($routes, fn($route) => !is_null($route));
     }
 }

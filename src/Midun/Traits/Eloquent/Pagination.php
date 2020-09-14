@@ -14,7 +14,7 @@ trait Pagination
      * 
      * @return array
      */
-    public function paginate($perPage = null, $columns = null)
+    public function paginate(?int $perPage = null, $columns = null): array
     {
         $this->setColumns($columns);
         $this->makePagination(true);
@@ -52,7 +52,7 @@ trait Pagination
      * 
      * @return int
      */
-    public function getSkip(int $currentPage, int $perPage)
+    public function getSkip(int $currentPage, int $perPage): int
     {
         return (int) $currentPage == 1 ? 0 : ($currentPage - 1) * $perPage;
     }
@@ -64,7 +64,7 @@ trait Pagination
      * 
      * @return int
      */
-    public function getPerPage(int $perPage)
+    public function getPerPage(int $perPage): int
     {
         return $perPage === null ? config('settings.pagination') : $perPage;
     }
@@ -76,7 +76,7 @@ trait Pagination
      * 
      * @return void
      */
-    public function makePagination(bool $status)
+    public function makePagination(bool $status): void
     {
         $this->isPagination = $status;
     }
@@ -86,9 +86,9 @@ trait Pagination
      * 
      * @param null|array
      * 
-     * @return array
+     * @return void
      */
-    public function setColumns($columns)
+    public function setColumns($columns): void
     {
         $this->columns = $columns === null ? $this->columns : $columns;
     }
@@ -102,7 +102,7 @@ trait Pagination
      * 
      * @return array
      */
-    private function makeRequest($pageUrl, $total, $currentPage, $perPage)
+    private function makeRequest(string $pageUrl, int $total, int $currentPage, int $perPage): array
     {
         list($lastPage, $firstPageUrl, $lastPageUrl, $nextPageUrl, $prevPageUrl) = Paginator::resolvePagePagination($total, $perPage, $pageUrl);
         $pagination = [
@@ -127,7 +127,7 @@ trait Pagination
      * 
      * @return string
      */
-    private function getPageUrl()
+    private function getPageUrl(): string
     {
         $queryParams = http_build_query(request()->getQueryParams());
         $appUrl = config('app.url');
@@ -143,7 +143,7 @@ trait Pagination
      * 
      * @return int
      */
-    private function getTotalParentResources(string $sql)
+    private function getTotalParentResources(string $sql): int
     {
         $connection = app()->make('connection')->getConnection();
         $object = $connection->prepare($sql);

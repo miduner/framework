@@ -22,7 +22,7 @@ class Collection extends \ArrayObject
      * 
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $array = objectToArray($this);
 

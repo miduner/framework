@@ -6,7 +6,13 @@ use Midun\Http\Exceptions\AppException;
 
 class ValidationException extends AppException
 {
-    public function __construct($message, $code = 400)
+    /**
+     * AuthenticationException constructor
+     * 
+     * @param string $message
+     * @param int $code = 400
+     */
+    public function __construct(string $message, int $code = 422)
     {
         parent::__construct($message, $code);
     }

@@ -9,7 +9,7 @@ class Translator
      * 
      * @var array
      */
-    private $storage = [];
+    private array $storage = [];
 
     /**s
      * Set config
@@ -19,7 +19,7 @@ class Translator
      * 
      * @return self
      */
-    public function setTranslation(string $key, $value)
+    public function setTranslation(string $key, $value): Translator
     {
         $this->storage[$key] = $value;
         return $this;
@@ -75,7 +75,7 @@ class Translator
      * 
      * @return array
      */
-    protected function getStorage()
+    protected function getStorage(): array
     {
         return $this->storage;
     }
@@ -87,7 +87,7 @@ class Translator
      * 
      * @return bool
      */
-    protected function checkTranslation(string $key)
+    protected function checkTranslation(string $key): bool
     {
         return isset($this->storage[$key]);
     }

@@ -7,17 +7,9 @@ use Midun\ServiceProvider;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * Booting
-     */
-    public function boot()
-    {
-
-    }
-
-    /**
      * Register singleton routing
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton('route', function () {
             return new \Midun\Routing\Router;

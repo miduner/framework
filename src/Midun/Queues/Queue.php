@@ -9,19 +9,21 @@ abstract class Queue
      * 
      * @var int
      */
-    protected $tries = 3;
+    protected int $tries = 3;
 
     /**
      * Handle queue
+     * 
+     * @return void
      */
-    abstract function handle();
+    abstract function handle(): void;
 
     /**
      * Get tries
      * 
      * @return int
      */
-    public function getTries()
+    public function getTries(): int
     {
         return $this->tries;
     }
@@ -31,7 +33,7 @@ abstract class Queue
      *
      * @return array
      */
-    public function getSerializeData()
+    public function getSerializeData(): array
     {
         $properties = (new \ReflectionClass($this))->getProperties();
 

@@ -6,21 +6,21 @@ use Closure;
 
 interface Pipeline
 {
-        /**
+    /**
      * Set the object being sent through the pipeline.
      *
-     * @param  mixed  $passable
+     * @param  \Midun\Http\Request  $passable
      * @return $this
      */
-    public function send($passable);
+    public function send(\Midun\Http\Request $passable): Pipeline;
 
     /**
      * Set the array of pipes.
      *
-     * @param  array|mixed  $pipes
+     * @param  array  $pipes
      * @return $this
      */
-    public function through($pipes);
+    public function through(array $pipes): Pipeline;
 
     /**
      * Set the method to call on the pipes.
@@ -28,7 +28,7 @@ interface Pipeline
      * @param  string  $method
      * @return $this
      */
-    public function via($method);
+    public function via(string $method): Pipeline;
     
     /**
      * Run the pipeline with a final handleRouting callback.

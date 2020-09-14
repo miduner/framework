@@ -11,21 +11,21 @@ class JwtInstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'jwt:install';
+    protected string $signature = 'jwt:install';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Json web tokens management';
+    protected string $description = 'Json web tokens management';
 
     /**
      * True format for command
      * 
      * @var string
      */
-    protected $format = 'Please use jwt:install to install secret key for JWT token';
+    protected string $format = 'Please use jwt:install to install secret key for JWT token';
 
     /**
      * Create a new command instance.
@@ -42,7 +42,7 @@ class JwtInstallCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $env = base_path('.env');
         $file_contents = file_get_contents($env);

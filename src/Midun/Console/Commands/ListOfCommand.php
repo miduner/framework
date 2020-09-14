@@ -11,19 +11,19 @@ class ListOfCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'list';
+    protected string $signature = 'list';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Display list of commands supported by the application';
+    protected string $description = 'Display list of commands supported by the application';
 
     /**
      * Other called signatures
      */
-    protected $otherSignatures = [
+    protected array $otherSignatures = [
         'all',
         'help'
     ];
@@ -43,7 +43,7 @@ class ListOfCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $commands = $this->app->make(\Midun\Contracts\Console\Kernel::class)->all();
 
@@ -113,7 +113,7 @@ class ListOfCommand extends Command
      * 
      * @return string
      */
-    public function makeSpace(int $max, string $specific = ' ')
+    public function makeSpace(int $max, string $specific = " "): string
     {
         $space = '';
 

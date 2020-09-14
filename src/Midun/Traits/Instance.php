@@ -7,7 +7,7 @@ trait Instance
     /**
      * Instance of
      */
-    private static $instance;
+    private static self $instance;
 
     /**
      * Initial constructor
@@ -22,7 +22,7 @@ trait Instance
      * 
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if(!static::$instance) {
             static::$instance = new static;

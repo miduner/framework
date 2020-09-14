@@ -11,9 +11,9 @@ trait Resource
      * 
      * @param array $resource
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function makeIndex(array $resource)
+    public function makeIndex(array $resource): ?RouteCollection
     {
         if (!in_array('index', $this->except)) {
             return $this->createRoute(
@@ -26,6 +26,8 @@ trait Resource
                 $this->namespaces
             );
         }
+
+        return null;
     }
 
     /**
@@ -33,9 +35,9 @@ trait Resource
      * 
      * @param array $resource
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function makeCreate(array $resource)
+    public function makeCreate(array $resource): ?RouteCollection
     {
         if (!in_array('create', $this->except)) {
             return $this->createRoute(
@@ -48,6 +50,8 @@ trait Resource
                 $this->namespaces
             );
         }
+
+        return null;
     }
 
     /**
@@ -55,9 +59,9 @@ trait Resource
      * 
      * @param array $resource
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function makeShow(array $resource)
+    public function makeShow(array $resource): ?RouteCollection
     {
         if (!in_array('show', $this->except)) {
             return $this->createRoute(
@@ -70,6 +74,8 @@ trait Resource
                 $this->namespaces
             );
         }
+
+        return null;
     }
 
     /**
@@ -77,9 +83,9 @@ trait Resource
      * 
      * @param array $resource
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function makeStore(array $resource)
+    public function makeStore(array $resource): ?RouteCollection
     {
         if (!in_array('store', $this->except)) {
             return $this->createRoute(
@@ -92,6 +98,8 @@ trait Resource
                 $this->namespaces
             );
         }
+
+        return null;
     }
 
     /**
@@ -99,9 +107,9 @@ trait Resource
      * 
      * @param array $resource
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function makeEdit(array $resource)
+    public function makeEdit(array $resource): ?RouteCollection
     {
         if (!in_array('edit', $this->except)) {
             return $this->createRoute(
@@ -114,6 +122,8 @@ trait Resource
                 $this->namespaces
             );
         }
+
+        return null;
     }
 
     /**
@@ -121,9 +131,9 @@ trait Resource
      * 
      * @param array $resource
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function makeUpdate(array $resource)
+    public function makeUpdate(array $resource): ?RouteCollection
     {
         if (!in_array('update', $this->except)) {
             return $this->createRoute(
@@ -136,6 +146,8 @@ trait Resource
                 $this->namespaces
             );
         }
+
+        return null;
     }
 
     /**
@@ -143,9 +155,9 @@ trait Resource
      * 
      * @param array $resource
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function makeDelete(array $resource)
+    public function makeDelete(array $resource): ?RouteCollection
     {
         if (!in_array('destroy', $this->except)) {
             return $this->createRoute(
@@ -158,6 +170,8 @@ trait Resource
                 $this->namespaces
             );
         }
+
+        return null;
     }
 
     /**
@@ -171,9 +185,9 @@ trait Resource
      * @param array $prefix
      * @param array $namespace
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function createRoute($methods, $uri, $name, $action, $middlewares, $prefix, $namespace)
+    public function createRoute(string $methods, string $uri, string $name, $action, array $middlewares, array $prefix, array $namespace): ?RouteCollection
     {
         return new RouteCollection($methods, $uri, $name, $action, $middlewares, $prefix, $namespace);
     }

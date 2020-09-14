@@ -15,7 +15,7 @@ class QueryBuilder
     /**
      * The list of accept operator using in query builder
      */
-    private $operator = [
+    private array $operator = [
         '=', '<>', '>', '<', '<=', '>=',
     ];
 
@@ -24,124 +24,133 @@ class QueryBuilder
      *
      * @var array
      */
-    private $columns;
+    private array $columns = ["*"];
 
     /**
      * The list of need bindings arguments
+     * 
+     * @var array
      */
-    private $parameters;
+    private array $parameters = [];
 
     /**
      * The table which the query is targeting.
      *
      * @var string
      */
-    private $table;
+    private string $table;
 
     /**
      * Indicates if the query returns distinct results.
      *
      * @var bool
      */
-    private $distinct = false;
+    private bool $distinct = false;
 
     /**
      * The table joins for the query.
      *
      * @var array
      */
-    private $joins;
+    private array $joins = [];
 
     /**
      * The where constraints for the query.
      *
      * @var array
      */
-    private $wheres;
+    private array $wheres = [];
 
     /**
      * The where constraints for the query.
      *
      * @var array
      */
-    private $wherein;
+    private array $wherein = [];
 
     /**
      * The groupings for the query.
      *
      * @var array
      */
-    private $groups;
+    private array $groups = [];
 
     /**
      * The having constraints for the query.
      *
      * @var array
      */
-    private $having;
+    private array $having = [];
 
     /**
      * The orderings for the query.
      *
      * @var array
      */
-    private $orders;
+    private array $orders = [];
 
     /**
      * The maximum number of records to return.
      *
      * @var int
      */
-    private $limit;
+    private int $limit = 0;
 
     /**
      * The number of records to skip.
      *
      * @var int
      */
-    private $offset;
+    private int $offset = 0;
 
     /**
      * Take 1 record
      *
      * @var boolean
      */
-    private $find = false;
+    private bool $find = false;
 
     /**
      * Take 1 record
      *
      * @var boolean
      */
-    private $first = false;
+    private bool $first = false;
 
     /**
      * Fails throw Exception
      * 
      * @var bool
      */
-    private $isThrow = false;
+    private bool $isThrow = false;
 
     /**
      * Flag checking pagination
      * 
      * @var bool
      */
-    private $isPagination = false;
+    private bool $isPagination = false;
 
     /**
      * Count row execute
      * 
      * @var int
      */
-    private $rowCount = 0;
+    private int $rowCount = 0;
 
     /**
      * Compile instance
      * 
      * @var Compile
      */
-    private $compile;
+    private Compile $compile;
+
+    /**
+     * Class called
+     * 
+     * @var string
+     */
+    private string $calledFromModel = "";
 
     /**
      * Create a new query builder instance.
@@ -149,7 +158,7 @@ class QueryBuilder
      * @param  ConnectionInterface  $this->table
      * @return void
      */
-    public function __construct($table = null, $calledClass = null)
+    public function __construct(string $table = "", $calledClass = "")
     {
         $this->calledFromModel = $calledClass;
         $this->table = $table;
@@ -160,31 +169,20 @@ class QueryBuilder
      * Set the table which the query is targeting.
      *
      * @param  string  $table
-     * @return $this
+     * @return self
      */
-    public static function table($table)
+    public static function table(string $table): QueryBuilder
     {
         return new self($table);
-    }
-
-    /**
-     * Create new query builder from model
-     *
-     * @param ConnectionInterface $this->bindClass
-     * return self
-     */
-    public static function bindClass($class)
-    {
-        return new self((new $class)->table());
     }
 
     /**
      * Set the columns to be selected.
      *
      * @param  array|mixed  $columns
-     * @return $this
+     * @return self
      */
-    public function select($columns)
+    public function select($columns): QueryBuilder
     {
         $this->columns = is_array($columns) ? $columns : func_get_args();
         return $this;
@@ -194,13 +192,13 @@ class QueryBuilder
      * Add a new select column to the query.
      *
      * @param  array|mixed  $column
-     * @return $this
+     * @return self
      */
-    public function addSelect($column)
+    public function addSelect($column): QueryBuilder
     {
         $column = is_array($column) ? $column : func_get_args();
 
-        $this->columns = array_merge((array) $this->columns, $column);
+        $this->columns = [...$this->columns, ...$column];
 
         return $this;
     }
@@ -208,9 +206,9 @@ class QueryBuilder
     /**
      * Force the query to only return distinct results.
      *
-     * @return $this
+     * @return self
      */
-    public function distinct()
+    public function distinct(): QueryBuilder
     {
         $this->distinct = true;
         return $this;
@@ -224,10 +222,9 @@ class QueryBuilder
      * @param  string  $operator
      * @param  string  $second
      * @param  string  $type
-     * @param  bool    $where
-     * @return $this
+     * @return self
      */
-    public function join($tableJoin, $st, $operator, $nd, $type = 'INNER')
+    public function join(string $tableJoin, string $st, string $operator, string $nd, string $type = 'INNER'): QueryBuilder
     {
         $this->joins[] = [$tableJoin, $st, $operator, $nd, $type];
         return $this;
@@ -242,7 +239,7 @@ class QueryBuilder
      * @param  string  $second
      * @return \Database\QueryBuilder|static
      */
-    public function leftJoin($tableJoin, $st, $operator = '=', $nd)
+    public function leftJoin(string $tableJoin, string $st, string $operator = '=', string $nd): QueryBuilder
     {
         return $this->join($tableJoin, $st, $operator, $nd, 'LEFT');
     }
@@ -256,15 +253,19 @@ class QueryBuilder
      * @param  string  $second
      * @return \Database\QueryBuilder|static
      */
-    public function rightJoin($tableJoin, $st, $operator = '=', $nd)
+    public function rightJoin(string $tableJoin, string $st, string $operator = '=', string $nd): QueryBuilder
     {
         return $this->join($tableJoin, $st, $operator, $nd, 'RIGHT');
     }
 
     /**
      * Check condition and execute statement
+     * 
+     * @param bool $condition
+     * @param \Closure $callback
+     * @param \Closure $default
      */
-    public function when($condition, $callback, $default = null)
+    public function when($condition, $callback, ?\Closure $default = null): QueryBuilder
     {
         if ($condition) {
             $callback($this);
@@ -281,9 +282,9 @@ class QueryBuilder
      * @param  string  $operator
      * @param  mixed   $value
      * @param  string  $boolean
-     * @return $this
+     * @return self
      */
-    public function where($column, $operator = '=', $value = null, $boolean = 'AND')
+    public function where($column, string $operator = '=', $value = null, $boolean = 'AND'): QueryBuilder
     {
         if (!is_callable($column) && !is_array($column)) {
             if (!in_array($operator, $this->operator)) {
@@ -315,9 +316,9 @@ class QueryBuilder
      * @param  string|array|\Closure  $column
      * @param  string  $operator
      * @param  mixed   $value
-     * @return \Database\QueryBuilder|static
+     * @return self
      */
-    public function orWhere($column, $operator = '=', $value = null)
+    public function orWhere($column, string $operator = '=', $value = null): QueryBuilder
     {
         if (!is_callable($column)) {
             return $this->where($column, $operator, $value, 'OR');
@@ -326,21 +327,19 @@ class QueryBuilder
         call_user_func_array($column, [$this]);
         $this->wheres[] = ['end_or'];
         return $this;
-        // return $this->where($column, $operator, $value, 'OR');
     }
 
     /**
      * Add a "where in" clause to the query.
      *
      * @param  string  $column
-     * @param  mixed   $values
-     * @param  string  $boolean
-     * @param  bool    $not
-     * @return $this
+     * @param  array   $values
+     * @param  bool    $in
+     * @return self
      */
-    public function whereIn($column, $value = [], $is = true)
+    public function whereIn(string $column, array $value = [], bool $in = true): QueryBuilder
     {
-        $this->wherein = [$column, !is_array($value) ? $value : implode(', ', $value), $is];
+        $this->wherein = [$column, $value , $in];
         return $this;
     }
 
@@ -349,10 +348,9 @@ class QueryBuilder
      *
      * @param  string  $column
      * @param  mixed   $values
-     * @param  string  $boolean
-     * @return \Database\QueryBuilder|static
+     * @return self
      */
-    public function whereNotIn($column, $value = [])
+    public function whereNotIn(string $column, array $value = []): QueryBuilder
     {
         return $this->whereIn($column, $value, false);
     }
@@ -360,12 +358,12 @@ class QueryBuilder
     /**
      * Add a "group by" clause to the query.
      *
-     * @param  array  ...$groups
-     * @return $this
+     * @param  string|array  $groups
+     * @return self
      */
-    public function groupBy($columns)
+    public function groupBy($groups): QueryBuilder
     {
-        $this->groups = is_array($columns) ? $columns : func_get_args();
+        $this->groups = is_array($groups) ? $groups : func_get_args();
         return $this;
     }
 
@@ -376,9 +374,9 @@ class QueryBuilder
      * @param  string  $operator
      * @param  string  $value
      * @param  string  $boolean
-     * @return $this
+     * @return self
      */
-    public function having($column, $operator = '=', $value, $boolean = 'and')
+    public function having(string $column, string $operator = '=', string $value, string $boolean = 'and'): QueryBuilder
     {
         $this->havings[] = [$column, $operator, $value, $boolean];
         return $this;
@@ -390,9 +388,9 @@ class QueryBuilder
      * @param  string  $column
      * @param  string  $operator
      * @param  string  $value
-     * @return \Database\QueryBuilder|static
+     * @return self
      */
-    public function orHaving($column, $operator = '=', $value, $boolean = 'and')
+    public function orHaving(string $column, string $operator = '=', string $value): QueryBuilder
     {
         return $this->having($column, $operator, $value, 'or');
     }
@@ -402,9 +400,9 @@ class QueryBuilder
      *
      * @param  string  $column
      * @param  string  $direction
-     * @return $this
+     * @return self
      */
-    public function orderBy($columns, $type = 'asc')
+    public function orderBy(string $columns, string $type = 'asc'): QueryBuilder
     {
         $this->orders[] = [$columns, $type];
         return $this;
@@ -414,9 +412,9 @@ class QueryBuilder
      * Add a descending "order by" clause to the query.
      *
      * @param  string  $column
-     * @return $this
+     * @return self
      */
-    public function orderByDesc($column)
+    public function orderByDesc(string $column = "id"): QueryBuilder
     {
         return $this->orderBy($column, 'desc');
     }
@@ -425,9 +423,9 @@ class QueryBuilder
      * Add an "order by" clause for a timestamp to the query.
      *
      * @param  string  $column
-     * @return \Database\QueryBuilder|static
+     * @return self
      */
-    public function latest($column = 'created_at')
+    public function latest(string $column = 'id'): QueryBuilder
     {
         return $this->orderBy($column, 'desc');
     }
@@ -436,9 +434,9 @@ class QueryBuilder
      * Add an "order by" clause for a timestamp to the query.
      *
      * @param  string  $column
-     * @return \Illuminate\Database\Query\Builder|static
+     * @return self
      */
-    public function oldest($column = 'created_at')
+    public function oldest($column = 'id'): QueryBuilder
     {
         return $this->orderBy($column, 'asc');
     }
@@ -447,9 +445,9 @@ class QueryBuilder
      * Set the "limit" value of the query.
      *
      * @param  int  $value
-     * @return $this
+     * @return self
      */
-    public function limit($limit)
+    public function limit(int $limit): QueryBuilder
     {
         $this->limit = $limit;
         return $this;
@@ -459,9 +457,9 @@ class QueryBuilder
      * Alias to set the "limit" value of the query.
      *
      * @param  int  $value
-     * @return \Database\QueryBuilder|static
+     * @return self
      */
-    public function take($value)
+    public function take(int $value): QueryBuilder
     {
         return $this->limit($value);
     }
@@ -470,9 +468,9 @@ class QueryBuilder
      * Alias to set the "offset" value of the query.
      *
      * @param  int  $value
-     * @return \Database\QueryBuilder|static
+     * @return self
      */
-    public function skip($value)
+    public function skip(int $value): QueryBuilder
     {
         return $this->offset($value);
     }
@@ -481,9 +479,9 @@ class QueryBuilder
      * Set the "offset" value of the query.
      *
      * @param  int  $value
-     * @return $this
+     * @return self
      */
-    public function offset($offset)
+    public function offset(int $offset): QueryBuilder
     {
         $this->offset = $offset;
         return $this;

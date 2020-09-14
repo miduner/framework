@@ -15,42 +15,42 @@ abstract class Model
      * 
      * @var array
      */
-    protected $appends = [];
+    protected array $appends = [];
 
     /**
      * List of casts
      * 
      * @var array
      */
-    protected $casts = [];
+    protected array $casts = [];
 
     /**
      * Lit of fillable
      * 
      * @var array
      */
-    protected $fillable = [];
+    protected array $fillable = [];
 
     /**
      * List of hidden
      * 
      * @var array
      */
-    protected $hidden = [];
+    protected array $hidden = [];
 
     /**
      * Table instance
      * 
      * @var string
      */
-    protected $table;
+    protected string $table;
 
     /**
      * Primary key
      * 
      * @var string
      */
-    protected $primaryKey;
+    protected string $primaryKey = "id";
 
     /**
      * Created at column name
@@ -85,7 +85,7 @@ abstract class Model
      * 
      * @return mixed
      */
-    public function __get($property)
+    public function __get(string $property)
     {
         if (property_exists($this, $property)) {
             return $this->$property;
@@ -101,7 +101,7 @@ abstract class Model
      * 
      * @return void
      */
-    public function __set($property, $value)
+    public function __set(string $property, $value): void
     {
         $this->$property = $value;
     }
@@ -115,7 +115,7 @@ abstract class Model
      * 
      * @return \Midun\Database\QueryBuilder\QueryBuilder
      */
-    public static function __callStatic($method, $args)
+    public static function __callStatic(string $method, array $args): \Midun\Database\QueryBuilder\QueryBuilder
     {
         $static = new static;
         $table = $static->table();
@@ -137,7 +137,7 @@ abstract class Model
      * 
      * @return \Midun\Database\QueryBuilder\QueryBuilder
      */
-    public function __call($method, $args)
+    public function __call($method, $args): \Midun\Database\QueryBuilder\QueryBuilder
     {
         $static = new static;
         $table = $static->table();
@@ -155,7 +155,7 @@ abstract class Model
      * 
      * @return void
      */
-    private function callServiceAppends()
+    private function callServiceAppends(): void
     {
         foreach ($this->appends as $key => $value) {
             $values = explode('_', $value);
@@ -171,8 +171,10 @@ abstract class Model
      * Execute service casts
      * 
      * @return void
+     * 
+     * @throws EloquentException
      */
-    private function callServiceCasts()
+    private function callServiceCasts(): void
     {
         foreach ($this->casts as $key => $value) {
             if (!in_array($key, $this->fillable)) {
@@ -209,7 +211,7 @@ abstract class Model
      * 
      * @return void
      */
-    private function callServiceGetAttributes()
+    private function callServiceGetAttributes(): void
     {
         foreach (get_class_methods($this) as $key => $value) {
             if (strpos($value, 'get') !== false && strpos($value, 'Attribute') !== false) {
@@ -225,7 +227,7 @@ abstract class Model
      * 
      * @return void
      */
-    private function handleServiceGetAttribute(string $value)
+    private function handleServiceGetAttribute(string $value): void
     {
         $pazeGet = str_replace('get', '', $value);
         $pazeAttribute = str_replace('Attribute', '', $pazeGet);
@@ -246,7 +248,7 @@ abstract class Model
      * 
      * @return void
      */
-    public function callServiceHidden()
+    public function callServiceHidden(): void
     {
         foreach ($this->hidden as $hidden) {
             unset($this->$hidden);

@@ -10,7 +10,7 @@ trait CommitQueryMethod
      * Execute the query as a "select" statement.
      *
      * @param  array  $this
-     * @return \SupportCollection
+     * @return mixed
      */
     public function get()
     {
@@ -21,9 +21,9 @@ trait CommitQueryMethod
     /**
      * View query builder to sql statement.
      *
-     * @return \SupportSqlCollection
+     * @return void
      */
-    public function toSql()
+    public function toSql(): void
     {
         echo $this->pase();
         exit(0);
@@ -31,8 +31,10 @@ trait CommitQueryMethod
 
     /**
      * Get full sql statement
+     * 
+     * @return string
      */
-    public function getFullSql()
+    public function getFullSql(): string
     {
         return $this->pase();
     }
@@ -40,9 +42,9 @@ trait CommitQueryMethod
     /**
      * Convert variables to sql
      *
-     * @return \SupportSqlCollection
+     * @return string
      */
-    public function pase()
+    public function pase(): string
     {
         if (!isset($this->table) || empty($this->table)) {
             return false;
@@ -82,7 +84,7 @@ trait CommitQueryMethod
      *
      * @param array data
      *
-     * @return \SupportSqlCollection
+     * @return mixed
      */
     public function insert(array $data)
     {
@@ -95,7 +97,9 @@ trait CommitQueryMethod
      *
      * @param array data
      *
-     * @return \SupportSqlCollection
+     * @return mixed
+     * 
+     * @throws AppException
      */
     public function create(array $data)
     {
@@ -115,9 +119,9 @@ trait CommitQueryMethod
      *
      * @param string value
      * @param string column
-     * @return \SupportSqlCollection
+     * @return mixed
      */
-    public function find($value, $column = 'id')
+    public function find(string $value, string $column = 'id')
     {
         $this->find = true;
         $this->limit = 1;
@@ -134,9 +138,9 @@ trait CommitQueryMethod
      *
      * @param string value
      * @param string column
-     * @return \SupportSqlCollection
+     * @return mixed
      */
-    public function findOrFail($value, $column = 'id')
+    public function findOrFail(string $value, string $column = 'id')
     {
         $this->find = true;
         $this->limit = 1;
@@ -152,9 +156,7 @@ trait CommitQueryMethod
     /**
      * First 1 record usually use column id
      *
-     * @param string value
-     * @param string column
-     * @return \SupportSqlCollection
+     * @return mixed
      */
     public function first()
     {
@@ -167,9 +169,7 @@ trait CommitQueryMethod
     /**
      * First 1 record usually use column id
      *
-     * @param string value
-     * @param string column
-     * @return \SupportSqlCollection
+     * @return mixed
      */
     public function firstOrFail()
     {
@@ -183,7 +183,7 @@ trait CommitQueryMethod
      * Quick login with array params
      *
      * @param array data
-     * @return \SupportSqlCollection
+     * @return mixed
      */
     public function login(array $data)
     {
@@ -195,7 +195,7 @@ trait CommitQueryMethod
     /**
      * Destroy a record from condition
      *
-     * @return \SupportSqlCollection
+     * @return mixed
      */
     public function delete()
     {
@@ -216,7 +216,7 @@ trait CommitQueryMethod
      * Update records from condition
      *
      * @param array data
-     * @return \SupportSqlCollection
+     * @return mixed
      */
     public function update(array $data)
     {
@@ -238,7 +238,7 @@ trait CommitQueryMethod
      * 
      * @return bool
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return app()->make('connection')->getConnection()->{__FUNCTION__}();
     }
@@ -248,7 +248,7 @@ trait CommitQueryMethod
      * 
      * @return bool
      */
-    public function commit()
+    public function commit(): bool
     {
         return app()->make('connection')->getConnection()->{__FUNCTION__}();
     }
@@ -258,7 +258,7 @@ trait CommitQueryMethod
      * 
      * @return bool
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         return app()->make('connection')->getConnection()->{__FUNCTION__}();
     }

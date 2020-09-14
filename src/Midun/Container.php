@@ -22,42 +22,42 @@ class Container
      * Instance of the application
      * @var self
      */
-    private static $instance;
+    private static self $instance;
 
     /**
      * List of bindings instances
      * 
      * @var array
      */
-    private $instances = [];
+    private array $instances = [];
 
     /**
      * Base path of the installation
      * @var string
      */
-    private $basePath;
+    private string $basePath;
 
     /**
      * Storage saving registry variables
      * @var array $storage
      */
-    private $storage = [];
+    private array $storage = [];
 
     /**
      * Storage saving bindings objects
      * @var array $bindings
      */
-    private $bindings = [];
+    private array $bindings = [];
 
     /**
      * List of resolved bindings
      */
-    private $resolved = [];
+    private array $resolved = [];
 
     /**
      * Flag check should skip middleware
      */
-    private $shouldSkipMiddleware = false;
+    private bool $shouldSkipMiddleware = false;
 
     /**
      * Initial of container
@@ -83,7 +83,7 @@ class Container
      * 
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance(): Container
     {
         if (!self::$instance) {
             return new self(...func_get_args());
@@ -97,7 +97,7 @@ class Container
      * 
      * @return string
      */
-    private function getPublicPath()
+    private function getPublicPath(): string
     {
         return $this->basePath() . DIRECTORY_SEPARATOR . 'public';
     }
@@ -107,7 +107,7 @@ class Container
      * 
      * @return string
      */
-    private function getCachePath()
+    private function getCachePath(): string
     {
         return $this->getStoragePath() . DIRECTORY_SEPARATOR . 'cache';;
     }
@@ -117,7 +117,7 @@ class Container
      * 
      * @return string
      */
-    private function getConfigPath()
+    private function getConfigPath(): string
     {
         return $this->basePath() . DIRECTORY_SEPARATOR . 'config';
     }
@@ -127,7 +127,7 @@ class Container
      * 
      * @return string
      */
-    private function getStoragePath()
+    private function getStoragePath(): string
     {
         return $this->basePath() . DIRECTORY_SEPARATOR . 'storage';
     }
@@ -137,7 +137,7 @@ class Container
      * 
      * @return string
      */
-    private function getDatabasePath()
+    private function getDatabasePath(): string
     {
         return $this->basePath() . DIRECTORY_SEPARATOR . 'database';
     }
@@ -147,7 +147,7 @@ class Container
      * 
      * @return string
      */
-    private function getRoutePath()
+    private function getRoutePath(): string
     {
         return $this->basePath() . DIRECTORY_SEPARATOR . 'routes';
     }
@@ -157,7 +157,7 @@ class Container
      * 
      * @param string $path
      */
-    public function basePath($path = '')
+    public function basePath(string $path = ''): string
     {
         return !$path ? $this->basePath : $this->basePath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -168,7 +168,7 @@ class Container
      * @param string $key
      * @param mixed $instance
      */
-    private function instance(string $key, $instance)
+    private function instance(string $key, $instance): void
     {
         $this->instances[$key] = $instance;
     }
@@ -179,7 +179,7 @@ class Container
      * @param string $key
      * @param mixed $instance
      */
-    private function hasInstance(string $key)
+    private function hasInstance(string $key): bool
     {
         return isset($this->instances[$key]);
     }
@@ -219,7 +219,7 @@ class Container
      * 
      * @return void
      */
-    private function putToResolved(string $abstract, $concrete)
+    private function putToResolved(string $abstract, $concrete): void
     {
         if ($this->isResolved($abstract)) {
             throw new AppException("Duplicated abstract resolve `{$abstract}`");
@@ -235,7 +235,7 @@ class Container
      * 
      * @return bool
      */
-    private function isResolved(string $abstract)
+    private function isResolved(string $abstract): bool
     {
         return isset($this->resolved[$abstract]);
     }
@@ -247,9 +247,9 @@ class Container
      * 
      * @return boolean
      * 
-     * @throws Midun\Http\Exceptions\AppException
+     * @throws AppException
      */
-    private function canResolve($entity)
+    private function canResolve($entity): bool
     {
         return $this->bound($entity) || class_exists($entity) || $this->hasInstance($entity);
     }
@@ -273,7 +273,7 @@ class Container
      * @param mixed $concrete
      * @return void
      */
-    public function singleton($abstract, $concrete)
+    public function singleton($abstract, $concrete): void
     {
         $this->bind($abstract, $concrete, true);
     }
@@ -286,7 +286,7 @@ class Container
      *
      * @return void
      */
-    public function bind($abstract, $concrete = null, $shared = false)
+    public function bind($abstract, $concrete = null, $shared = false): void
     {
         if (is_null($concrete)) {
             $concrete = $abstract;
@@ -300,11 +300,10 @@ class Container
     /**
      * Get the Closure to be used when building a type.
      *
-     * @param  string  $abstract
      * @param  string  $concrete
      * @return \Closure
      */
-    private function getClosure($concrete)
+    private function getClosure(string $concrete): \Closure
     {
         return function () use ($concrete) {
             return $this->build($concrete);
@@ -383,7 +382,7 @@ class Container
      *
      * @return boolean
      */
-    private function resolved(string $abstract)
+    private function resolved(string $abstract): bool
     {
         return isset($this->resolved[$abstract]);
     }
@@ -394,7 +393,7 @@ class Container
      * @param  array  $dependencies
      * @return array
      */
-    private function resolveConstructorDependencies(array $dependencies)
+    private function resolveConstructorDependencies(array $dependencies): array
     {
         $array = [];
         foreach ($dependencies as $dependency) {
@@ -415,7 +414,7 @@ class Container
      *
      * @return array
      */
-    public function resolveMethodDependencyWithParameters($controller, $methodName, $params)
+    public function resolveMethodDependencyWithParameters($controller, $methodName, $params): array
     {
         try {
             $ref = new ReflectionMethod($controller, $methodName);
@@ -443,9 +442,11 @@ class Container
      * Handle validation for request
      * @param string $object
      *
-     * @return Object
+     * @return object
+     * 
+     * @throws AppException
      */
-    private function buildStacks($object)
+    private function buildStacks($object): object
     {
         try {
             $object = $this->build($object);
@@ -463,7 +464,7 @@ class Container
      *
      * @return array
      */
-    public function getBindings()
+    public function getBindings(): array
     {
         return $this->bindings;
     }
@@ -475,7 +476,7 @@ class Container
      * 
      * @return bool
      */
-    private function bound(string $entity)
+    private function bound(string $entity): bool
     {
         return isset($this->bindings[$entity]);
     }
@@ -485,7 +486,7 @@ class Container
      * 
      * @return bool
      */
-    public function isDownForMaintenance()
+    public function isDownForMaintenance(): bool
     {
         return false;
     }
@@ -495,7 +496,7 @@ class Container
      * 
      * @return bool
      */
-    public function shouldSkipMiddleware()
+    public function shouldSkipMiddleware(): bool
     {
         return $this->shouldSkipMiddleware;
     }
@@ -505,7 +506,7 @@ class Container
      * 
      * @return string
      */
-    public function getOS()
+    public function getOS(): string
     {
         switch (true) {
             case stristr(PHP_OS, 'DAR'):
@@ -524,7 +525,7 @@ class Container
      * 
      * @return bool
      */
-    public function isWindows()
+    public function isWindows(): bool
     {
         return "windows" === $this->getOs();
     }
@@ -534,7 +535,7 @@ class Container
      * 
      * @return bool
      */
-    public function isMacos()
+    public function isMacos(): bool
     {
         return "macosx" === $this->getOs();
     }
@@ -544,7 +545,7 @@ class Container
      * 
      * @return bool
      */
-    public function isLinux()
+    public function isLinux(): bool
     {
         return "linux" === $this->getOs();
     }
@@ -554,7 +555,7 @@ class Container
      * 
      * @return bool
      */
-    public function unknownOs()
+    public function unknownOs(): bool
     {
         return "unknown" === $this->getOs();
     }

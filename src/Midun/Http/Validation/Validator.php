@@ -14,63 +14,63 @@ class Validator
      * 
      * @var array
      */
-    protected $rules = [];
+    protected array $rules = [];
 
     /**
      * List of custom rules
      * 
      * @var array
      */
-    protected $customRules = [];
+    protected array $customRules = [];
 
     /**
      * List of custom messages
      * 
      * @var array
      */
-    protected $customMessages = [];
+    protected array $customMessages = [];
 
     /**
      * List of custom messages
      * 
      * @var array
      */
-    protected $messages = [];
+    protected array $messages = [];
 
     /**
      * Flag checking failed request
      * 
      * @var bool
      */
-    protected $isFailed = false;
+    protected bool $isFailed = false;
 
     /**
      * List of errors message
      * 
      * @var array
      */
-    protected $failedMessages = [];
+    protected array $failedMessages = [];
 
     /**
      * Instance of passable request
      * 
      * @var array
      */
-    protected $passable;
+    protected array $passable = [];
 
     /**
      * File validation using for multiple languages
      * 
      * @var string
      */
-    protected $validationFile = 'validation';
+    protected string $validationFile = 'validation';
 
     /**
      * Current parameter working
      * 
      * @var string
      */
-    protected $current;
+    protected string $current = "";
 
     /**
      * Specific character used to parse validation
@@ -84,7 +84,7 @@ class Validator
      * 
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return $this->rules;
     }
@@ -94,7 +94,7 @@ class Validator
      * 
      * @return array
      */
-    public function messages()
+    public function messages(): array
     {
         return $this->messages;
     }
@@ -106,7 +106,7 @@ class Validator
      * 
      * @return void
      */
-    public function setValidateFile(string $file)
+    public function setValidateFile(string $file): void
     {
         $this->validationFile = $file;
     }
@@ -120,7 +120,7 @@ class Validator
      * 
      * @return void
      */
-    public function setRule(string $rule, \Closure $handle, string $message = '')
+    public function setRule(string $rule, \Closure $handle, string $message = ''): void
     {
         $this->customRules[$rule] = $handle;
         $this->customMessages[$rule] = $message;
@@ -133,7 +133,7 @@ class Validator
      * 
      * @return void
      */
-    public function setRules(array $rules)
+    public function setRules(array $rules): void
     {
         $this->rules = $rules;
     }
@@ -143,7 +143,7 @@ class Validator
      * 
      * @return bool
      */
-    public function isFailed()
+    public function isFailed(): bool
     {
         return $this->isFailed;
     }
@@ -153,7 +153,7 @@ class Validator
      * 
      * @return bool
      */
-    public function isSucceeded()
+    public function isSucceeded(): bool
     {
         return !$this->isFailed();
     }
@@ -163,7 +163,7 @@ class Validator
      * 
      * @return array
      */
-    public function errors()
+    public function errors(): array
     {
         return $this->failedMessages;
     }
@@ -175,7 +175,7 @@ class Validator
      * 
      * @return void
      */
-    public function setPassable(Request $passable)
+    public function setPassable(Request $passable): void
     {
         $this->passable = $passable;
     }
@@ -187,7 +187,7 @@ class Validator
      * 
      * @return void
      */
-    public function setMessages(array $messages)
+    public function setMessages(array $messages): void
     {
         $this->messages = $messages;
     }
@@ -199,7 +199,7 @@ class Validator
      * 
      * @return bool
      */
-    public function isCustom(string $rule)
+    public function isCustom(string $rule): bool
     {
         return isset($this->customRules[$rule]);
     }
@@ -211,7 +211,7 @@ class Validator
      * 
      * @return \Closure
      */
-    public function getCustom(string $rule)
+    public function getCustom(string $rule): \Closure
     {
         return $this->customRules[$rule];
     }
@@ -227,7 +227,7 @@ class Validator
      * 
      * @throws ValidationException
      */
-    public function makeValidate(Request $request, array $validateRules, array $messages = [])
+    public function makeValidate(Request $request, array $validateRules, array $messages = []): Validator
     {
         $this->setPassable($request);
         $this->setMessages($messages);
@@ -263,7 +263,7 @@ class Validator
      * 
      * @return void
      */
-    public function verify(string $rule, array $rules, $ruleValue)
+    public function verify(string $rule, array $rules, $ruleValue): void
     {
         $value = isset($this->passable->all()[$this->current]) ? $this->passable->all()[$this->current] : null;
 
@@ -306,7 +306,7 @@ class Validator
      * 
      * @return string
      */
-    public function buildErrorMessage($param, string $rule, array $options = [])
+    public function buildErrorMessage($param, string $rule, array $options = []): string
     {
         if (is_array($param)) {
             list($param, $type) = $param;
@@ -336,7 +336,7 @@ class Validator
      * 
      * @return void
      */
-    public function pushErrorMessage(string $key, string $message)
+    public function pushErrorMessage(string $key, string $message): void
     {
         $this->failedMessages[$key][] = $message;
     }
@@ -347,9 +347,9 @@ class Validator
      * @param string $param
      * @param string $rule
      * 
-     * @return void
+     * @return string
      */
-    public function getDeclaringMessage($param, $rule)
+    public function getDeclaringMessage($param, $rule): ?string
     {
         $currentMessageKey = $param . Validator::SPECIFIC_SEPARATOR . $rule;
         return isset($this->messages[$currentMessageKey]) ? $this->messages[$currentMessageKey] : null;
@@ -360,7 +360,7 @@ class Validator
      * 
      * @return void
      */
-    public function makeFailed()
+    public function makeFailed(): void
     {
         $this->isFailed = true;
     }

@@ -22,7 +22,7 @@ abstract class FormRequest extends Request
      *
      * @return boolean
      */
-    abstract public function authorize();
+    abstract public function authorize(): bool;
 
     /**
      * Abstract function for overriding
@@ -30,7 +30,7 @@ abstract class FormRequest extends Request
      *
      * @return array
      */
-    abstract public function rules();
+    abstract public function rules(): array;
 
     /**
      * Abstract function for overriding
@@ -38,14 +38,16 @@ abstract class FormRequest extends Request
      *
      * @return array
      */
-    abstract public function messages();
+    abstract public function messages(): array;
 
     /**
      * Execute verify request method
      *
      * @return void
+     * 
+     * @throws ValidationException
      */
-    public function executeValidate()
+    public function executeValidate(): void
     {
         if (!$this->authorize()) {
             throw new UnauthorizedException();

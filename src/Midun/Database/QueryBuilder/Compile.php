@@ -13,7 +13,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileSelect(bool $distinct)
+    public function compileSelect(bool $distinct): string
     {
         return $distinct ? "SELECT DISTINCT " : "SELECT ";
     }
@@ -21,13 +21,13 @@ class Compile
     /**
      * Compile select columns
      * 
-     * @param array|null $columns
+     * @param array $columns
      * 
      * @return string
      */
-    public function compileColumns($columns)
+    public function compileColumns(array $columns = []): string
     {
-        return is_array($columns) ? implode(', ', $columns) : '*';
+        return !empty($columns) ? implode(', ', $columns) : '*';
     }
 
     /**
@@ -37,7 +37,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileFrom(string $table)
+    public function compileFrom(string $table): string
     {
         return " FROM {$table}";
     }
@@ -49,7 +49,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileJoins(array $joins)
+    public function compileJoins(array $joins): string
     {
         foreach ($joins as $join) {
             switch (strtolower($join[4])) {
@@ -78,7 +78,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileWheres(array $wheres)
+    public function compileWheres(array $wheres): string
     {
         $sql = " WHERE";
         foreach ($wheres as $key => $where) {
@@ -131,10 +131,9 @@ class Compile
      * 
      * @return string
      */
-    public function compileGroups(array $groups)
+    public function compileGroups(array $groups): string
     {
-        $sql = " GROUP BY " . implode(', ', $groups);
-        return $sql;
+        return " GROUP BY " . implode(', ', $groups);
     }
 
     /**
@@ -144,7 +143,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileHavings(array $havings)
+    public function compileHavings(array $havings): string
     {
         $sql = " HAVING";
         foreach ($havings as $key => $having) {
@@ -163,7 +162,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileOrders(array $orders)
+    public function compileOrders(array $orders): string
     {
         $sql = " ORDER BY ";
         foreach ($orders as $key => $order) {
@@ -182,7 +181,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileLimit(int $limit)
+    public function compileLimit(int $limit): string
     {
         return " LIMIT {$limit}";
     }
@@ -194,7 +193,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileOffset(int $offset)
+    public function compileOffset(int $offset): string
     {
         return " OFFSET {$offset}";
     }
@@ -206,7 +205,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileWhereIn(array $wherein)
+    public function compileWhereIn(array $wherein): string
     {
         $array = explode(", ", $wherein[1]);
         foreach ($array as $key => $arr) {
@@ -228,7 +227,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileInsert($table, array $data)
+    public function compileInsert(string $table, array $data): string
     {
         $columns = [];
         $values = [];
@@ -255,7 +254,7 @@ class Compile
      * 
      * @throws QueryException
      */
-    public function compileCreate(Model $model, array $fillable, array $data)
+    public function compileCreate(Model $model, array $fillable, array $data): string
     {
         try {
             $columns = [];
@@ -288,7 +287,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileDelete($table)
+    public function compileDelete(string $table): string
     {
         return "DELETE FROM {$table}";
     }
@@ -301,7 +300,7 @@ class Compile
      * 
      * @return string
      */
-    public function compileUpdate($table, array $arg)
+    public function compileUpdate(string $table, array $arg): string
     {
         $sql = "UPDATE {$table} SET ";
         foreach ($arg as $key => $dt) {

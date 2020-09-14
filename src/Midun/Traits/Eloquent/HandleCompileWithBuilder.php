@@ -2,30 +2,39 @@
 
 namespace Midun\Traits\Eloquent;
 
-use Midun\Database\QueryBuilder\QueryException;
+use Midun\Eloquent\Model;
+use Midun\Eloquent\EloquentException;
 use Midun\Http\Exceptions\AppException;
+use Midun\Database\QueryBuilder\QueryException;
 
 trait HandleCompileWithBuilder
 {
     /**
      * Instance of exists model
      * 
-     * @var \Midun\Eloquent\Model
+     * @var Model
      */
-    protected $existsModelInstance = null;
+    protected ?Model $existsModelInstance = null;
 
     /**
      * List of with relations
      */
-    public $with;
+    public array $with = [];
 
     /**
      * Create new query builder from model
      *
-     * @param ConnectionInterface $this->bindClass
-     * return self
+     * @param string $table
+     * @param array $modelMeta
+     * @param string $method
+     * @param array $args
+     * @param Model $instance
+     * 
+     * @return mixed
+     * 
+     * @throws QueryException
      */
-    public function staticEloquentBuilder($table, $modelMeta, $method, $args = null, $instance = null)
+    public function staticEloquentBuilder(string $table, array $modelMeta, string $method, ?array $args = null, ?Model $instance = null)
     {
         try {
             $object = isset($modelMeta['calledClass']) ? new self($table, $modelMeta['calledClass']) : new self($table);
@@ -70,16 +79,18 @@ trait HandleCompileWithBuilder
      * @param string $method
      * @param array $args
      * 
-     * @return \Midun\Eloquent\Model
+     * @return Model
+     * 
+     * @throws EloquentException
      */
-    public function __call($method, $args)
+    public function __call(string $method, array $args): Model
     {
         try {
             $buildScope = $this->_getScopeMethod($method);
             array_unshift($args, $this);
             return (new $this->calledFromModel)->$buildScope(...$args);
         } catch (\TypeError $e) {
-            throw new \Exception($e->getMessage());
+            throw new EloquentException($e->getMessage());
         }
     }
 
@@ -90,7 +101,7 @@ trait HandleCompileWithBuilder
      * 
      * @return string
      */
-    private function _getScopeMethod($method)
+    private function _getScopeMethod($method): string
     {
         return 'scope' . ucfirst($method);
     }
@@ -102,7 +113,7 @@ trait HandleCompileWithBuilder
      * 
      * @return self
      */
-    public function with($with)
+    public function with($with): self
     {
         $this->with = is_array($with) ? $with : func_get_args();
         return $this;

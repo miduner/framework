@@ -7,7 +7,7 @@ if (!function_exists('view')) {
      * @param string $view
      * @param array $data
      * 
-     * @return void
+     * @return mixed
      */
     function view(string $view = '', array $data = [])
     {
@@ -23,7 +23,7 @@ if (!function_exists('master')) {
      * 
      * @return void
      */
-    function master(string $master)
+    function master(string $master): void
     {
         app()->make('view')->setMaster($master);
     }
@@ -38,7 +38,7 @@ if (!function_exists('setVar')) {
      * 
      * @return void
      */
-    function setVar(string $key, $value)
+    function setVar(string $key, $value): void
     {
         app()->make('view')->setVar($key, $value);
     }
@@ -52,7 +52,7 @@ if (!function_exists('need')) {
      * 
      * @return void
      */
-    function need(string $section, string $instead = '')
+    function need(string $section, string $instead = ''): void
     {
         echo app()->make('view')->getNeedSection($section, $instead);
     }
@@ -67,7 +67,7 @@ if (!function_exists('section')) {
      * 
      * @return void
      */
-    function section(string $section, $data = null)
+    function section(string $section, $data = null): void
     {
         if (!is_null($data)) {
             app()->make('view')->setSectionWithData($section, $data);
@@ -83,7 +83,7 @@ if (!function_exists('endsection')) {
      * 
      * @return void
      */
-    function endsection()
+    function endsection(): void
     {
         app()->make('view')->setDataForSection(ob_get_clean());
     }
@@ -97,7 +97,7 @@ if (!function_exists('included')) {
      * 
      * @return void
      */
-    function included(string $path)
+    function included(string $path): void
     {
         $path = str_replace('.', DIRECTORY_SEPARATOR, $path);
 

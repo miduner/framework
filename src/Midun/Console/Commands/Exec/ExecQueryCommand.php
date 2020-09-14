@@ -11,28 +11,28 @@ class ExecQueryCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'exec:query';
+	protected string $signature = 'exec:query';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Run query live';
+	protected string $description = 'Run query live';
 
 	/**
 	 * Option required
 	 *
 	 * @var array
 	 */
-	protected $required = ['query'];
+	protected array $required = ['query'];
 
 	/**
 	 * True format for command
 	 *
 	 * @var string
 	 */
-	protected $format = '>> midun exec:query --query="{select sql}"';
+	protected string $format = '>> midun exec:query --query="{select sql}"';
 
 	/**
 	 * Create a new command instance.
@@ -48,10 +48,12 @@ class ExecQueryCommand extends Command
 	 * Handle the command
 	 *
 	 * @return void
+	 * 
+	 * @throws PDOException
 	 */
-	public function handle()
+	public function handle(): void
 	{
-		$query = $this->getOptions('query');
+		$query = $this->getOption('query');
 
 		try {
 			$connection = app('connection')->getConnection();
@@ -67,7 +69,7 @@ class ExecQueryCommand extends Command
 
 			$touched = $statement->rowCount();
 
-			$result = $this->getOptions('test') == 'true' ? '' : json_encode($statement->fetchAll());
+			$result = $this->getOption('test') == 'true' ? '' : json_encode($statement->fetchAll());
 
 			$end = microtime(true);
 

@@ -4,6 +4,7 @@ namespace Midun\Routing;
 
 use Midun\Container;
 use Midun\Pipeline\Pipeline;
+use Midun\Routing\RouteCollection;
 
 class NextPasses
 {
@@ -12,10 +13,9 @@ class NextPasses
      * 
      * @param array $routeParams
      * @param array $requestParams
-     * @param mixed $action
-     * @param array/string $middleware
+     * @param RouteCollection $route
      */
-    public function __construct($routeParams, $requestParams, $route)
+    public function __construct(array $routeParams, array $requestParams, RouteCollection $route)
     {
         $params = [];
 

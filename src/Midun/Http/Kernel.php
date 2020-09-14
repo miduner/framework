@@ -13,13 +13,13 @@ class Kernel
      * Instance of application
      * @var Container
      */
-    private $app;
+    private Container $app;
 
     /**
      * List of route middlewares
      * @var array
      */
-    public $routeMiddlewares = [];
+    public array $routeMiddlewares = [];
 
     /**
      * The application's global HTTP middleware stack.
@@ -28,7 +28,7 @@ class Kernel
      *
      * @var array
      */
-    protected $middlewares = [];
+    protected array $middlewares = [];
 
     /**
      * Initial instance of kernel
@@ -51,8 +51,10 @@ class Kernel
 
     /**
      * Bindings all middlewares to container
+     * 
+     * @return void
      */
-    private function bindingMiddlewares()
+    private function bindingMiddlewares(): void
     {
         foreach ($this->routeMiddlewares as $key => $middleware) {
             $this->app->bind($key, $middleware);
@@ -63,7 +65,7 @@ class Kernel
      * Handle execute pipeline request
      * @param Request $request
      *
-     * @return void
+     * @return mixed
      */
     public function handle(Request $request)
     {
@@ -77,7 +79,7 @@ class Kernel
      * Dispatch router of application
      * @return \Closure
      */
-    protected function dispatchToRouter()
+    protected function dispatchToRouter(): \Closure
     {
         return function () {
             $route = new Route;
@@ -86,6 +88,11 @@ class Kernel
         };
     }
 
+    /**
+     * Get the application 
+     * 
+     * @return Container
+     */
     public function getApplication()
     {
         return $this->app;

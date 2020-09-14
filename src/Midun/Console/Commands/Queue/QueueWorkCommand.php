@@ -12,14 +12,14 @@ class QueueWorkCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'queue:work';
+    protected string $signature = 'queue:work';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Run queue jobs';
+    protected string $description = 'Run queue jobs';
 
     /**
      * Create a new command instance.
@@ -38,7 +38,7 @@ class QueueWorkCommand extends Command
 	 *
 	 * @throws \ReflectionException
      */
-    public function handle()
+    public function handle(): void
     {
         while (true) {
             sleep(1);

@@ -9,7 +9,7 @@ class LoggerServiceProvider extends ServiceProvider
     /**
      * Booting
      */
-    public function boot()
+    public function boot(): void
     {
         $logger = $this->app->make('log');
 
@@ -21,7 +21,7 @@ class LoggerServiceProvider extends ServiceProvider
     /**
      * Register singleton routing
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton('log', function () {
             return new \Midun\Logger\Logger();

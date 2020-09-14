@@ -11,25 +11,25 @@ class KeyGenerateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'key:generate';
+    protected string $signature = 'key:generate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate application key';
+    protected string $description = 'Generate application key';
 
     /**
      * Flag check using cache
      * @var boolean
      */
-    protected $usingCache = false;
+    protected bool $usingCache = false;
 
     /**
      * Other called signatures
      */
-    protected $otherSignatures = [
+    protected array $otherSignatures = [
         'key:',
         'key:gen',
         'key:genera',
@@ -52,7 +52,7 @@ class KeyGenerateCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $env = base_path('.env');
         $file_contents = file_get_contents($env);

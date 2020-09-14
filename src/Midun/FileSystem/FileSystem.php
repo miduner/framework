@@ -12,7 +12,7 @@ class FileSystem
      * @param  string  $path
      * @return bool
      */
-    public function exists($path)
+    public function exists(string $path): bool
     {
         return file_exists($path);
     }
@@ -24,9 +24,9 @@ class FileSystem
      * @param  bool  $lock
      * @return string
      *
-     * @throws \Midun\FileSystem\FileSystemException
+     * @throws FileSystemException
      */
-    public function get($path, $lock = false)
+    public function get(string $path, $lock = false): string
     {
         if ($this->isFile($path)) {
             return $lock ? $this->sharedGet($path) : file_get_contents($path);
@@ -41,7 +41,7 @@ class FileSystem
      * @param  string  $path
      * @return string
      */
-    public function sharedGet($path)
+    public function sharedGet(string $path): string
     {
         $contents = '';
 
@@ -72,7 +72,7 @@ class FileSystem
      * @param  bool  $lock
      * @return int
      */
-    public function put($path, $contents, $lock = false)
+    public function put(string $path, string $contents, bool $lock = false): int
     {
         return file_put_contents($path, $contents, $lock ? LOCK_EX : 0);
     }
@@ -84,7 +84,7 @@ class FileSystem
      * @param  string  $data
      * @return int
      */
-    public function append($path, $data)
+    public function append(string $path, string $data): int
     {
         return file_put_contents($path, $data, FILE_APPEND);
     }
@@ -96,9 +96,9 @@ class FileSystem
      * @param  int  $mode
      * @return mixed
      */
-    public function chmod($path, $mode = null)
+    public function chmod(string $path, ?int $mode = null)
     {
-        if ($mode) {
+        if (!is_null($mode)) {
             return chmod($path, $mode);
         }
 
@@ -111,7 +111,7 @@ class FileSystem
      * @param  string|array  $paths
      * @return bool
      */
-    public function delete($paths)
+    public function delete($paths): bool
     {
         $paths = is_array($paths) ? $paths : func_get_args();
 
@@ -137,7 +137,7 @@ class FileSystem
      * @param  string  $target
      * @return bool
      */
-    public function move($path, $target)
+    public function move(string $path, string $target): bool
     {
         return rename($path, $target);
     }
@@ -149,7 +149,7 @@ class FileSystem
      * @param  string  $target
      * @return bool
      */
-    public function copy($path, $target)
+    public function copy(string $path, string $target): bool
     {
         return copy($path, $target);
     }
@@ -161,10 +161,11 @@ class FileSystem
      * @param  string  $link
      * @return void
      */
-    public function link($target, $link)
+    public function link(string $target, string $link): void
     {
         if (! \Midun\Container::getInstance()->isWindows()) {
-            return symlink($target, $link);
+            symlink($target, $link);
+            exit(1);
         }
 
         $mode = $this->isDirectory($target) ? 'J' : 'H';
@@ -178,7 +179,7 @@ class FileSystem
      * @param  string  $path
      * @return string
      */
-    public function name($path)
+    public function name(string $path): string
     {
         return pathinfo($path, PATHINFO_FILENAME);
     }
@@ -189,7 +190,7 @@ class FileSystem
      * @param  string  $path
      * @return string
      */
-    public function basename($path)
+    public function basename(string $path): string
     {
         return pathinfo($path, PATHINFO_BASENAME);
     }
@@ -200,7 +201,7 @@ class FileSystem
      * @param  string  $path
      * @return string
      */
-    public function dirname($path)
+    public function dirname(string $path): string
     {
         return pathinfo($path, PATHINFO_DIRNAME);
     }
@@ -211,7 +212,7 @@ class FileSystem
      * @param  string  $path
      * @return string
      */
-    public function extension($path)
+    public function extension(string $path): string
     {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
@@ -222,7 +223,7 @@ class FileSystem
      * @param  string  $path
      * @return string
      */
-    public function type($path)
+    public function type(string $path): string
     {
         return filetype($path);
     }
@@ -233,7 +234,7 @@ class FileSystem
      * @param  string  $path
      * @return string|false
      */
-    public function mimeType($path)
+    public function mimeType(string $path)
     {
         return finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
     }
@@ -244,7 +245,7 @@ class FileSystem
      * @param  string  $path
      * @return int
      */
-    public function size($path)
+    public function size(string $path): int
     {
         return filesize($path);
     }
@@ -255,7 +256,7 @@ class FileSystem
      * @param  string  $path
      * @return int
      */
-    public function lastModified($path)
+    public function lastModified(string $path): int
     {
         return filemtime($path);
     }
@@ -266,7 +267,7 @@ class FileSystem
      * @param  string  $directory
      * @return bool
      */
-    public function isDirectory($directory)
+    public function isDirectory(string $directory): bool
     {
         return is_dir($directory);
     }
@@ -277,7 +278,7 @@ class FileSystem
      * @param  string  $path
      * @return bool
      */
-    public function isReadable($path)
+    public function isReadable(string $path): bool
     {
         return is_readable($path);
     }
@@ -288,7 +289,7 @@ class FileSystem
      * @param  string  $path
      * @return bool
      */
-    public function isWritable($path)
+    public function isWritable(string $path): bool
     {
         return is_writable($path);
     }
@@ -299,7 +300,7 @@ class FileSystem
      * @param  string  $file
      * @return bool
      */
-    public function isFile($file)
+    public function isFile(string $file): bool
     {
         return is_file($file);
     }
@@ -311,7 +312,7 @@ class FileSystem
      * @param  int     $flags
      * @return array
      */
-    public function glob($pattern, $flags = 0)
+    public function glob(string $pattern, int $flags = 0): array
     {
         return glob($pattern, $flags);
     }
@@ -322,7 +323,7 @@ class FileSystem
      * @param  string  $directory
      * @return array
      */
-    public function files($directory)
+    public function files(string $directory): array
     {
         $glob = glob($directory.DIRECTORY_SEPARATOR.'*');
 

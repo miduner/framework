@@ -11,14 +11,14 @@ class MigrateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'migrate';
+    protected string $signature = 'migrate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Run migration database tables';
+    protected string $description = 'Run migration database tables';
 
     /**
      * Create a new command instance.
@@ -35,7 +35,7 @@ class MigrateCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         foreach (scandir(database_path('migration'), 1) as $file) {
             if (strlen($file) > 5) {

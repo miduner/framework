@@ -7,7 +7,7 @@ use Midun\Application;
 
 class AppException extends Exception
 {
-    public function __construct($message, $code = 400)
+    public function __construct(string $message, int $code = 400)
     {
         $this->writeLog($message);
 
@@ -29,7 +29,7 @@ class AppException extends Exception
      * 
      * @return mixed
      */
-    public function render($exception)
+    public function render(\Exception $exception)
     {
         if (request()->isAjax()) {
             return response()->json([
@@ -48,7 +48,7 @@ class AppException extends Exception
      * 
      * @return void
      */
-    private function writeLog(string $message)
+    private function writeLog(string $message): void
     {
         if (app()->make(Application::class)->isLoaded()) {
 
@@ -65,7 +65,7 @@ class AppException extends Exception
      * 
      * @return void
      */
-    protected function report()
+    protected function report(): void
     {
         // echo 'Reported !';
     }

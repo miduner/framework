@@ -15,7 +15,7 @@ abstract class Authenticate extends Model
      * 
      * @return string
      */
-    public function setPasswordAttribute($password)
+    public function setPasswordAttribute(string $password): string
     {
         return Hash::make($password);
     }
@@ -27,7 +27,7 @@ abstract class Authenticate extends Model
      * 
      * @throws AuthenticationException
      */
-    public function createToken(array $customClaims = [])
+    public function createToken(array $customClaims = []): string
     {
         $key = config('jwt.secret');
 
@@ -72,7 +72,7 @@ abstract class Authenticate extends Model
      * 
      * @return string
      */
-    public function trueFormatKey(string $key)
+    public function trueFormatKey(string $key): string
     {
         return base64_decode(strtr($key, '-_', '+/'));
     }

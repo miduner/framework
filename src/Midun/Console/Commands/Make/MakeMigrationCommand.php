@@ -11,14 +11,14 @@ class MakeMigrationCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:migration';
+    protected string $signature = 'make:migration';
 
     /**
      * The console migration description.
      *
      * @var string
      */
-    protected $description = 'Making migration service';
+    protected string $description = 'Making migration service';
 
     /**
      * Create a new command instance.
@@ -35,9 +35,9 @@ class MakeMigrationCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        $table = $this->getOptions('table');
+        $table = $this->getOption('table');
 
         if(!$table || empty($table) || is_null($table)) {
             $this->output->printError("You're missing argument 'table'. Please using correct format.\n>> make:migration --table={table_name}");

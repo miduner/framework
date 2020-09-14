@@ -2,17 +2,19 @@
 
 namespace Midun\Database\Connections;
 
+use PDO;
+
 abstract class Connection implements \Midun\Contracts\Database\Connection
 {
     /**
      * Driver database connection
      */
-    protected $driver;
+    protected string $driver;
 
     /**
      * Instance of connection
      */
-    protected $instance;
+    protected PDO $instance;
 
     /**
      * Initial constructor connection
@@ -29,7 +31,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $driver = $this->getDriverConnection(
             $this->driver()
@@ -66,27 +68,27 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      *
      * @return void
      */
-    abstract function setDriver(string $driver);
+    abstract function setDriver(string $driver): void;
 
     /**
      * Check the connection is available
      * @return boolean
      */
-    abstract function isConnected();
+    abstract function isConnected(): bool;
 
     /**
      * Make instance
      *
      * @return void
      */
-    abstract function makeInstance();
+    abstract function makeInstance(): void;
 
     /**
      * Get the connection
      *
-     * @return \PDOInstance
+     * @return \PDO
      */
-    public function getConnection()
+    public function getConnection(): PDO
     {
         if (!$this->instance) {
             $this->makeInstance();
@@ -99,7 +101,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return string
      */
-    protected function driver()
+    protected function driver(): string
     {
         return $this->driver;
     }
@@ -109,7 +111,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return string
      */
-    protected function getDefaultDriver()
+    protected function getDefaultDriver(): string
     {
         return config('database.default');
     }
@@ -121,7 +123,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return string
      */
-    protected function getDriverConnection(string $driver)
+    protected function getDriverConnection(string $driver): string
     {
         return config("database.connections.{$driver}.driver");
     }
@@ -133,7 +135,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return string
      */
-    protected function getHostConnection(string $driver)
+    protected function getHostConnection(string $driver): string
     {
         return config("database.connections.{$driver}.host");
     }
@@ -145,7 +147,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return string
      */
-    protected function getPortConnection(string $driver)
+    protected function getPortConnection(string $driver): string
     {
         return config("database.connections.{$driver}.port");
     }
@@ -157,7 +159,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return string
      */
-    protected function getDatabaseConnection(string $driver)
+    protected function getDatabaseConnection(string $driver): string
     {
         return config("database.connections.{$driver}.database");
     }
@@ -169,7 +171,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return string
      */
-    protected function getUsernameConnection(string $driver)
+    protected function getUsernameConnection(string $driver): string
     {
         return config("database.connections.{$driver}.username");
     }
@@ -181,7 +183,7 @@ abstract class Connection implements \Midun\Contracts\Database\Connection
      * 
      * @return string
      */
-    protected function getPasswordConnection(string $driver)
+    protected function getPasswordConnection(string $driver): string
     {
         return config("database.connections.{$driver}.password");
     }

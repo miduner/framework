@@ -8,19 +8,13 @@ use Midun\ServiceProvider;
 class ConnectionServiceProvider extends ServiceProvider
 {
     /**
-     * Booting
-     * 
-     * @return void
-     */
-    public function boot()
-    { }
-
-    /**
      * Register connection service provider
      * 
      * @return void
+     * 
+     * @throws RuntimeException
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton('connection', function () {
             try {

@@ -15,9 +15,9 @@ trait ExecuteQuery
      * Execute sql
      *
      * @param string sql
-     * @return \SupportSqlCollection
+     * @return mixed
      */
-    public function request($sql)
+    public function request(string $sql)
     {
         try {
             $connection = app()->make('connection')->getConnection();
@@ -47,7 +47,7 @@ trait ExecuteQuery
      * 
      * @return boolean
      */
-    public function isInsertQuery(string $query)
+    public function isInsertQuery(string $query): bool
     {
         $parse = explode(' ', $query);
         $queryType = array_shift($parse);
@@ -62,7 +62,7 @@ trait ExecuteQuery
      * 
      * @return boolean
      */
-    public function isUpdateQuery(string $query)
+    public function isUpdateQuery(string $query): bool
     {
         $parse = explode(' ', $query);
         $queryType = array_shift($parse);
@@ -76,7 +76,7 @@ trait ExecuteQuery
      * 
      * @return boolean
      */
-    public function isSelectQuery(string $query)
+    public function isSelectQuery(string $query): bool
     {
         $parse = explode(' ', $query);
         $queryType = array_shift($parse);
@@ -90,7 +90,7 @@ trait ExecuteQuery
      * 
      * @return boolean
      */
-    public function isDeleteQuery(string $query)
+    public function isDeleteQuery(string $query): bool
     {
         $parse = explode(' ', $query);
         $queryType = array_shift($parse);
@@ -102,11 +102,11 @@ trait ExecuteQuery
      * Building response
      * @param string $sql
      * @param PDOStatement $object
-     * @param Connection $connection
+     * @param PDO $connection
      * 
-     * @return void
+     * @return mixed
      */
-    private function buildResponse($sql, $object, $connection)
+    private function buildResponse(string $sql, PDOStatement $object, PDO $connection)
     {
         $type = explode(" ", $sql);
         switch (array_shift($type)) {
@@ -129,7 +129,7 @@ trait ExecuteQuery
      * 
      * @return void
      */
-    private function bindingParams(PDOStatement $object)
+    private function bindingParams(PDOStatement $object): void
     {
         if (!is_null($this->parameters)) {
             foreach ($this->parameters as $key => $param) {
@@ -142,8 +142,10 @@ trait ExecuteQuery
      * Get one row has model instance
      * 
      * @param Connection $connection
+     * 
+     * @return mixed
      */
-    private function getOneItemHasModel($connection)
+    private function getOneItemHasModel(Connection $connection)
     {
         $primaryKey = $this->getCalledModelInstance()->primaryKey();
         return $this->find($connection->lastInsertId(), $primaryKey);
@@ -157,10 +159,11 @@ trait ExecuteQuery
     /**
      * Exec sql get column id in connection
      *
-     * @param Object $connection
-     *
+     * @param PDO $connection
+     * 
+     * @return mixed
      */
-    private function sqlExecGetColumnIdInConnection($connection)
+    private function sqlExecGetColumnIdInConnection(PDO $connection)
     {
         $lastInsertId = $connection->lastInsertId();
         $getConfigFromConnection = app()->make('connection');
@@ -174,10 +177,11 @@ trait ExecuteQuery
     /**
      * Create sql statement get column name
      *
-     * @param String $databaseName
+     * @param string $databaseName
      *
+     * @return string
      */
-    private function createSqlStatementGetColumnName($databaseName)
+    private function createSqlStatementGetColumnName(string $databaseName): string
     {
         return "
             SELECT
@@ -193,10 +197,11 @@ trait ExecuteQuery
     /**
      * Handle in case insert SQL
      *
-     * @param Object $connection
-     *
+     * @param PDO $connection
+     * 
+     * @return mixed
      */
-    private function inCaseInsert($connection)
+    private function inCaseInsert(PDO $connection)
     {
         if (!empty($this->calledFromModel)) {
             return $this->getOneItemHasModel($connection);
@@ -207,10 +212,10 @@ trait ExecuteQuery
     /**
      * Handle in case select SQL
      *
-     * @param Object $object
+     * @param PDOStatement $object
      *
      */
-    private function inCaseSelect($object)
+    private function inCaseSelect(PDOStatement $object)
     {
         if ($this->find === true || $this->first === true) {
             if (!empty($this->calledFromModel)) {
@@ -227,10 +232,11 @@ trait ExecuteQuery
     /**
      * Fetch one item without model
      *
-     * @param Object $object
-     *
+     * @param PDOStatement $object
+     * 
+     * @return array
      */
-    private function fetchOneItemWithoutModel($object)
+    private function fetchOneItemWithoutModel(PDOStatement $object): array
     {
         return $object->fetchAll(PDO::FETCH_OBJ);
     }
@@ -241,9 +247,8 @@ trait ExecuteQuery
      * @param PDOStatement $pdoStatementObject
      *
      * @return ModelBindingObject
-     *
      */
-    private function execBindingModelObject(PDOStatement $pdoStatementObject)
+    private function execBindingModelObject(PDOStatement $pdoStatementObject): ModelBindingObject
     {
         $resources = $pdoStatementObject->fetchAll(PDO::FETCH_CLASS, $this->calledFromModel);
         return (new ModelBindingObject($resources))->receive(

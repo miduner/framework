@@ -11,14 +11,14 @@ class StorageLinkCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'storage:link';
+    protected string $signature = 'storage:link';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Link storage to public';
+    protected string $description = 'Link storage to public';
 
     /**
      * Create a new command instance.
@@ -35,7 +35,7 @@ class StorageLinkCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         if (file_exists(public_path('storage'))) {
         	$this->output->printError('The "public/storage" directory already exists.');

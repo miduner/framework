@@ -9,14 +9,14 @@ class ViewCompiler
 	 *
 	 * @var string
 	 */
-	protected $path;
+	protected string $path;
 
 	/**
 	 * Content of html
 	 *
 	 * @var string
 	 */
-	protected $html;
+	protected string $html;
 
 	/**
 	 * Initial constructor of view compiler
@@ -41,7 +41,7 @@ class ViewCompiler
 	 *
 	 * @return void
 	 */
-	protected function setPath(string $path)
+	protected function setPath(string $path): void
 	{
 		$this->path = $path;
 	}
@@ -54,7 +54,7 @@ class ViewCompiler
 	 *
 	 * @return void
 	 */
-	protected function setHtml()
+	protected function setHtml(): void
 	{
 		$this->html = file_get_contents($this->path);
 	}
@@ -64,7 +64,7 @@ class ViewCompiler
 	 *
 	 * @return void
 	 */
-	public final function compileEcho()
+	public final function compileEcho(): void
 	{
 		$newViewData = [];
 
@@ -89,7 +89,7 @@ class ViewCompiler
 	 *
 	 * @return void
 	 */
-	public final function compilePhpTag(array $start_tags, array $end_tags)
+	public final function compilePhpTag(array $start_tags, array $end_tags): void
 	{
 		foreach($start_tags as $tag) {
 			$html = str_replace($tag, '<?php', $this->getHtml());
@@ -106,7 +106,7 @@ class ViewCompiler
 	 *
 	 * @return void
 	 */
-	public final function compileSpecialTags()
+	public final function compileSpecialTags(): void
 	{
 		$newViewData = [];
 
@@ -136,7 +136,7 @@ class ViewCompiler
 	 *
 	 * @return void
 	 */
-	public final function compileComment()
+	public final function compileComment(): void
 	{
 		$html = preg_replace('/\{\{--(.+?)(--\}\})?\n/', "<?php // $1 ?>\n", $this->getHtml());
 
@@ -156,7 +156,7 @@ class ViewCompiler
 	 *
 	 * @return void
 	 */
-	protected final function resetHtml(string $html)
+	protected final function resetHtml(string $html): void
 	{
 		$this->html = $html;
 	}
@@ -166,7 +166,7 @@ class ViewCompiler
 	 *
 	 * @return string
 	 */
-	public final function getHtml()
+	public final function getHtml(): string
 	{
 		return $this->html;
 	}

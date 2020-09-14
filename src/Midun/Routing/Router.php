@@ -2,6 +2,8 @@
 
 namespace Midun\Routing;
 
+use Midun\Routing\RouteCollection;
+
 class Router
 {
     /**
@@ -9,59 +11,59 @@ class Router
      * 
      * @var array
      */
-    private $middlewares = [];
+    private array $middlewares = [];
 
     /**
      * Prefix of routes
      * 
      * @var string
      */
-    private $prefix;
+    private string $prefix = "";
 
     /**
      * Name of route
      * 
      * @var string
      */
-    private $name;
+    private string $name = "";
 
     /**
      * Namespace of route
      * 
      * @var string
      */
-    private $namespace;
+    private string $namespace;
 
     /**
      * Except method resource
      * 
      * @var array
      */
-    private $except;
+    private array $except;
 
     /**
      * List of resources
      * 
      * @var array
      */
-    private $resources = [];
+    private array $resources = [];
 
     /**
      * List of routes
      * 
      * @var array
      */
-    private $routes = [];
+    private array $routes = [];
 
     /**
      * Get method
      * 
      * @param string $uri
-     * @param string $method
+     * @param mixed $action
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function get($uri, $action)
+    public function get(string $uri, $action): RouteCollection
     {
         return $this->addRoute('GET', $uri, $action);
     }
@@ -70,11 +72,11 @@ class Router
      * Post method
      * 
      * @param string $uri
-     * @param string $method
+     * @param mixed $action
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function post($uri, $action)
+    public function post(string $uri, $action): RouteCollection
     {
         return $this->addRoute('POST', $uri, $action);
     }
@@ -83,11 +85,11 @@ class Router
      * Put method
      * 
      * @param string $uri
-     * @param string $method
+     * @param mixed $action
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function put($uri, $action)
+    public function put(string $uri, $action): RouteCollection
     {
         return $this->addRoute('PUT', $uri, $action);
     }
@@ -95,11 +97,11 @@ class Router
      * Patch method
      * 
      * @param string $uri
-     * @param string $method
+     * @param mixed $action
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function patch($uri, $action)
+    public function patch($uri, $action): RouteCollection
     {
         return $this->addRoute('PATCH', $uri, $action);
     }
@@ -107,11 +109,11 @@ class Router
      * Any method
      * 
      * @param string $uri
-     * @param string $method
+     * @param mixed $action
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function any($uri, $action)
+    public function any(string $uri, $action): RouteCollection
     {
         return $this->addRoute('GET|POST', $uri, $action);
     }
@@ -119,11 +121,11 @@ class Router
      * Delete method
      * 
      * @param string $uri
-     * @param string $method
+     * @param mixed $action
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    public function delete($uri, $action)
+    public function delete(string $uri, $action): RouteCollection
     {
         return $this->addRoute('DELETE', $uri, $action);
     }
@@ -133,11 +135,11 @@ class Router
      * 
      * @param string $methods
      * @param string $uri
-     * @param string $action
+     * @param mixed $action
      * 
-     * @return \Midun\Routing\RouteCollection
+     * @return RouteCollection
      */
-    private function addRoute($methods, $uri, $action)
+    private function addRoute(string $methods, string $uri, $action): RouteCollection
     {
         $middlewares = $this->middlewares;
         $prefix = $this->prefix;
@@ -156,7 +158,7 @@ class Router
      * 
      * @return self
      */
-    public function middleware($middleware)
+    public function middleware($middleware): Router
     {
         if (!is_array($middleware)) {
             array_push($this->middlewares, $middleware);
@@ -171,13 +173,13 @@ class Router
      * 
      * @return true
      */
-    public function register()
+    public function register(): bool
     {
         $this->middlewares = [];
-        $this->prefix = null;
-        $this->namespace = null;
-        $this->name = null;
-        $this->except = null;
+        $this->prefix = "";
+        $this->namespace = "";
+        $this->name = "";
+        $this->except = [];
         $this->resources = [];
         return true;
     }
@@ -189,7 +191,7 @@ class Router
      * 
      * @return self
      */
-    public function prefix($prefix)
+    public function prefix(string $prefix): Router
     {
         $this->prefix = $prefix;
         return $this;
@@ -202,7 +204,7 @@ class Router
      * 
      * @return self
      */
-    public function namespace($namespace)
+    public function namespace(string $namespace): Router
     {
         $this->namespace = $namespace;
         return $this;
@@ -212,8 +214,12 @@ class Router
      * Include route file with parameters
      * 
      * @param string $path
+     * 
+     * @return RouteCollection
+     * 
+     * @throws AppException
      */
-    public function group($path)
+    public function group(string $path): Router
     {
         if (file_exists($path)) {
             require $path;
@@ -228,9 +234,9 @@ class Router
      * @param string $uri
      * @param string $action
      *
-     * @return $this
+     * @return RouteResource
      */
-    public function resource($uri, $action)
+    public function resource(string $uri, $action): RouteResource
     {
         $resource = [
             [
@@ -248,9 +254,9 @@ class Router
      *
      * @param array $resources
      *
-     * @return $this
+     * @return RouteResource
      */
-    public function resources(array $resources)
+    public function resources(array $resources): RouteResource
     {
         $middlewares = $this->middlewares;
         $prefix = $this->prefix;
@@ -273,7 +279,7 @@ class Router
      * 
      * @return array
      */
-    public function routes()
+    public function routes(): array
     {
         return $this->routes;
     }
@@ -295,7 +301,7 @@ class Router
      * 
      * @return array
      */
-    public function collect()
+    public function collect(): array
     {
         $routes = [];
 
@@ -316,7 +322,7 @@ class Router
      * @param array $action
      * @param array $params = []
      * 
-     * @return void
+     * @return mixed
      */
     public function callableAction(array $action, array $params = [])
     {

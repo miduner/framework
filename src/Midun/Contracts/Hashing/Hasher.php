@@ -11,7 +11,7 @@ interface Hasher
      * @param  array   $options
      * @return string
      */
-    public function make($value, array $options = []);
+    public function make(string $value, array $options = []): string;
 
     /**
      * Check the given plain value against a hash.
@@ -21,5 +21,5 @@ interface Hasher
      * @param  array   $options
      * @return bool
      */
-    public function check($value, $hashedValue, array $options = []);
+    public function check(string $value, string $hashedValue, array $options = []): bool;
 }

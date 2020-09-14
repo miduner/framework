@@ -9,7 +9,7 @@ class Compile
      * 
      * @var array
      */
-    public $rows = [];
+    public array $rows = [];
 
     /**
      * Execute building columns
@@ -18,7 +18,7 @@ class Compile
      * 
      * @return array
      */
-    public function exec(array $columns)
+    public function exec(array $columns): array
     {
         foreach ($columns as $column) {
             $column = (object) $column;
@@ -31,7 +31,7 @@ class Compile
             if (isset($column->column)) {
                 $row .= $column->column;
                 $row .= ' ' . $column->dataType;
-                $row .= $column->length !== null ? "($column->length)" : '';
+                $row .= (isset($column->length) && $column->length > 0) ? "($column->length)" : '';
                 $row .= $column->autoIncrement == 1 && $column->pk != 1 ? ' UNSIGNED' : '';
                 $row .= $column->unsigned == 1 ? ' UNSIGNED' : '';
                 $row .= $column->nullable == 1 ? ' NULL' : ' NOT NULL';

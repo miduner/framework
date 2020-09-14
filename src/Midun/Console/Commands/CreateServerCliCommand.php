@@ -11,19 +11,19 @@ class CreateServerCliCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'serve';
+    protected string $signature = 'serve';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Creating cli server';
+    protected string $description = 'Creating cli server';
 
     /**
      * Other called signatures
      */
-    protected $otherSignatures = [
+    protected array $otherSignatures = [
         'ser',
         'serv',
         'server',
@@ -44,7 +44,7 @@ class CreateServerCliCommand extends Command
      * 
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $host = '127.0.0.1';
         $port = '8000';

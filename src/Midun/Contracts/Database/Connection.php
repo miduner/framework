@@ -11,12 +11,12 @@ interface Connection
      *
      * @return void
      */
-    public function setDriver(string $driver);
+    public function setDriver(string $driver): void;
 
     /**
      * Make instance
      *
      * @return void
      */
-    public function makeInstance();
+    public function makeInstance(): void;
 }

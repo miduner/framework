@@ -7,6 +7,10 @@ use Midun\Services\File;
 
 class Request
 {
+    /**
+     * Initial constructor of Request
+     * Set the properties of request
+     */
     public function __construct()
     {
         foreach ($this->getRequest() as $key => $value) {
@@ -20,9 +24,9 @@ class Request
     /**
      * Make response array with the request data.
      *
-     * @make array $request
+     * @return array
      */
-    public function getRequest()
+    public function getRequest(): array
     {
         $params = array_merge($_REQUEST, array_map(function ($file) {
             return new File($file);
@@ -41,15 +45,17 @@ class Request
      *
      * @return array $request
      */
-    public function all()
+    public function all(): array
     {
         return $this->getRequest();
     }
 
     /**
      * Get all query parameters
+     * 
+     * @return array
      */
-    public function getQueryParams()
+    public function getQueryParams(): array
     {
         return $_GET;
     }
@@ -59,8 +65,10 @@ class Request
      *
      * @param string $input
      * @return string input value
+     * 
+     * @return mixed
      */
-    public function input($input)
+    public function input(string $input)
     {
         return isset($this->getRequest()[$input]) ? $this->getRequest()[$input] : null;
     }
@@ -69,9 +77,10 @@ class Request
      * Response only 1 data input from param.
      * 
      * @param string $input
-     * @return string input value
+     * 
+     * @return mixed
      */
-    public function get($input)
+    public function get(string $input)
     {
         return $this->input($input);
     }
@@ -79,13 +88,15 @@ class Request
     /**
      * Response only data input from array input.
      *
-     * @param array $input
-     * @return object input value
+     * @param array $inputs
+     * @return object
      */
-    public function only($array_input)
+    public function only(array $inputs): object
     {
+        $request = [];
+        
         foreach ($this->getRequest() as $name => $value) {
-            if (in_array($name, $array_input)) {
+            if (in_array($name, $inputs)) {
                 $request[$name] = $value;
             }
         }
@@ -95,14 +106,14 @@ class Request
     /**
      * Response data input except array input.
      *
-     * @param array $input
+     * @param array $inputs
      * @return object
      */
-    public function except(array $array_input)
+    public function except(array $inputs): object
     {
-        $request = new \stdClass();
+        $request = [];
         foreach ($this->getRequest() as $name => $value) {
-            if (!in_array($name, $array_input)) {
+            if (!in_array($name, $inputs)) {
                 $request[$name] = $value;
             }
         }
@@ -111,8 +122,10 @@ class Request
 
     /**
      * Get all headers requested
+     * 
+     * @return object
      */
-    public function headers()
+    public function headers(): object
     {
         return (object) getallheaders();
     }
@@ -122,9 +135,9 @@ class Request
      * 
      * @param string $guard
      * 
-     * @return mixed
+     * @return object
      */
-    public function user($guard = null)
+    public function user(?string $guard = null): ?object
     {
         if (is_null($guard)) {
             $guard = Auth::getCurrentGuard();

@@ -15,7 +15,7 @@ class Connection extends MidunConnection
      *
      * @return void
      */
-    public function setDriver(string $driver)
+    public function setDriver(string $driver): void
     {
         $connections = config("database.connections");
         if (!isset($connections[$driver])) {
@@ -29,7 +29,7 @@ class Connection extends MidunConnection
      * Check the connection is available
      * @return boolean
      */
-    public function isConnected()
+    public function isConnected(): bool
     {
         try {
             list($driver, $host, $port, $database, $username, $password) = $this->getConfig();
@@ -46,7 +46,7 @@ class Connection extends MidunConnection
      *
      * @return void
      */
-    public function makeInstance()
+    public function makeInstance(): void
     {
         try {
             list($driver, $host, $port, $database, $username, $password) = $this->getConfig();
