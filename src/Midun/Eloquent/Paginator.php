@@ -43,7 +43,7 @@ final class Paginator
      * 
      * @return array
      */
-    public static function buildPagination(int $lastPage, int $firstPage, int $nextPage, int $prevPage, int $currentPage, string $pageUrl): array
+    public static function buildPagination(int $lastPage, int $firstPage, ?int $nextPage, ?int $prevPage, int $currentPage, string $pageUrl): array
     {
         $parseUrl = parse_url($pageUrl);
 
@@ -149,7 +149,7 @@ final class Paginator
      * 
      * @return int
      */
-    public static function resolveTo(int $currentPage, int $perPage, int $total, int $lastPage): ints
+    public static function resolveTo(int $currentPage, int $perPage, int $total, int $lastPage): int
     {
         if ($currentPage == $lastPage) {
             return $total;

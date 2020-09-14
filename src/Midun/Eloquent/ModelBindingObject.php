@@ -99,7 +99,7 @@ final class ModelBindingObject
     private function handle()
     {
         if ($this->oneOf) {
-            return $this->bindOne($this->resources);
+            return $this->bindOne($this->resource);
         }
         if ($this->listOf) {
             return $this->bindMultiple($this->resources);
@@ -144,7 +144,7 @@ final class ModelBindingObject
                     if (method_exists($resource, $with)) {
                         $resource->$with = $resource->$with();
                     } else {
-                        throw new EloquentException("Method '{$with}' not found in class {$this->model}");
+                        throw new EloquentException("Method '{$with}()' not found in class {$this->model}");
                     }
                 }
             }

@@ -341,16 +341,16 @@ if (!function_exists('objectToArray')) {
     /**
      * Convert object to array
      * 
-     * @param array $inputs
+     * @param \ArrayObject $inputs
      * 
      * @return array
      */
-    function objectToArray(array $inputs): array
+    function objectToArray(\ArrayObject $inputs): array
     {
         $array = [];
 
         foreach ($inputs as $object) {
-            $array[] = get_object_vars($object);
+             $array[] = get_object_vars($object);
         }
 
         return $array;

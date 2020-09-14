@@ -246,9 +246,9 @@ trait ExecuteQuery
      *
      * @param PDOStatement $pdoStatementObject
      *
-     * @return ModelBindingObject
+     * @return object
      */
-    private function execBindingModelObject(PDOStatement $pdoStatementObject): ModelBindingObject
+    private function execBindingModelObject(PDOStatement $pdoStatementObject): object
     {
         $resources = $pdoStatementObject->fetchAll(PDO::FETCH_CLASS, $this->calledFromModel);
         return (new ModelBindingObject($resources))->receive(

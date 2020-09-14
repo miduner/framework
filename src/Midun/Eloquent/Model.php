@@ -18,6 +18,13 @@ abstract class Model
     protected array $appends = [];
 
     /**
+     * List of attributes
+     * 
+     * @var array
+     */
+    protected array $attributes = [];
+
+    /**
      * List of casts
      * 
      * @var array
@@ -87,9 +94,7 @@ abstract class Model
      */
     public function __get(string $property)
     {
-        if (property_exists($this, $property)) {
-            return $this->$property;
-        }
+        return $this->$property ??= null;
     }
 
     /**
@@ -113,9 +118,9 @@ abstract class Model
      * 
      * @param array $args
      * 
-     * @return \Midun\Database\QueryBuilder\QueryBuilder
+     * @return mixed
      */
-    public static function __callStatic(string $method, array $args): \Midun\Database\QueryBuilder\QueryBuilder
+    public static function __callStatic(string $method, array $args)
     {
         $static = new static;
         $table = $static->table();
@@ -135,9 +140,9 @@ abstract class Model
      * 
      * @param array $args
      * 
-     * @return \Midun\Database\QueryBuilder\QueryBuilder
+     * @return mixed
      */
-    public function __call($method, $args): \Midun\Database\QueryBuilder\QueryBuilder
+    public function __call($method, $args)
     {
         $static = new static;
         $table = $static->table();

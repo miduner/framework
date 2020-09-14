@@ -145,9 +145,7 @@ class Compile
                     break;
             }
         } catch (\Error $e) {
-            throw $e;
-            // dd($e->getMessage());
-            // throw new RuntimeException($e->getMessage());
+            throw new RuntimeException($e->getMessage());
         }
     }
 

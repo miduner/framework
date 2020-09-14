@@ -51,6 +51,8 @@ class Compile
      */
     public function compileJoins(array $joins): string
     {
+        $sql = "";
+
         foreach ($joins as $join) {
             switch (strtolower($join[4])) {
                 case 'inner':
@@ -68,6 +70,7 @@ class Compile
             }
             $sql .= " {$join[0]} ON {$join[1]} {$join[2]} {$join[3]}";
         }
+
         return $sql;
     }
 
@@ -80,6 +83,10 @@ class Compile
      */
     public function compileWheres(array $wheres): string
     {
+        if(empty($wheres)) {
+            return "";
+        }
+        
         $sql = " WHERE";
         foreach ($wheres as $key => $where) {
             if ($key == 0) {
@@ -133,7 +140,7 @@ class Compile
      */
     public function compileGroups(array $groups): string
     {
-        return " GROUP BY " . implode(', ', $groups);
+        return !empty($groups) ? " GROUP BY " . implode(', ', $groups) : "";
     }
 
     /**
@@ -164,6 +171,10 @@ class Compile
      */
     public function compileOrders(array $orders): string
     {
+        if(empty($orders)) {
+            return "";
+        }
+
         $sql = " ORDER BY ";
         foreach ($orders as $key => $order) {
             $sql .= "$order[0] $order[1]";
@@ -183,7 +194,7 @@ class Compile
      */
     public function compileLimit(int $limit): string
     {
-        return " LIMIT {$limit}";
+        return $limit ? " LIMIT {$limit}" : "";
     }
 
     /**
@@ -195,7 +206,7 @@ class Compile
      */
     public function compileOffset(int $offset): string
     {
-        return " OFFSET {$offset}";
+        return $offset ? " OFFSET {$offset}" : "";
     }
 
     /**
@@ -207,6 +218,10 @@ class Compile
      */
     public function compileWhereIn(array $wherein): string
     {
+        if(empty($wherein)) {
+            return "";
+        }
+        
         $array = explode(", ", $wherein[1]);
         foreach ($array as $key => $arr) {
             if ($key + 1 == count($array)) {

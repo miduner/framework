@@ -80,7 +80,7 @@ class RouteCollection
         $this->action = $action;
         $this->middlewares = $middlewares;
         $this->prefix = is_array($prefix) && !empty($prefix) ? $prefix : [$prefix];
-        $this->namespaces = (is_array($namespaces) ? $namespaces : is_string($namespaces)) ? [$namespaces] : null;
+        $this->namespaces = is_array($namespaces) && !empty($namespaces) ? $namespaces : [$namespaces];
     }
 
     /**
@@ -211,6 +211,6 @@ class RouteCollection
      */
     public function getNamespace(): array
     {
-        return $this->namespaces;
+        return !empty($this->namespaces && !empty($this->namespaces[0])) ? $this->namespaces : [];
     }
 }
