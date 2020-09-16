@@ -15,7 +15,7 @@ class DataResponseServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton('response', function () {
-            return new \Midun\Supports\Response\DataResponse;
+            return new \Midun\Supports\Response\Response;
         });
     }
 }

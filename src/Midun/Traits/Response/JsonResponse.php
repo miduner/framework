@@ -2,6 +2,8 @@
 
 namespace Midun\Traits\Response;
 
+use Midun\Supports\Response\Response;
+
 trait JsonResponse
 {
     /**
@@ -12,7 +14,7 @@ trait JsonResponse
      * @param array $headers
      * @return void
      */
-    protected function respond($data, int $statusCode = 200, array $headers = [])
+    protected function respond($data, int $statusCode = 200, array $headers = []): Response
     {
         return response()->json($data, $statusCode, $headers);
     }
@@ -23,7 +25,7 @@ trait JsonResponse
      * @param mixed $data
      * @return void
      */
-    protected function respondCreated($data)
+    protected function respondCreated($data): Response
     {
         return $this->respond($data, 201);
     }
@@ -35,7 +37,7 @@ trait JsonResponse
      * @param int $statusCode
      * @return void
      */
-    protected function respondSuccess($data, int $statusCode = 200)
+    protected function respondSuccess($data, int $statusCode = 200): Response
     {
         return $this->respond([
             'success' => true,
@@ -51,7 +53,7 @@ trait JsonResponse
      * @param $statusCode
      * @return void
      */
-    protected function respondError(string $message = 'Bad request', int $statusCode = 400)
+    protected function respondError(string $message = 'Bad request', int $statusCode = 400): Response
     {
         return $this->respond([
             'success' => false,
@@ -66,7 +68,7 @@ trait JsonResponse
      *
      * @return void
      */
-    protected function respondNoContent()
+    protected function respondNoContent(): Response
     {
         return $this->respondSuccess(null, 204);
     }
@@ -77,7 +79,7 @@ trait JsonResponse
      * @param string $message
      * @return void
      */
-	protected function respondUnauthorized(string $message = 'Unauthorized')
+	protected function respondUnauthorized(string $message = 'Unauthorized'): Response
     {
         return $this->respondError($message, 401);
     }
@@ -88,7 +90,7 @@ trait JsonResponse
      * @param string $message
      * @return void
      */
-    protected function respondForbidden(string $message = 'Forbidden')
+    protected function respondForbidden(string $message = 'Forbidden'): Response
     {
         return $this->respondError($message, 403);
     }
@@ -99,7 +101,7 @@ trait JsonResponse
      * @param string $message
      * @return void
      */
-	protected function respondNotFound(string $message = 'Not Found')
+	protected function respondNotFound(string $message = 'Not Found'): Response
     {
         return $this->respondError($message, 404);
     }
@@ -110,7 +112,7 @@ trait JsonResponse
      * @param string $message
      * @return void
      */
-    protected function respondInternalError(string $message = 'Internal Error')
+    protected function respondInternalError(string $message = 'Internal Error'): Response
     {
         return $this->respondError($message, 500);
     }

@@ -6,6 +6,7 @@ use Closure;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionException;
+use Midun\Eloquent\Model;
 use Midun\Http\FormRequest;
 use Midun\Http\Exceptions\AppException;
 
@@ -408,11 +409,14 @@ class Container
 
     /**
      * Resolve list of dependencies from options
+     * 
      * @param string $controller
      * @param string $methodName
      * @param array $params
      *
      * @return array
+     * 
+     * @throws AppException
      */
     public function resolveMethodDependencyWithParameters($controller, $methodName, $params): array
     {
@@ -420,15 +424,59 @@ class Container
             $ref = new ReflectionMethod($controller, $methodName);
             $listParameters = $ref->getParameters();
             $array = [];
-            foreach ($listParameters as $parameter) {
-                if ($parameter->getClass() instanceof \ReflectionClass) {
-                    $object = $parameter->getClass()->getName();
-                    array_push($array, $this->buildStacks($object));
-                } else {
-                    if (!isset($params[$parameter->getName()])) {
-                        throw new AppException("Missing parameter '{$parameter->getName()}'");
-                    }
-                    array_push($array, $params[$parameter->getName()]);
+            foreach ($listParameters as $key => $parameter) {
+                switch(true) {
+                    case $parameter->getClass() instanceof \ReflectionClass:
+                        $object = $this->buildStacks(
+                            $parameter->getClass()->getName()
+                        );
+                        if($object instanceof Model) {
+                            $arg = array_shift($params);
+                            if (!$arg) {
+                                throw new AppException("Missing parameter `{$parameter->getName()}` for initial model `{$parameter->getClass()->getName()}`");
+                            }
+                            $object = $object->findOrFail($arg);
+                        }
+                        $array = [...$array, $object];
+                        break;
+                    case is_null($parameter->getClass()):
+                        $param = array_shift($params);
+                        try {
+                            $default = $parameter->getDefaultValue();
+                        }catch(\ReflectionException $e) {
+                            $default = null;
+                        }
+                        
+                        if(!is_null($parameter->getType())) {
+                                switch($parameter->getType()->getName()) {
+                                    case 'int':
+                                    case 'integer':
+                                        $param = (int) $param ?: (is_numeric($default) ? $default : $default);
+                                        break;
+                                    case 'array':
+                                        $param = (array) $param ?: $default;
+                                        break;
+                                    case 'object':
+                                        $param = (object) $param ?: $default;
+                                        break;
+                                    case 'float':
+                                        $param = (float) $param ?: $default;
+                                        break;
+                                    case 'string':
+                                        $param = (string) $param ?: $default;
+                                        break;
+                                    case 'boolean':
+                                    case 'bool':
+                                            $param = (bool) $param ?: $default;
+                                    break;
+                                }
+                        }
+
+                        $array = [...$array, $param];
+                        break;
+                    default:
+                        throw new AppException("Invalid type of parameter");
+
                 }
             }
             return $array;

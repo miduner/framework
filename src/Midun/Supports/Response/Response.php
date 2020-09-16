@@ -4,7 +4,7 @@ namespace Midun\Supports\Response;
 
 use Midun\Http\HttpResponseCode;
 
-class DataResponse
+class Response
 {
     /**
      * Response with json
@@ -12,9 +12,9 @@ class DataResponse
      * @param mixed $arguments
      * @param int $code = 200
      * 
-     * @return void
+     * @return Response
      */
-    public final function json($arguments, $code = 200): void
+    public final function json($arguments, $code = 200): Response
     {
         (new HttpResponseCode($code));
         header('Content-Type: application/json');
@@ -23,6 +23,7 @@ class DataResponse
             $arguments = objectToArray($arguments);
         }
         echo json_encode($arguments);
-        exit;
+
+        return $this;
     }
 }

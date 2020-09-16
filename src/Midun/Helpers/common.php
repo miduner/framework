@@ -20,9 +20,9 @@ if (!function_exists('response')) {
     /**
      * Make instance of response
      * 
-     * @return \Midun\Supports\Response\DataResponse
+     * @return \Midun\Supports\Response\Response
      */
-    function response(): \Midun\Supports\Response\DataResponse
+    function response(): \Midun\Supports\Response\Response
     {
         return app()->make(__FUNCTION__);
     }

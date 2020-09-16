@@ -93,7 +93,7 @@ class Kernel
      * 
      * @return Container
      */
-    public function getApplication()
+    public function getApplication(): Container
     {
         return $this->app;
     }

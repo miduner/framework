@@ -4,10 +4,10 @@ namespace Midun\Auth;
 
 use DB;
 use Hash;
-use Midun\Http\Exceptions\AppException;
 use Session;
 use Firebase\JWT\JWT;
 use Midun\Eloquent\Model;
+use Midun\Http\Exceptions\AppException;
 use Midun\Contracts\Auth\Authentication;
 
 /**

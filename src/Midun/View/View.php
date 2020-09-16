@@ -358,7 +358,7 @@ class View
      * @param string $file
      * @param array $arguments
      * 
-     * @return mixed
+     * @return self
 	 *
 	 * @throws ViewException
      */
@@ -378,7 +378,7 @@ class View
                 return $this->render('exception', compact('exception'), View::SYNC);
         }
 
-        exit(0);
+        return $this;
     }
 
     /**
