@@ -5,9 +5,9 @@ include 'view.php';
 if (!function_exists('redirect')) {
     /**
      * Redirect to url
-     * 
+     *
      * @param string $url
-     * 
+     *
      * @return void
      */
     function redirect(string $url): void
@@ -19,7 +19,7 @@ if (!function_exists('redirect')) {
 if (!function_exists('response')) {
     /**
      * Make instance of response
-     * 
+     *
      * @return \Midun\Supports\Response\Response
      */
     function response(): \Midun\Supports\Response\Response
@@ -31,7 +31,7 @@ if (!function_exists('response')) {
 if (!function_exists('session')) {
     /**
      * Working on session
-     * 
+     *
      * @return \Midun\Session\Session
      */
     function session(): \Midun\Session\Session
@@ -43,9 +43,9 @@ if (!function_exists('session')) {
 if (!function_exists('unsetsession')) {
     /**
      * Calling unset_session method in Session
-     * 
+     *
      * @param string $key
-     * 
+     *
      * @return void
      */
     function unsetsession(string $key): void
@@ -57,7 +57,7 @@ if (!function_exists('unsetsession')) {
 if (!function_exists('request')) {
     /**
      * Get instance of request
-     * 
+     *
      * @return \Midun\Http\Request
      */
     function request(): \Midun\Http\Request
@@ -69,7 +69,7 @@ if (!function_exists('request')) {
 if (!function_exists('readDotENV')) {
     /**
      * Reading .env file
-     * 
+     *
      * @return array
      */
     function readDotENV(): array
@@ -85,11 +85,11 @@ if (!function_exists('readDotENV')) {
 if (!function_exists('env')) {
     /**
      * Get value from environments
-     * 
+     *
      * @param string $variable
      * @param string $ndvalue
-	 *
-	 * @return string
+     *
+     * @return string
      */
     function env(string $variable, string $ndvalue = ""): string
     {
@@ -106,9 +106,9 @@ if (!function_exists('env')) {
 if (!function_exists('config')) {
     /**
      * Get config setting
-     * 
+     *
      * @param string $variable
-     * 
+     *
      * @return mixed
      */
     function config(string $variable)
@@ -120,11 +120,11 @@ if (!function_exists('config')) {
 if (!function_exists('trans')) {
     /**
      * Get translate value
-     * 
+     *
      * @param string $variable
      * @param array $params
      * @param string $lang
-     * 
+     *
      * @return string
      */
     function trans(string $variable, array $params = [], string $lang = 'en'): string
@@ -146,10 +146,10 @@ if (!function_exists('__')) {
 if (!function_exists('action')) {
     /**
      * Return action to controller method
-     * 
+     *
      * @param mixed $action
      * @param array @params
-     * 
+     *
      * @return mixed
      */
     function action(array $action, array $params = [])
@@ -161,16 +161,16 @@ if (!function_exists('action')) {
 if (!function_exists('route')) {
     /**
      * Get uri of route from name
-     * 
+     *
      * @param string $name
-     * 
+     *
      * @return string
-     * 
+     *
      * @throws \Exception
      */
     function route(string $name): string
     {
-        $routes =  app()->make(__FUNCTION__)->collect();
+        $routes = app()->make(__FUNCTION__)->collect();
         $flag = false;
         $uri = '';
         foreach ($routes as $key => $route) {
@@ -190,9 +190,9 @@ if (!function_exists('route')) {
 if (!function_exists('app')) {
     /**
      * Get instance of Container or make somethings
-     * 
+     *
      * @param string $entity
-     * 
+     *
      * @return mixed
      */
     function app(string $entity = "")
@@ -207,9 +207,9 @@ if (!function_exists('app')) {
 if (!function_exists('is_json')) {
     /**
      * Checking argument is json format
-     * 
+     *
      * @param mixed $argument
-     * 
+     *
      * @return boolean
      */
     function is_json($argument): bool
@@ -236,9 +236,9 @@ if (!function_exists('dd')) {
 if (!function_exists('assets')) {
     /**
      * Get path for resources
-     * 
+     *
      * @param string $path
-     * 
+     *
      * @return string
      */
     function assets(string $path): string
@@ -254,7 +254,7 @@ if (!function_exists('assets')) {
 if (!function_exists('auth')) {
     /**
      * Get instance of auth
-     * 
+     *
      * @return \Midun\Auth\Authenticatable
      */
     function auth(): \Midun\Auth\Authenticatable
@@ -266,7 +266,7 @@ if (!function_exists('auth')) {
 if (!function_exists('getallheaders')) {
     /**
      * Get all headers
-     * 
+     *
      * @return array
      */
     function getallheaders(): array
@@ -284,16 +284,16 @@ if (!function_exists('getallheaders')) {
 if (!function_exists('compileWatchingViews')) {
     /**
      * Compile watching view
-     * 
+     *
      * @param string $view
-     * 
+     *
      * @return void
      */
     function compileWatchingViews(string $view): void
     {
         $folder = explode('/', $view);
         $file = array_pop($folder);
-        $folder =  implode('/', $folder);
+        $folder = implode('/', $folder);
         writeCache($folder, $file);
     }
 }
@@ -301,10 +301,10 @@ if (!function_exists('compileWatchingViews')) {
 if (!function_exists('writeCache')) {
     /**
      * Write caching
-     * 
+     *
      * @param string $folder
      * @param string $file
-     * 
+     *
      * @return void
      */
     function writeCache(string $folder, string $file): void
@@ -340,9 +340,9 @@ if (!function_exists('writeCache')) {
 if (!function_exists('objectToArray')) {
     /**
      * Convert object to array
-     * 
+     *
      * @param \ArrayObject $inputs
-     * 
+     *
      * @return array
      */
     function objectToArray(\ArrayObject $inputs): array
@@ -350,7 +350,7 @@ if (!function_exists('objectToArray')) {
         $array = [];
 
         foreach ($inputs as $object) {
-             $array[] = get_object_vars($object);
+            $array[] = get_object_vars($object);
         }
 
         return $array;
@@ -360,9 +360,9 @@ if (!function_exists('objectToArray')) {
 if (!function_exists('dispatch')) {
     /**
      * Dispatch a job
-     * 
+     *
      * @param \Midun\Queues\Queue
-     * 
+     *
      * @return mixed
      */
     function dispatch(\Midun\Queues\Queue $queue)
@@ -374,9 +374,9 @@ if (!function_exists('dispatch')) {
 if (!function_exists('realTimeOutput')) {
     /**
      * @link https://www.hashbangcode.com/article/overwriting-command-line-output-php
-     * 
+     *
      * @param array $output
-     * 
+     *
      * @return void
      */
     function realTimeOutput(array $output): void
@@ -399,7 +399,7 @@ if (!function_exists('realTimeOutput')) {
 if (!function_exists('logger')) {
     /**
      * Get instance of logger
-     * 
+     *
      * @return \Midun\Logger\Logger
      */
     function logger(): \Midun\Logger\Logger
@@ -411,9 +411,9 @@ if (!function_exists('logger')) {
 if (!function_exists('check_file')) {
     /**
      * Check file exists in project
-     * 
+     *
      * @param string $file
-     * 
+     *
      * @return boolean
      */
     function check_file(string $file): bool
@@ -425,9 +425,9 @@ if (!function_exists('check_file')) {
 if (!function_exists('check_dir')) {
     /**
      * Check exists directory
-     * 
+     *
      * @param string $dir
-     * 
+     *
      * @return boolean
      */
     function check_dir(string $dir): bool
@@ -440,7 +440,7 @@ if (!function_exists('public_path')) {
     /**
      * Get public path
      * @param string $path
-     * 
+     *
      * @return string
      */
     function public_path($path = ''): string
@@ -453,7 +453,7 @@ if (!function_exists('cache_path')) {
     /**
      * Get cache path
      * @param string $path
-     * 
+     *
      * @return string
      */
     function cache_path($path = ''): string
@@ -466,7 +466,7 @@ if (!function_exists('config_path')) {
     /**
      * Get config path
      * @param string $path
-     * 
+     *
      * @return string
      */
     function config_path($path = ''): string
@@ -479,7 +479,7 @@ if (!function_exists('database_path')) {
     /**
      * Get database path
      * @param string $path
-     * 
+     *
      * @return string
      */
     function database_path($path = ''): string
@@ -491,9 +491,9 @@ if (!function_exists('database_path')) {
 if (!function_exists('storage_path')) {
     /**
      * Return storage path
-     * 
+     *
      * @param string $path
-     * 
+     *
      * @return string
      */
     function storage_path($path = ''): string
@@ -505,9 +505,9 @@ if (!function_exists('storage_path')) {
 if (!function_exists('route_path')) {
     /**
      * Return storage path
-     * 
+     *
      * @param string $path
-     * 
+     *
      * @return string
      */
     function route_path(string $path = ''): string
@@ -519,9 +519,9 @@ if (!function_exists('route_path')) {
 if (!function_exists('base_path')) {
     /**
      * Get full path from base
-     * 
+     *
      * @param string $path
-     * 
+     *
      * @return string
      */
     function base_path(string $path = ''): string
@@ -533,11 +533,11 @@ if (!function_exists('base_path')) {
 if (!function_exists('make_dir')) {
     /**
      * Make directory from base
-     * 
+     *
      * @param string $dir
      * @param int $mode
      * @param bool $recursive
-     * 
+     *
      * @return bool
      */
     function make_dir(string $dir, int $mode = 0777, bool $recursive = false): bool
@@ -549,9 +549,9 @@ if (!function_exists('make_dir')) {
 if (!function_exists('cacheExists')) {
     /**
      * Check exists caching
-     * 
+     *
      * @param string $cacheFile
-     * 
+     *
      * @return bool
      */
     function cacheExists(string $cacheFile): bool
@@ -563,9 +563,9 @@ if (!function_exists('cacheExists')) {
 if (!function_exists('generateRandomString')) {
     /**
      * Random string generator
-     * 
+     *
      * @param int $length = 10
-     * 
+     *
      * @return string
      */
     function generateRandomString(int $length = 10): string
@@ -583,13 +583,13 @@ if (!function_exists('generateRandomString')) {
 if (!function_exists('stringToKeywords')) {
     /**
      * Parse a string to list keywords
-     * 
+     *
      * @param string $str
      * @param int $min
      * minimum length of word
      * @param int $max
      * maximum length of word
-     * 
+     *
      * @return array
      */
     function stringToKeywords(string $str, int $min = 1, ?int $max = null)
@@ -679,10 +679,10 @@ if (!function_exists('delete_directory')) {
 if (!function_exists('items_in_folder')) {
     /**
      * Get all items in folder
-     * 
+     *
      * @param string $folder
      * @param bool $included
-     * 
+     *
      * @return array
      */
     function items_in_folder(string $folder, bool $included = true): array
@@ -692,7 +692,7 @@ if (!function_exists('items_in_folder')) {
             \FilesystemIterator::SKIP_DOTS
         );
 
-        $iterators  = new \RecursiveIteratorIterator(
+        $iterators = new \RecursiveIteratorIterator(
             $dir,
             \RecursiveIteratorIterator::SELF_FIRST
         );
@@ -705,8 +705,8 @@ if (!function_exists('items_in_folder')) {
                 && $file_info->getFilename() != '.gitignore'
             ) {
                 $path = !empty($iterators->getSubPath())
-                    ? $iterators->getSubPath() . DIRECTORY_SEPARATOR . $file_info->getFilename()
-                    : $file_info->getFilename();
+                ? $iterators->getSubPath() . DIRECTORY_SEPARATOR . $file_info->getFilename()
+                : $file_info->getFilename();
                 $items[] = ($included ? $folder . DIRECTORY_SEPARATOR : '') . $path;
             }
         }
@@ -715,28 +715,31 @@ if (!function_exists('items_in_folder')) {
     }
 }
 
-if(!function_exists('get_client_ip')) {
+if (!function_exists('get_client_ip')) {
     /**
      * Get client ip
-     * 
+     *
      * @return mixed
      */
-    function get_client_ip() {
+    function get_client_ip()
+    {
         $ip = '';
-        if (getenv('HTTP_CLIENT_IP'))
+        if (getenv('HTTP_CLIENT_IP')) {
             $ip = getenv('HTTP_CLIENT_IP');
-        else if(getenv('HTTP_X_FORWARDED_FOR'))
+        } else if (getenv('HTTP_X_FORWARDED_FOR')) {
             $ip = getenv('HTTP_X_FORWARDED_FOR');
-        else if(getenv('HTTP_X_FORWARDED'))
+        } else if (getenv('HTTP_X_FORWARDED')) {
             $ip = getenv('HTTP_X_FORWARDED');
-        else if(getenv('HTTP_FORWARDED_FOR'))
+        } else if (getenv('HTTP_FORWARDED_FOR')) {
             $ip = getenv('HTTP_FORWARDED_FOR');
-        else if(getenv('HTTP_FORWARDED'))
-           $ip = getenv('HTTP_FORWARDED');
-        else if(getenv('REMOTE_ADDR'))
+        } else if (getenv('HTTP_FORWARDED')) {
+            $ip = getenv('HTTP_FORWARDED');
+        } else if (getenv('REMOTE_ADDR')) {
             $ip = getenv('REMOTE_ADDR');
-        else
+        } else {
             $ip = 'UNKNOWN';
+        }
+
         return $ip;
     }
 }
