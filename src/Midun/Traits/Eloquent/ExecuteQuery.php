@@ -132,7 +132,7 @@ trait ExecuteQuery
     private function bindingParams(PDOStatement $object): void
     {
         if (!is_null($this->parameters)) {
-            foreach ($this->parameters as $key => $param) {
+            foreach ($this->parameters as $key => &$param) {
                 $object->bindParam($key + 1, $param);
             }
         }
