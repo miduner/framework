@@ -6,7 +6,6 @@ use PDO;
 use PDOException;
 use PDOStatement;
 use Midun\Eloquent\ModelBindingObject;
-use Midun\Database\Connections\Mysql\Connection;
 use Midun\Database\QueryBuilder\QueryException;
 
 trait ExecuteQuery
@@ -251,14 +250,16 @@ trait ExecuteQuery
     private function execBindingModelObject(PDOStatement $pdoStatementObject): ?object
     {
         $resources = $pdoStatementObject->fetchAll(PDO::FETCH_CLASS, $this->calledFromModel);
-        return (new ModelBindingObject($resources))->receive(
-            $this->find || $this->first,
-            !$this->find && !$this->first,
-            $this->calledFromModel ?: null,
-            [
-                'with' => $this->with,
-            ],
-            $this->isThrow
-        );
+
+        $binding = new ModelBindingObject($resources);
+
+        return $binding->setTakeOne($this->find || $this->first)
+            ->setTakeList(!$this->find && !$this->first)
+            ->setIsThrow($this->isThrow)
+            ->setArgs([
+                'with' => $this->with
+            ])
+            ->verifyEmptyResources()
+            ->handle();
     }
 }

@@ -27,10 +27,11 @@ abstract class Relation
      * Get data of relationship
      * 
      * @param string $value
+     * @param \Closure $callback
      * 
      * @return mixed
      */
-    abstract public function getModelObject(string $value);
+    abstract public function getModelObject(string $value, ?\Closure $callback = null);
 
     /**
      * Set where condition

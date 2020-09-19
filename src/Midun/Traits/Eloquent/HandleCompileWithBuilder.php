@@ -58,7 +58,7 @@ trait HandleCompileWithBuilder
                         if (method_exists($object, $method)) {
                             return $object->$method(...$args);
                         }
-                        $buildScope = $this->_getScopeMethod($method);
+                        $buildScope = $this->buildScopeMethod($method);
                         $objectModel = new $modelMeta['calledClass'];
                         if (method_exists($objectModel, $buildScope)) {
                             return $objectModel->$buildScope($object, ...$args);
@@ -86,7 +86,7 @@ trait HandleCompileWithBuilder
     public function __call(string $method, array $args): Model
     {
         try {
-            $buildScope = $this->_getScopeMethod($method);
+            $buildScope = $this->buildScopeMethod($method);
             array_unshift($args, $this);
             return (new $this->calledFromModel)->$buildScope(...$args);
         } catch (\TypeError $e) {
@@ -101,7 +101,7 @@ trait HandleCompileWithBuilder
      * 
      * @return string
      */
-    private function _getScopeMethod($method): string
+    private function buildScopeMethod($method): string
     {
         return 'scope' . ucfirst($method);
     }

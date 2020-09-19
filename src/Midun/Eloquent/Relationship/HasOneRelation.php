@@ -124,13 +124,17 @@ class HasOneRelation extends Relation
      * 
      * @return Model
      */
-    public function getModelObject(string $value): ?Model
+    public function getModelObject(string $value, ?\Closure $callback = null): ?Model
     {
         $builder = app()->make($this->getModel())
             ->where($this->getLocalKey(), $value);
 
         foreach($this->getWhereCondition() as $where) {
             $builder->where(array_shift($where), array_shift($where), array_shift($where));
+        }
+
+        if(!is_null($callback)) {
+            $callback($builder);
         }
 
         return $builder->first();
