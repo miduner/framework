@@ -30,7 +30,7 @@ final class ModelBindingObject
      * 
      * @var object
      */
-    private object $resource;
+    private ?object $resource = null;
 
     /**
      * Model binding
@@ -99,6 +99,9 @@ final class ModelBindingObject
     private function handle()
     {
         if ($this->oneOf) {
+            if(is_null($this->resource)) {
+                return $this->resource;
+            }
             return $this->bindOne($this->resource);
         }
         if ($this->listOf) {
@@ -118,7 +121,12 @@ final class ModelBindingObject
         if (isset($this->args['with']) && !empty($this->args['with'])) {
             foreach ($this->args['with'] as $with) {
                 if (method_exists($object, $with)) {
-                    $object->$with = $object->$with();
+                    $relation = $object->$with();
+                    $localKey = $relation->getLocalKey();
+                    $relationData = $relation->getModelObject(
+                        $object->$localKey
+                    );
+                    $object->$with = $relationData;
                 } else {
                     throw new EloquentException("Method '{$with}' not found in class {$this->model}");
                 }

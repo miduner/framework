@@ -5,10 +5,11 @@ namespace Midun\Eloquent;
 use DB;
 use Midun\Traits\Instance;
 use Midun\Traits\Eloquent\GetAttribute;
+use Midun\Traits\Eloquent\RelationTraits;
 
 abstract class Model
 {
-    use GetAttribute, Instance;
+    use GetAttribute, Instance, RelationTraits;
 
     /**
      * List of appends

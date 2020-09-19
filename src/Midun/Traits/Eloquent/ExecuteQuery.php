@@ -141,11 +141,11 @@ trait ExecuteQuery
     /**
      * Get one row has model instance
      * 
-     * @param Connection $connection
+     * @param PDO $connection
      * 
      * @return mixed
      */
-    private function getOneItemHasModel(Connection $connection)
+    private function getOneItemHasModel(PDO $connection)
     {
         $primaryKey = $this->getCalledModelInstance()->primaryKey();
         return $this->find($connection->lastInsertId(), $primaryKey);
@@ -248,7 +248,7 @@ trait ExecuteQuery
      *
      * @return object
      */
-    private function execBindingModelObject(PDOStatement $pdoStatementObject): object
+    private function execBindingModelObject(PDOStatement $pdoStatementObject): ?object
     {
         $resources = $pdoStatementObject->fetchAll(PDO::FETCH_CLASS, $this->calledFromModel);
         return (new ModelBindingObject($resources))->receive(
