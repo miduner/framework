@@ -49,29 +49,55 @@ class CreateServerCliCommand extends Command
         $host = '127.0.0.1';
         $port = '8000';
         $open = false;
-        foreach ($this->argv() as $param) {
-            if (strpos($param, '-h=') !== false || strpos($param, '--host=') !== false) {
-                $host = str_replace('--host=', '', $param);
-            }
-            if (strpos($param, '-p=') !== false || strpos($param, '--port=') !== false) {
-                $port = str_replace('--port=', '', $param);
-            }
-            if (strpos($param, '-o') !== false || strpos($param, '--open') !== false) {
-                $open = true;
+        foreach ($this->argv() as $key => $param) {
+            switch (true) {
+                case strpos($param, '-h') !== false:
+                    $host = $this->argv()[$key + 1];
+                    break;
+                case strpos($param, '--host=') !== false:
+                    $host = str_replace('--host=', '', $param);
+                    break;
+                case strpos($param, '-p') !== false:
+                    $port = $this->argv()[$key + 1];
+                    break;
+                case strpos($param, '--port=') !== false:
+                    $port = str_replace('--port=', '', $param);
+                    break;
+                case strpos($param, '-o') !== false:
+                case strpos($param, '--open') !== false:
+                    $open = true;
+                    break;
+                case strpos($param, '-r') !== false:
+                    $route = $this->argv()[$key + 1];
+                    break;
+                case strpos($param, '--route=') !== false:
+                    $route = str_replace('--route=', '', $param);
+                    break;
             }
         }
-        $this->output->printSuccess("Starting development at: http://{$host}:{$port}");
         if ($open) {
+            if (isset($route)) {
+                $routes = app()->make('route')->collect();
+                $routeFound = array_filter($routes, fn ($rt) => $rt->getName() === $route);
+                if (empty($routeFound)) {
+                    $this->output->printError("Route `{$route}` not found");
+                    exit(1);
+                }
+                $uri = array_shift($routeFound)->getUri();
+            }
+            $url = "http://{$host}:{$port}" . (isset($uri) ? $uri : '');
             switch (true) {
                 case app()->isWindows():
-                    exec("explorer http://{$host}:{$port}");
+                    exec("explorer $url");
                     break;
                 default:
-                    exec("open http://{$host}:{$port}");
+                    exec("open $url");
             }
         } else {
             $this->output->printSuccess("Using argument --open to open server on browser.");
         }
+        $this->output->printSuccess("Starting development at: http://{$host}:{$port}");
         system("php -S {$host}:{$port} server.php");
     }
+
 }

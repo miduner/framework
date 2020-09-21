@@ -2,6 +2,8 @@
 
 namespace Midun\Traits\Eloquent;
 
+use Str;
+
 trait GetAttribute
 {
     /**
@@ -11,7 +13,17 @@ trait GetAttribute
      */
     public function table(): string
     {
-        return $this->table;
+        if (isset($this->table)) {
+            return $this->table;
+        }
+
+        return strtolower(
+            Str::pluralize(
+                snake_case(
+                    class_name_only(static::class)
+                )
+            )
+        );
     }
 
     /**

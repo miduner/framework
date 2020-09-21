@@ -743,3 +743,35 @@ if (!function_exists('get_client_ip')) {
         return $ip;
     }
 }
+
+if(!function_exists('class_name_only')) {
+    /**
+     * Get class name only
+     * 
+     * @param string $class
+     */
+    function class_name_only(string $class): string
+    {
+        $explode = explode('\\', $class);
+
+        return end(
+            $explode
+        );
+    }
+}
+
+if(!function_exists('snake_case')) {
+    function snake_case(string $string)
+    {
+        $result = "";
+        for($i = 0; $i < strlen($string); $i++) {
+            if(ctype_upper($string[$i])) {
+                $result .= $i === 0 ? strtolower($string[$i]) : '_' . strtolower($string[$i]);
+            } else {
+                $result .= strtolower($string[$i]);
+            }
+        }
+
+        return $result;
+    }
+}

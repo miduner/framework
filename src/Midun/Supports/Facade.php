@@ -24,11 +24,11 @@ abstract class Facade
 	 * @param string $method
 	 * @param array $arguments
 	 *
-	 * @return mixed|object
+	 * @return mixed
 	 *
 	 * @throws AppException
 	 */
-	public static function __callStatic($method, $arguments)
+	public static function __callStatic(string $method, array $arguments)
 	{
 		return app()->make(static::getFacadeAccessor())->$method(...$arguments);
 	}
@@ -39,11 +39,11 @@ abstract class Facade
 	 * @param string $method
 	 * @param array $arguments
 	 *
-	 * @return mixed|object
+	 * @return mixed
 	 * 
 	 * @throws AppException
 	 */
-	public function __call($method, $arguments)
+	public function __call(string $method, array $arguments)
 	{
 		return app()->make(static::getFacadeAccessor())->$method(...$arguments);
 	}

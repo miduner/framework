@@ -68,7 +68,7 @@ interface RepositoryInterface
      * @param $input
      * @return mixed
      */
-    public function firstOrCreate($input);
+    public function firstOrCreate($input = []);
 
     /**
      * Insert
