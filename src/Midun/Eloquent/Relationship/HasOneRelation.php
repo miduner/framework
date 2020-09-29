@@ -2,23 +2,24 @@
 
 namespace Midun\Eloquent\Relationship;
 
+use Midun\Database\QueryBuilder\QueryBuilder;
 use Midun\Eloquent\Model;
 
 class HasOneRelation extends Relation
 {
-    /**
-     * Model that is belongs to this
-     * 
-     * @var string
-     */
-    protected string $model;
-
     /**
      * Local key 
      * 
      * @var string
      */
     protected string $localKey;
+
+    /**
+     * Local key value
+     * 
+     * @var string
+     */
+    protected string $localValue;
 
     /**
      * Remote key 
@@ -36,28 +37,19 @@ class HasOneRelation extends Relation
      * 
      * @return void
      */
-    public function __construct(string $model, string $localKey = "", string $remoteKey = "")
+    public function __construct(string $model, string $localKey = "", string $remoteKey = "", Model $instance)
     {
         $this->setModel($model);
         $this->setLocalKey($localKey);
         $this->setRemoteKey($remoteKey);
-    }
-
-    /**
-     * Set the model
-     * 
-     * @param string $model
-     * 
-     * @return void
-     */
-    protected function setModel(string $model): void
-    {
-        $this->model = $model;
+        $this->setModelInstance($instance);
+        $this->setLocalValue(
+            $this->getModelInstance()->{$this->getLocalKey()}
+        );
     }
 
     /**
      * Set the local key
-     * 
      * 
      * @param string $localKey
      * 
@@ -65,11 +57,33 @@ class HasOneRelation extends Relation
      */
     protected function setLocalKey(string $localKey): void
     {
-        if(empty($localKey)) {
+        if (empty($localKey)) {
             $model = $this->getModel();
             $localKey = (new $model)->primaryKey();
         }
         $this->localKey = $localKey;
+    }
+
+    /**
+     * Set local value
+     * 
+     * @param string $localValue
+     * 
+     * @return void
+     */
+    public function setLocalValue(string $localValue): void
+    {
+        $this->localValue = $localValue;
+    }
+
+    /**
+     * Get local value
+     * 
+     * @return string
+     */
+    public function getLocalValue()
+    {
+        return $this->localValue;
     }
 
     /**
@@ -81,20 +95,10 @@ class HasOneRelation extends Relation
      */
     protected function setRemoteKey(string $remoteKey): void
     {
-        if(empty($remoteKey)) {
+        if (empty($remoteKey)) {
             $remoteKey = $this->getLocalKey();
         }
         $this->remoteKey = $remoteKey;
-    }
-
-    /**
-     * Get the model
-     * 
-     * @return string
-     */
-    public function getModel(): string
-    {
-        return $this->model;
     }
 
     /**
@@ -126,17 +130,46 @@ class HasOneRelation extends Relation
      */
     public function getModelObject(string $value, ?\Closure $callback = null): ?Model
     {
-        $builder = app()->make($this->getModel())
-            ->where($this->getLocalKey(), $value);
+        $builder = $this->buildWhereCondition($value);
 
-        foreach($this->getWhereCondition() as $where) {
-            $builder->where(array_shift($where), array_shift($where), array_shift($where));
-        }
-
-        if(!is_null($callback)) {
+        if (!is_null($callback)) {
             $callback($builder);
         }
 
         return $builder->first();
+    }
+
+    /**
+     * Call function 
+     * 
+     * @param string $method
+     * @param array $args
+     * 
+     * @return QueryBuilder
+     */
+    public function __call(string $method, array $args)
+    {
+        return $this->buildWhereCondition(
+            $this->getLocalValue()
+        )->$method(...$args);
+    }
+
+    /**
+     * Build where condition
+     * 
+     * @param string $value
+     * 
+     * @return QueryBuilder
+     */
+    protected function buildWhereCondition(string $value)
+    {
+        $builder = app()->make($this->getModel())
+            ->where($this->getLocalKey(), $value);
+
+        foreach ($this->getWhereCondition() as $where) {
+            $builder->where(array_shift($where), array_shift($where), array_shift($where));
+        }
+
+        return $builder;
     }
 }

@@ -17,6 +17,6 @@ trait RelationTraits
      */
     public function hasOne(string $model, string $localKey = "", string $remoteKey = ""): HasOneRelation
     {
-        return new HasOneRelation($model, $localKey, $remoteKey);
+        return new HasOneRelation($model, $localKey, $remoteKey, $this);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Midun\Eloquent;
 
+use Midun\Eloquent\Relationship\Relation;
+
 final class ModelBindingObject
 {
     /**
@@ -71,7 +73,7 @@ final class ModelBindingObject
         }
         $relation = $object->$with();
         $localKey = $relation->getLocalKey();
-        $relationData = $relation->getModelObject(
+        $relationData = $relation->{Relation::METHOD_EXECUTION}(
             $object->$localKey, $callback instanceof \Closure ? $callback : null
         );
         $object->$with = $relationData;

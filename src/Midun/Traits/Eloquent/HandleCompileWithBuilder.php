@@ -86,9 +86,17 @@ trait HandleCompileWithBuilder
     public function __call(string $method, array $args): Model
     {
         try {
+            $instance = new $this->calledFromModel;
+
+            if (method_exists($instance, $method)) {
+                return $instance->$method(...$args);
+            }
             $buildScope = $this->buildScopeMethod($method);
-            array_unshift($args, $this);
-            return (new $this->calledFromModel)->$buildScope(...$args);
+            if (method_exists($instance, $buildScope)) {
+                array_unshift($args, $this);
+                return $instance->$buildScope(...$args);
+            }
+            throw new EloquentException("Method `$method` does not exist");
         } catch (\TypeError $e) {
             throw new EloquentException($e->getMessage());
         }

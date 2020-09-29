@@ -2,11 +2,28 @@
 
 namespace Midun\Eloquent\Relationship;
 
+use Midun\Container;
+use Midun\Eloquent\Model;
+
 /**
  * Relationship class
  */
 abstract class Relation
 {
+    /**
+     * Model that is belongs to this
+     * 
+     * @var string
+     */
+    protected string $model;
+
+    /**
+     * Instance of model
+     * 
+     * @var Model
+     */
+    protected Model $instance;
+
     /**
      * Where condition
      * 
@@ -22,6 +39,13 @@ abstract class Relation
     protected array $conditions = [
         "=", ">=", "<=", "<", ">", "<>"
     ];
+
+    /**
+     * Method execute
+     * 
+     * @var string
+     */
+    const METHOD_EXECUTION = 'getModelObject';
 
     /**
      * Get data of relationship
@@ -44,7 +68,7 @@ abstract class Relation
      */
     public function where(string $column, string $condition = "=", string $value = ""): Relation
     {
-        if(!in_array($condition, $this->getAcceptCondition())) {
+        if (!in_array($condition, $this->getAcceptCondition())) {
             $where = [$column, "=", $condition];
         } else {
             $where = [$column, $condition, $value];
@@ -72,5 +96,49 @@ abstract class Relation
     public function getWhereCondition(): array
     {
         return $this->wheres;
+    }
+
+    /**
+     * Set model instance
+     * 
+     * @param Model $instance
+     * 
+     * @return void
+     */
+    protected function setModelInstance(Model $instance): void
+    {
+        $this->instance = $instance;
+    }
+
+    /**
+     * Get model instance
+     * 
+     * @return Model
+     */
+    protected function getModelInstance(): Model
+    {
+        return $this->instance;
+    }
+
+    /**
+     * Set the model
+     * 
+     * @param string $model
+     * 
+     * @return void
+     */
+    protected function setModel(string $model): void
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * Get the model
+     * 
+     * @return string
+     */
+    public function getModel(): string
+    {
+        return $this->model;
     }
 }
