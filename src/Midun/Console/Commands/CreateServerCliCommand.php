@@ -51,27 +51,27 @@ class CreateServerCliCommand extends Command
         $open = false;
         foreach ($this->argv() as $key => $param) {
             switch (true) {
-                case strpos($param, '-h') !== false:
-                    $host = $this->argv()[$key + 1];
-                    break;
                 case strpos($param, '--host=') !== false:
                     $host = str_replace('--host=', '', $param);
                     break;
-                case strpos($param, '-p') !== false:
-                    $port = $this->argv()[$key + 1];
+                case strpos($param, '-h') !== false:
+                    $host = $this->argv()[$key + 1];
                     break;
                 case strpos($param, '--port=') !== false:
                     $port = str_replace('--port=', '', $param);
+                    break;
+                case strpos($param, '-p') !== false:
+                    $port = $this->argv()[$key + 1];
                     break;
                 case strpos($param, '-o') !== false:
                 case strpos($param, '--open') !== false:
                     $open = true;
                     break;
-                case strpos($param, '-r') !== false:
-                    $route = $this->argv()[$key + 1];
-                    break;
                 case strpos($param, '--route=') !== false:
                     $route = str_replace('--route=', '', $param);
+                    break;
+                case strpos($param, '-r') !== false:
+                    $route = $this->argv()[$key + 1];
                     break;
             }
         }
@@ -99,5 +99,4 @@ class CreateServerCliCommand extends Command
         $this->output->printSuccess("Starting development at: http://{$host}:{$port}");
         system("php -S {$host}:{$port} server.php");
     }
-
 }
