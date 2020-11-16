@@ -159,7 +159,7 @@ class Application
     {
         $last_error = error_get_last();
         if (!is_null($last_error)) {
-            throw new RuntimeException($last_error['message']);
+            exit($last_error['message']);
         }
     }
 
