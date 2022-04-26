@@ -27,6 +27,7 @@ use Midun\Console\Commands\Make\MakeControllerCommand;
 use Midun\Console\Commands\Storage\StorageLinkCommand;
 use Midun\Console\Commands\Schedule\ScheduleRunCommand;
 use Midun\Console\Commands\Migrate\MigrateRollbackCommand;
+use Midun\Console\Commands\Development\SyncCoreToFramework;
 use Midun\Console\Commands\Development\DevelopmentModeCommand;
 
 class Kernel implements KernelContract
@@ -99,7 +100,8 @@ class Kernel implements KernelContract
         ViewClearCommand::class,
         ConfigClearCommand::class,
         StorageLinkCommand::class,
-        DevelopmentModeCommand::class
+        DevelopmentModeCommand::class,
+        SyncCoreToFramework::class
     ];
 
     /**
