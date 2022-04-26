@@ -44,7 +44,7 @@ class MakeMigrationCommand extends Command
             exit(1);
         }
 
-        $defaultMigratePath = base_path('midun/Helpers/Init/migrate.txt');
+        $defaultMigratePath = base_path('vendor/miduner/miduner/src/Midun/Helpers/Init/migrate.txt');
         $defaultMigrate = file_get_contents($defaultMigratePath);
         $defaultMigrate = str_replace(':table', $table, $defaultMigrate);
         $defaultMigrate = str_replace(':Table', ucfirst($table), $defaultMigrate);

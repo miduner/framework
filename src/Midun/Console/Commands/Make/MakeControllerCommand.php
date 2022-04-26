@@ -49,15 +49,15 @@ class MakeControllerCommand extends Command
             $namespace = '\\' . implode("\\", $paseController) . ';';
             foreach ($paseController as $dir) {
                 $fullDir .= "{$dir}";
-                if (is_dir($fullDir) !== 1) {
+                if (!is_dir($fullDir)) {
                     @mkdir($fullDir, 0777, true);
-                    $fullDir .= '/';
                 }
+                $fullDir .= '/';
             }
         } else {
             $controller = $name;
         }
-        $defaultControllerPath = base_path('midun/Helpers/Init/controller.txt');
+        $defaultControllerPath = base_path('vendor/miduner/miduner/src/Midun/Helpers/Init/controller.txt');
         $defaultController = file_get_contents($defaultControllerPath);
         $defaultController = str_replace(':namespace', $namespace, $defaultController);
         $defaultController = str_replace(':controller', $controller, $defaultController);

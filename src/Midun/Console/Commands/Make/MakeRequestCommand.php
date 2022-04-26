@@ -49,13 +49,13 @@ class MakeRequestCommand extends Command
             $namespace = '\\' . implode("\\", $paseRequest) . ';';
             foreach ($paseRequest as $dir) {
                 $fullDir .= "{$dir}";
-                if (is_dir($fullDir) !== 1) {
-                    mkdir($fullDir, 0777, true);
-                    $fullDir .= '/';
+                if (!is_dir($fullDir)) {
+                    @mkdir($fullDir, 0777, true);
                 }
+                $fullDir .= '/';
             }
         }
-        $defaultRequestPath = base_path('midun/Helpers/Init/request.txt');
+        $defaultRequestPath = base_path('vendor/miduner/miduner/src/Midun/Helpers/Init/request.txt');
         $defaultRequest = file_get_contents($defaultRequestPath);
         $defaultRequest = str_replace(':request', $request, $defaultRequest);
         $defaultRequest = str_replace(':namespace', $namespace, $defaultRequest);

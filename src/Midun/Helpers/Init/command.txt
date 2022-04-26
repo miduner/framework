@@ -11,38 +11,38 @@ class :command extends Command
      *
      * @var string
      */
-    protected $signature = 'hello:world';
+    protected string $signature = 'hello:world';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Example command';
+    protected string $description = 'Example command';
 
     /**
      * Get true format for command
      * 
      * @var string
      */
-    protected $format = 'midun hello:world --abc=123 --xyz=456';
+    protected string $format = 'midun hello:world --abc=123 --xyz=456';
 
     /**
      * User guide helper
      */
-    protected $helper = "Step 1: Making some abc\nStep 2: Setting crontab abc\nStep 3: Run xyz";
+    protected string $helper = "Step 1: Making some abc\nStep 2: Setting crontab abc\nStep 3: Run xyz";
 
     /**
      * Require options
      */
-    protected $required = [
+    protected array $required = [
         'abc', 'xyz'
     ];
 
     /**
      * Other called signatures
      */
-    protected $otherSignatures = [
+    protected array $otherSignatures = [
         'he:wo',
         'world:hello'
     ];
@@ -57,7 +57,7 @@ class :command extends Command
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): void
     {
         dd($this->getOptions());
     }

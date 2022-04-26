@@ -12,7 +12,7 @@ trait JsonResponse
      * @param mixed $data
      * @param int $statusCode
      * @param array $headers
-     * @return void
+     * @return Response
      */
     protected function respond($data, int $statusCode = 200, array $headers = []): Response
     {
@@ -23,7 +23,7 @@ trait JsonResponse
      * Respond with created.
      *
      * @param mixed $data
-     * @return void
+     * @return Response
      */
     protected function respondCreated($data): Response
     {
@@ -35,7 +35,7 @@ trait JsonResponse
      *
      * @param $data
      * @param int $statusCode
-     * @return void
+     * @return Response
      */
     protected function respondSuccess($data, int $statusCode = 200): Response
     {
@@ -51,7 +51,7 @@ trait JsonResponse
      *
      * @param $message
      * @param $statusCode
-     * @return void
+     * @return Response
      */
     protected function respondError(string $message = 'Bad request', int $statusCode = 400): Response
     {
@@ -66,7 +66,7 @@ trait JsonResponse
     /**
      * Respond with no content.
      *
-     * @return void
+     * @return Response
      */
     protected function respondNoContent(): Response
     {
@@ -77,7 +77,7 @@ trait JsonResponse
      * Respond with unauthorized.
      *
      * @param string $message
-     * @return void
+     * @return Response
      */
 	protected function respondUnauthorized(string $message = 'Unauthorized'): Response
     {
@@ -88,7 +88,7 @@ trait JsonResponse
      * Respond with forbidden.
      *
      * @param string $message
-     * @return void
+     * @return Response
      */
     protected function respondForbidden(string $message = 'Forbidden'): Response
     {
@@ -99,7 +99,7 @@ trait JsonResponse
 	 * Respond with not found.
      *
      * @param string $message
-     * @return void
+     * @return Response
      */
 	protected function respondNotFound(string $message = 'Not Found'): Response
     {
@@ -110,7 +110,7 @@ trait JsonResponse
      * Respond with internal error.
      *
      * @param string $message
-     * @return void
+     * @return Response
      */
     protected function respondInternalError(string $message = 'Internal Error'): Response
     {

@@ -49,15 +49,15 @@ class MakeCommandCommand extends Command
             $namespace = '\\' . implode("\\", $parseCommand) . ';';
             foreach ($parseCommand as $dir) {
                 $fullDir .= "{$dir}";
-                if (is_dir($fullDir) !== 1) {
+                if (!is_dir($fullDir)) {
                     @mkdir($fullDir, 0777, true);
-                    $fullDir .= '/';
                 }
+                $fullDir .= '/';
             }
         } else {
             $command = $name;
         }
-        $defaultCommandPath = base_path('midun/Helpers/Init/command.txt');
+        $defaultCommandPath = base_path('vendor/miduner/miduner/src/Midun/Helpers/Init/command.txt');
         $defaultCommand = file_get_contents($defaultCommandPath);
         $defaultCommand = str_replace(':namespace', $namespace, $defaultCommand);
         $defaultCommand = str_replace(':command', $command, $defaultCommand);

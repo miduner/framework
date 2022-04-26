@@ -49,15 +49,15 @@ class MakeModelCommand extends Command
             $namespace = '\\' . implode("\\", $paseModel) . ';';
             foreach ($paseModel as $dir) {
                 $fullDir .= "{$dir}";
-                if (is_dir($fullDir) !== 1) {
+                if (!is_dir($fullDir)) {
                     @mkdir($fullDir, 0777, true);
-                    $fullDir .= '/';
                 }
+                $fullDir .= '/';
             }
         } else {
             $model = $name;
         }
-        $defaultModelPath = base_path('midun/Helpers/Init/model.txt');
+        $defaultModelPath = base_path('vendor/miduner/miduner/src/Midun/Helpers/Init/model.txt');
         $defaultModel = file_get_contents($defaultModelPath);
         $defaultModel = str_replace(':namespace', $namespace, $defaultModel);
         $defaultModel = str_replace(':model', $model, $defaultModel);

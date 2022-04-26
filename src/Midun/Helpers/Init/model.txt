@@ -6,18 +6,18 @@ use Midun\Eloquent\Model;
 
 class :model extends Model
 {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected string $table = '';
+    protected string $primaryKey = '';
 
-    protected $fillable = [];
+    protected array $fillable = [];
 
-    protected $hidden = [
+    protected array $hidden = [
       'password'
     ];
 
-    protected $appends = ['appended'];
+    protected array $appends = ['appended'];
 
-    protected $casts = [];
+    protected array $casts = [];
 
     public function getAppendedAttribute()
     {

@@ -54,9 +54,9 @@ class Validator
     /**
      * Instance of passable request
      * 
-     * @var array
+     * @var \Midun\Http\Request
      */
-    protected array $passable = [];
+    protected ?\Midun\Http\Request $passable;
 
     /**
      * File validation using for multiple languages
