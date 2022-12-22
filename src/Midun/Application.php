@@ -159,7 +159,10 @@ class Application
     {
         $last_error = error_get_last();
         if (!is_null($last_error)) {
-            exit($last_error['message']);
+            ob_clean();
+            $handler = new ErrorHandler;
+
+            $handler->errorHandler($last_error['type'], $last_error['message'], $last_error['file'], $last_error['line']);
         }
     }
 

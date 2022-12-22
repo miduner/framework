@@ -7,8 +7,6 @@ use Midun\Container;
 
 class ErrorHandler
 {
-    private \Midun\Logger\Logger $log;
-
     public function __construct()
     {
         $this->app = Container::getInstance();
@@ -16,7 +14,6 @@ class ErrorHandler
         if ($this->app->make(Application::class)->isLoaded()) {
             $this->app->make('view')->setMaster('');
             ob_get_clean();
-            $this->log = $this->app->make('log');
         }
     }
 
@@ -34,13 +31,7 @@ class ErrorHandler
     {
         $msg = "{$errstr} on line {$line} in file {$file}";
 
-        if (!isset($this->log)) {
-            die($msg);
-        }
-
         $file = str_replace(base_path(), '', $file);
-
-        $this->log->error($msg);
 
         $e = new UnknownException($msg);
 
