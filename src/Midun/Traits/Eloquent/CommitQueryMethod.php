@@ -76,6 +76,7 @@ trait CommitQueryMethod
         if (isset($this->offset)) {
             $sql .= $this->compile->compileOffset($this->offset);
         }
+
         return $sql;
     }
 
@@ -109,6 +110,7 @@ trait CommitQueryMethod
             $hidden = $object->hidden();
             $columns = array_merge($fillable, $hidden);
             $sql = $this->compile->compileCreate($object, $columns, $data);
+
             return $this->request($sql);
         }
         throw new AppException("Method 'create' doesn't exists");

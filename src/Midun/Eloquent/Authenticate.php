@@ -27,7 +27,7 @@ abstract class Authenticate extends Model
      * 
      * @throws AuthenticationException
      */
-    public function createToken(array $customClaims = []): string
+    public function createToken(array $customClaims = []): array
     {
         $key = config('jwt.secret');
 

@@ -80,7 +80,7 @@ class QueryBuilder
      *
      * @var array
      */
-    private array $having = [];
+    private array $havings = [];
 
     /**
      * The orderings for the query.

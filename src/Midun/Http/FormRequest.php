@@ -2,7 +2,6 @@
 
 namespace Midun\Http;
 
-use Midun\Http\Exceptions\AppException;
 use Midun\Http\Validation\ValidationException;
 use Midun\Http\Exceptions\UnauthorizedException;
 

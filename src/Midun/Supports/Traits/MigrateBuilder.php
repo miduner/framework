@@ -30,6 +30,7 @@ trait MigrateBuilder
                 }
             }
             $createTableSql .= ');';
+
             app()->make('connection')->getConnection()->query($createTableSql);
         } catch (\PDOException $e) {
             app()->make(\Midun\Supports\ConsoleOutput::class)->printError($e->getMessage());

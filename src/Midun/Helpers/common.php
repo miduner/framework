@@ -775,3 +775,20 @@ if(!function_exists('snake_case')) {
         return $result;
     }
 }
+
+if(!function_exists('log_query')) {
+    function log_query(string $query)
+    {
+        $isLogQuery = config('database.log_query') === 'enable' 
+        || config('database.log_query') === 'true' 
+        || config('database.log_query') === true
+        || config('database.log_query') === 1
+        || config('database.log_query') === "1";
+
+        if (!$isLogQuery) {
+            return;
+        }
+        
+        \Log::info($query);
+    }
+}

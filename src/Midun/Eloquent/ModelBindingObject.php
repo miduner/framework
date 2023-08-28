@@ -7,6 +7,13 @@ use Midun\Eloquent\Relationship\Relation;
 final class ModelBindingObject
 {
     /**
+     * Model is binding object
+     * 
+     * @var Model
+     */
+    private Model $model;
+
+    /**
      * Flag checking binding one resource
      *
      * @var bool
@@ -72,6 +79,7 @@ final class ModelBindingObject
             throw new EloquentException("Method `{$with}()` not found in class {$this->model}");
         }
         $relation = $object->$with();
+
         $localKey = $relation->getLocalKey();
         $relationData = $relation->{Relation::METHOD_EXECUTION}(
             $object->$localKey, $callback instanceof \Closure ? $callback : null

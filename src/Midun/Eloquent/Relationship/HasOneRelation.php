@@ -118,7 +118,7 @@ class HasOneRelation extends Relation
      */
     public function getRemoteKey(): string
     {
-        return $this->remoteKe;
+        return $this->remoteKey;
     }
 
     /**

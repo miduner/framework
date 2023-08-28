@@ -4,9 +4,15 @@ namespace Midun\Http\Exceptions;
 
 use Exception;
 use Midun\Application;
+use Midun\Http\Validation\ValidationException;
 
 class AppException extends Exception
 {
+    /**
+     * AppException constructor
+     * 
+     * @return void
+     */
     public function __construct(string $message, int $code = 400)
     {
         $this->writeLog($message);
@@ -31,10 +37,17 @@ class AppException extends Exception
      */
     public function render(\Exception $exception)
     {
+        $errors = [];
+
+        if ($exception instanceof ValidationException) {
+            $errors = $this->getErrors();
+        }
+
         if (request()->isAjax()) {
             return response()->json([
                 'status' => false,
                 'message' => $exception->getMessage(),
+                'errors' => $errors
             ], $this->code);
         }
 

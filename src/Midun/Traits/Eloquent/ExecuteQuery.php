@@ -20,6 +20,8 @@ trait ExecuteQuery
     {
         try {
             $connection = app()->make('connection')->getConnection();
+            log_query($sql);
+
             switch (true) {
                 case $this->isInsertQuery($sql):
                     $object = $connection->query($sql);
