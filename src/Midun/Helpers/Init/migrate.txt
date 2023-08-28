@@ -1,10 +1,9 @@
 <?php
 
-use Midun\Database\Migrations\Migration;
 use Midun\Database\DatabaseBuilder\Schema;
 use Midun\Database\DatabaseBuilder\ColumnBuilder;
 
-class Create:TableTable extends Migration
+class Create:TableTable
 {
     /** 
     * Run the migration.

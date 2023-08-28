@@ -8,10 +8,10 @@ trait Pagination
 {
     /**
      * Pagination collection
-     * 
+     *
      * @param int $perPage
      * @param mixed $column
-     * 
+     *
      * @return array
      */
     public function paginate(?int $perPage = null, $columns = null): array
@@ -46,10 +46,10 @@ trait Pagination
 
     /**
      * Get skip
-     * 
+     *
      * @param int $currentPage
      * @param int $perPage
-     * 
+     *
      * @return int
      */
     public function getSkip(int $currentPage, int $perPage): int
@@ -59,9 +59,9 @@ trait Pagination
 
     /**
      * Get per page pagination
-     * 
+     *
      * @param int $perPage
-     * 
+     *
      * @return int
      */
     public function getPerPage(int $perPage): int
@@ -71,9 +71,9 @@ trait Pagination
 
     /**
      * Make pagination request
-     * 
+     *
      * @param bool $status
-     * 
+     *
      * @return void
      */
     public function makePagination(bool $status): void
@@ -83,9 +83,9 @@ trait Pagination
 
     /**
      * Set selecting columns
-     * 
+     *
      * @param null|array
-     * 
+     *
      * @return void
      */
     public function setColumns($columns): void
@@ -99,7 +99,7 @@ trait Pagination
      * @param int $total
      * @param int $currentPage
      * @param int $perPage
-     * 
+     *
      * @return array
      */
     private function makeRequest(string $pageUrl, int $total, int $currentPage, int $perPage): array
@@ -124,7 +124,7 @@ trait Pagination
 
     /**
      * Get page url from parameters
-     * 
+     *
      * @return string
      */
     private function getPageUrl(): string
@@ -133,21 +133,27 @@ trait Pagination
         $appUrl = config('app.url');
         $uri = explode('?', $_SERVER['REQUEST_URI']);
         $pageUrl = $appUrl . array_shift($uri) . '?' . $queryParams;
+
         return $pageUrl;
     }
 
     /**
      * Get parent resources
-     * 
+     *
      * @param string $sql
-     * 
+     *
      * @return int
      */
     private function getTotalParentResources(string $sql): int
     {
         $connection = app()->make('connection')->getConnection();
+        log_query($sql);
+
         $object = $connection->prepare($sql);
+        $this->bindingParams($object);
+
         $object->execute();
+
         return $object->rowCount();
     }
 }

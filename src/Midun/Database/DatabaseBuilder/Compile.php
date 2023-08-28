@@ -23,8 +23,8 @@ class Compile
         foreach ($columns as $column) {
             $column = (object) $column;
             if (isset($column->timestamps) && $column->timestamps == 1) {
-                $this->rows[] = 'created_at TIMESTAMP';
-                $this->rows[] = 'updated_at TIMESTAMP';
+                $this->rows[] = 'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP';
+                $this->rows[] = 'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP';
                 continue;
             }
             $row = '';

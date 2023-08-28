@@ -32,10 +32,9 @@ class Request
             return new File($file);
         }, $_FILES));
 
-        if ($this->method() === 'PUT') {
-            parse_str(file_get_contents("php://input"), $data);
-            $params = array_merge($params, $data);
-        }
+        $jsonParams = (array) json_decode(file_get_contents("php://input"));
+
+        $params = array_merge($params, $jsonParams);
 
         return $params;
     }
@@ -89,9 +88,9 @@ class Request
      * Response only data input from array input.
      *
      * @param array $inputs
-     * @return object
+     * @return array
      */
-    public function only(array $inputs): object
+    public function only(array $inputs): array
     {
         $request = [];
         
@@ -100,16 +99,17 @@ class Request
                 $request[$name] = $value;
             }
         }
-        return (object) $request;
+        return $request;
     }
 
     /**
      * Response data input except array input.
      *
      * @param array $inputs
-     * @return object
+     * 
+     * @return array
      */
-    public function except(array $inputs): object
+    public function except(array $inputs): array
     {
         $request = [];
         foreach ($this->getRequest() as $name => $value) {
@@ -117,17 +117,17 @@ class Request
                 $request[$name] = $value;
             }
         }
-        return (object) $request;
+        return $request;
     }
 
     /**
      * Get all headers requested
      * 
-     * @return object
+     * @return array
      */
-    public function headers(): object
+    public function headers(): array
     {
-        return (object) getallheaders();
+        return getallheaders();
     }
 
     /**

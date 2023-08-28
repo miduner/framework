@@ -152,6 +152,10 @@ class Compile
      */
     public function compileHavings(array $havings): string
     {
+        if (empty($havings)) {
+            return "";
+        }
+
         $sql = " HAVING";
         foreach ($havings as $key => $having) {
             $sql .= " $having[0] $having[1] $having[2]";

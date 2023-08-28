@@ -2,6 +2,7 @@
 
 namespace Midun\Routing;
 
+use Midun\Container;
 use Midun\View\ViewException;
 use Midun\Hashing\HashException;
 use Midun\Logger\LoggerException;
@@ -27,6 +28,11 @@ use Midun\Database\Connections\PostgreSQL\PostgreConnectionException;
 
 class Compile
 {
+    /**
+     * Container of the app
+     */
+    private Container $app;
+
     /**
      * Method execute
      * 

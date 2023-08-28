@@ -153,6 +153,7 @@ abstract class Model
             'hidden' => $static->hidden(),
             'calledClass' => get_called_class(),
         ];
+
         return DB::staticEloquentBuilder($table, $modelMeta, $method, $args, $this);
     }
 

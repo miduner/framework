@@ -4,6 +4,7 @@ namespace Midun\Http\Middlewares;
 
 use Closure;
 use Midun\Container;
+use Midun\Session\Session;
 
 class LimitRequest
 {
@@ -13,6 +14,13 @@ class LimitRequest
      * @var \Midun\Container
      */
     protected $app;
+
+    /**
+     * The session of application
+     * 
+     * @var Session
+     */
+    protected $session;
 
     /**
      * Name of attempts
