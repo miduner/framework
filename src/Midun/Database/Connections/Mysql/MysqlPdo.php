@@ -31,7 +31,7 @@ class MysqlPdo extends PDO
      * 
      * @return PDOStatement|true
      */
-    public function prepare($statement, $options = [])
+    public function prepare($statement, $options = []): PDOStatement
     {
         return parent::prepare($statement, $options);
     }
@@ -51,11 +51,11 @@ class MysqlPdo extends PDO
      * 
      * @param string $statement
      * 
-     * @return PDOStatement
+     * @return PDOStatement|false
      */
-    public function query($statement): PDOStatement
+    public function query(string $query, int $fetchMode = null, ...$fetch_mode_args): PDOStatement
     {
-        return parent::query($statement);
+        return parent::query($query, $fetchMode, $fetch_mode_args);
     }
 
     /**
@@ -75,7 +75,7 @@ class MysqlPdo extends PDO
      * 
      * @return int|false
      */
-    public function exec($statement)
+    public function exec($statement): int
     {
         return parent::exec($statement);
     }

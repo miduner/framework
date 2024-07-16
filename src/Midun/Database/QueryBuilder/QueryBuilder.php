@@ -217,7 +217,7 @@ class QueryBuilder
     /**
      * Add a join clause to the query.
      *
-     * @param  string  $table
+     * @param  string  $tableJoin
      * @param  string  $first
      * @param  string  $operator
      * @param  string  $second
@@ -233,13 +233,13 @@ class QueryBuilder
     /**
      * Add a left join to the query.
      *
-     * @param  string  $table
+     * @param  string  $tableJoin
      * @param  string  $first
      * @param  string  $operator
      * @param  string  $second
      * @return \Database\QueryBuilder|static
      */
-    public function leftJoin(string $tableJoin, string $st, string $operator = '=', string $nd): QueryBuilder
+    public function leftJoin(string $tableJoin, string $st, string $operator, string $nd): QueryBuilder
     {
         return $this->join($tableJoin, $st, $operator, $nd, 'LEFT');
     }
@@ -247,13 +247,13 @@ class QueryBuilder
     /**
      * Add a right join to the query.
      *
-     * @param  string  $table
+     * @param  string  $tableJoin
      * @param  string  $first
      * @param  string  $operator
      * @param  string  $second
      * @return \Database\QueryBuilder|static
      */
-    public function rightJoin(string $tableJoin, string $st, string $operator = '=', string $nd): QueryBuilder
+    public function rightJoin(string $tableJoin, string $st, string $operator, string $nd): QueryBuilder
     {
         return $this->join($tableJoin, $st, $operator, $nd, 'RIGHT');
     }
@@ -284,7 +284,7 @@ class QueryBuilder
      * @param  string  $boolean
      * @return self
      */
-    public function where($column, string $operator = '=', $value = null, $boolean = 'AND'): QueryBuilder
+    public function where($column, string $operator, $value = null, $boolean = 'AND'): QueryBuilder
     {
         if (!is_callable($column) && !is_array($column)) {
             if (!in_array($operator, $this->operator)) {
@@ -318,7 +318,7 @@ class QueryBuilder
      * @param  mixed   $value
      * @return self
      */
-    public function orWhere($column, string $operator = '=', $value = null): QueryBuilder
+    public function orWhere($column, string $operator, $value = null): QueryBuilder
     {
         if (!is_callable($column)) {
             return $this->where($column, $operator, $value, 'OR');
@@ -376,7 +376,7 @@ class QueryBuilder
      * @param  string  $boolean
      * @return self
      */
-    public function having(string $column, string $operator = '=', string $value, string $boolean = 'and'): QueryBuilder
+    public function having(string $column, string $operator, string $value, string $boolean = 'and'): QueryBuilder
     {
         $this->havings[] = [$column, $operator, $value, $boolean];
         return $this;
@@ -390,7 +390,7 @@ class QueryBuilder
      * @param  string  $value
      * @return self
      */
-    public function orHaving(string $column, string $operator = '=', string $value): QueryBuilder
+    public function orHaving(string $column, string $operator, string $value): QueryBuilder
     {
         return $this->having($column, $operator, $value, 'or');
     }

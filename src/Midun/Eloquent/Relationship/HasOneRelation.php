@@ -8,33 +8,33 @@ use Midun\Eloquent\Model;
 class HasOneRelation extends Relation
 {
     /**
-     * Local key 
-     * 
+     * Local key
+     *
      * @var string
      */
     protected string $localKey;
 
     /**
-     * Local key value
-     * 
+     * Local key valueHasOneRelation
+     *
      * @var string
      */
     protected string $localValue;
 
     /**
-     * Remote key 
-     * 
+     * Remote key
+     *
      * @var string
      */
     protected string $remoteKey;
 
     /**
      * Initial constructor of HasOneRelation
-     * 
+     *
      * @param string $model
      * @param string $localKey
      * @param string $remoteKey
-     * 
+     *
      * @return void
      */
     public function __construct(string $model, string $localKey = "", string $remoteKey = "", Model $instance)
@@ -50,9 +50,9 @@ class HasOneRelation extends Relation
 
     /**
      * Set the local key
-     * 
+     *
      * @param string $localKey
-     * 
+     *
      * @return void
      */
     protected function setLocalKey(string $localKey): void
@@ -66,9 +66,9 @@ class HasOneRelation extends Relation
 
     /**
      * Set local value
-     * 
+     *
      * @param string $localValue
-     * 
+     *
      * @return void
      */
     public function setLocalValue(string $localValue): void
@@ -78,7 +78,7 @@ class HasOneRelation extends Relation
 
     /**
      * Get local value
-     * 
+     *
      * @return string
      */
     public function getLocalValue()
@@ -88,9 +88,9 @@ class HasOneRelation extends Relation
 
     /**
      * Set the remote key
-     * 
+     *
      * @param string $remoteKey
-     * 
+     *
      * @return void
      */
     protected function setRemoteKey(string $remoteKey): void
@@ -103,7 +103,7 @@ class HasOneRelation extends Relation
 
     /**
      * Get local key
-     * 
+     *
      * @return string
      */
     public function getLocalKey(): string
@@ -113,7 +113,7 @@ class HasOneRelation extends Relation
 
     /**
      * Get remote key
-     * 
+     *
      * @return string
      */
     public function getRemoteKey(): string
@@ -123,9 +123,9 @@ class HasOneRelation extends Relation
 
     /**
      * Execute get data
-     * 
+     *
      * @param string $value
-     * 
+     *
      * @return Model
      */
     public function getModelObject(string $value, ?\Closure $callback = null): ?Model
@@ -140,11 +140,11 @@ class HasOneRelation extends Relation
     }
 
     /**
-     * Call function 
-     * 
+     * Call function
+     *
      * @param string $method
      * @param array $args
-     * 
+     *
      * @return QueryBuilder
      */
     public function __call(string $method, array $args)
@@ -156,9 +156,9 @@ class HasOneRelation extends Relation
 
     /**
      * Build where condition
-     * 
+     *
      * @param string $value
-     * 
+     *
      * @return QueryBuilder
      */
     protected function buildWhereCondition(string $value)
