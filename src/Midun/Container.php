@@ -6,6 +6,7 @@ use Closure;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionException;
+use ReflectionParameter;
 use Midun\Eloquent\Model;
 use Midun\Http\FormRequest;
 use Midun\Http\Exceptions\AppException;
@@ -14,7 +15,7 @@ class Container
 {
     /**
      * Version of the application
-     * 
+     *
      * @var string
      */
     const VERSION = "0.1.0";
@@ -27,7 +28,7 @@ class Container
 
     /**
      * List of bindings instances
-     * 
+     *
      * @var array
      */
     private array $instances = [];
@@ -62,7 +63,7 @@ class Container
 
     /**
      * Initial of container
-     * 
+     *
      * @param string $basePath
      */
     public function __construct(string $basePath)
@@ -81,7 +82,7 @@ class Container
 
     /**
      * Get instance of container
-     * 
+     *
      * @return self
      */
     public static function getInstance(): Container
@@ -95,7 +96,7 @@ class Container
 
     /**
      * Get public path
-     * 
+     *
      * @return string
      */
     private function getPublicPath(): string
@@ -105,17 +106,17 @@ class Container
 
     /**
      * Get cache path
-     * 
+     *
      * @return string
      */
     private function getCachePath(): string
     {
-        return $this->getStoragePath() . DIRECTORY_SEPARATOR . 'cache';;
+        return $this->getStoragePath() . DIRECTORY_SEPARATOR . 'cache';
     }
 
     /**
      * Get config path
-     * 
+     *
      * @return string
      */
     private function getConfigPath(): string
@@ -125,7 +126,7 @@ class Container
 
     /**
      * Get storage path
-     * 
+     *
      * @return string
      */
     private function getStoragePath(): string
@@ -135,7 +136,7 @@ class Container
 
     /**
      * Get database path
-     * 
+     *
      * @return string
      */
     private function getDatabasePath(): string
@@ -145,7 +146,7 @@ class Container
 
     /**
      * Get routing path
-     * 
+     *
      * @return string
      */
     private function getRoutePath(): string
@@ -155,7 +156,7 @@ class Container
 
     /**
      * Get base path of installation
-     * 
+     *
      * @param string $path
      */
     public function basePath(string $path = ''): string
@@ -165,7 +166,7 @@ class Container
 
     /**
      * Register instance of things
-     * 
+     *
      * @param string $key
      * @param mixed $instance
      */
@@ -176,7 +177,7 @@ class Container
 
     /**
      * Register instance of things
-     * 
+     *
      * @param string $key
      * @param mixed $instance
      */
@@ -190,7 +191,7 @@ class Container
      * Make a entity
      * @param string $entity
      * @return mixed
-     * 
+     *
      * @throws \Midun\Http\Exceptions\AppException
      */
     public function resolve($entity)
@@ -214,10 +215,10 @@ class Container
 
     /**
      * Put to resolved
-     * 
+     *
      * @param string $abstract
      * @param mixed $concrete
-     * 
+     *
      * @return void
      */
     private function putToResolved(string $abstract, $concrete): void
@@ -231,9 +232,9 @@ class Container
 
     /**
      * Check is resolved
-     * 
+     *
      * @param string $abstract
-     * 
+     *
      * @return bool
      */
     private function isResolved(string $abstract): bool
@@ -243,11 +244,11 @@ class Container
 
     /**
      * Check can resolve
-     * 
+     *
      * @param mixed $entity
-     * 
+     *
      * @return boolean
-     * 
+     *
      * @throws AppException
      */
     private function canResolve($entity): bool
@@ -264,8 +265,8 @@ class Container
     public function make($entity)
     {
         return isset($this->instances[$entity])
-            ? $this->instances[$entity]
-            : $this->resolve($entity);
+        ? $this->instances[$entity]
+        : $this->resolve($entity);
     }
 
     /**
@@ -315,7 +316,7 @@ class Container
      * Instantiate a concrete instance of the given type.
      *
      * @param  mixed  $concrete
-     * 
+     *
      * @return mixed
      *
      * @throws AppException
@@ -355,9 +356,9 @@ class Container
 
     /**
      * Take bound dependencies
-     * 
+     *
      * @param string $concrete
-     * 
+     *
      * @return mixed
      */
     private function takeBound(string $concrete)
@@ -367,9 +368,9 @@ class Container
 
     /**
      * Take resolved dependencies
-     * 
+     *
      * @param string $concrete
-     * 
+     *
      * @return mixed
      */
     private function takeResolved(string $concrete)
@@ -398,8 +399,9 @@ class Container
     {
         $array = [];
         foreach ($dependencies as $dependency) {
-            if ($dependency->getClass() instanceof \ReflectionClass) {
-                $object = $dependency->getClass()->getName();
+            $class = $this->getReflectionClassFromParameter($dependency);
+            if ($class instanceof \ReflectionClass) {
+                $object = $class->getName();
                 $array[$dependency->getName()] = $this->make($object);
             }
         }
@@ -408,14 +410,28 @@ class Container
     }
 
     /**
+     * Replace for method getClass of ReflectionParameter when upgrade from PHP7.4 to PHP 8
+     *
+     * @param ReflectionParameter
+     *
+     * @return ReflectionClass|null
+     */
+    public function getReflectionClassFromParameter($parameter): ?ReflectionClass
+    {
+        return $parameter->getType() && !$parameter->getType()->isBuiltin()
+        ? new ReflectionClass($parameter->getType()->getName())
+        : null;
+    }
+
+    /**
      * Resolve list of dependencies from options
-     * 
+     *
      * @param string $controller
      * @param string $methodName
      * @param array $params
      *
      * @return array
-     * 
+     *
      * @throws AppException
      */
     public function resolveMethodDependencyWithParameters($controller, $methodName, $params): array
@@ -425,54 +441,55 @@ class Container
             $listParameters = $ref->getParameters();
             $array = [];
             foreach ($listParameters as $key => $parameter) {
-                switch(true) {
-                    case $parameter->getClass() instanceof \ReflectionClass:
+                $class = $this->getReflectionClassFromParameter($parameter);
+                switch (true) {
+                    case $class instanceof \ReflectionClass :
                         $object = $this->buildStacks(
-                            $parameter->getClass()->getName()
+                            $class->getName()
                         );
-                        if($object instanceof Model) {
+                        if ($object instanceof Model) {
                             $arg = array_shift($params);
                             if (!$arg) {
                                 throw new AppException("Missing parameter `{$parameter->getName()}` for initial model `{$parameter->getClass()->getName()}`");
                             }
                             $object = $object->findOrFail($arg);
                         }
-                        $array = [...$array, $object];
+                        $array = [ ...$array, $object];
                         break;
-                    case is_null($parameter->getClass()):
+                    case is_null($parameter->getType()):
                         $param = array_shift($params);
                         try {
                             $default = $parameter->getDefaultValue();
-                        }catch(\ReflectionException $e) {
+                        } catch (\ReflectionException $e) {
                             $default = null;
                         }
-                        
-                        if(!is_null($parameter->getType())) {
-                                switch($parameter->getType()->getName()) {
-                                    case 'int':
-                                    case 'integer':
-                                        $param = (int) $param ?: (is_numeric($default) ? $default : $default);
-                                        break;
-                                    case 'array':
-                                        $param = (array) $param ?: $default;
-                                        break;
-                                    case 'object':
-                                        $param = (object) $param ?: $default;
-                                        break;
-                                    case 'float':
-                                        $param = (float) $param ?: $default;
-                                        break;
-                                    case 'string':
-                                        $param = (string) $param ?: $default;
-                                        break;
-                                    case 'boolean':
-                                    case 'bool':
-                                            $param = (bool) $param ?: $default;
+
+                        if (!is_null($parameter->getType())) {
+                            switch ($parameter->getType()->getName()) {
+                                case 'int':
+                                case 'integer':
+                                    $param = (int) $param ?: (is_numeric($default) ? $default : $default);
                                     break;
-                                }
+                                case 'array':
+                                    $param = (array) $param ?: $default;
+                                    break;
+                                case 'object':
+                                    $param = (object) $param ?: $default;
+                                    break;
+                                case 'float':
+                                    $param = (float) $param ?: $default;
+                                    break;
+                                case 'string':
+                                    $param = (string) $param ?: $default;
+                                    break;
+                                case 'boolean':
+                                case 'bool':
+                                    $param = (bool) $param ?: $default;
+                                    break;
+                            }
                         }
 
-                        $array = [...$array, $param];
+                        $array = [ ...$array, $param];
                         break;
                     default:
                         throw new AppException("Invalid type of parameter");
@@ -491,7 +508,7 @@ class Container
      * @param string $object
      *
      * @return object
-     * 
+     *
      * @throws AppException
      */
     private function buildStacks($object): object
@@ -519,9 +536,9 @@ class Container
 
     /**
      * In bindings
-     * 
+     *
      * @param string $entity
-     * 
+     *
      * @return bool
      */
     private function bound(string $entity): bool
@@ -531,7 +548,7 @@ class Container
 
     /**
      * Check is down for maintenance
-     * 
+     *
      * @return bool
      */
     public function isDownForMaintenance(): bool
@@ -541,7 +558,7 @@ class Container
 
     /**
      * Should skip global middlewares
-     * 
+     *
      * @return bool
      */
     public function shouldSkipMiddleware(): bool
@@ -551,7 +568,7 @@ class Container
 
     /**
      * Get OS specific
-     * 
+     *
      * @return string
      */
     public function getOS(): string
@@ -570,7 +587,7 @@ class Container
 
     /**
      * Check is windows system
-     * 
+     *
      * @return bool
      */
     public function isWindows(): bool
@@ -580,7 +597,7 @@ class Container
 
     /**
      * Check is windows system
-     * 
+     *
      * @return bool
      */
     public function isMacos(): bool
@@ -590,7 +607,7 @@ class Container
 
     /**
      * Check is windows system
-     * 
+     *
      * @return bool
      */
     public function isLinux(): bool
@@ -600,7 +617,7 @@ class Container
 
     /**
      * Check is windows system
-     * 
+     *
      * @return bool
      */
     public function unknownOs(): bool

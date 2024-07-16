@@ -32,7 +32,7 @@ abstract class AppRepository implements RepositoryInterface
      * 
      * @return bool
      */
-    final private function isConnected(): bool
+    private function isConnected(): bool
     {
         return app('connection')->isConnected();
     }
