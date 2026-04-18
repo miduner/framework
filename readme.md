@@ -1,125 +1,111 @@
-# Please read me mom-facker !!!
+# Miduner Framework
 
-This shit is implemented `static typing` with type-hint and arrow function from `PHP 7.4` 
+Miduner is a PHP web application framework designed to provide expressive syntax and practical tooling for building modern applications.  
+The framework leverages PHP 7.4+ features such as type hints, typed properties, and arrow functions.
+
+## Requirements
+
+- PHP `>= 7.4.10`
+- Composer
 
 ## Installation
 
-```bash
-   composer create-project danganh97/miduner:dev-master your-project-folder
-```
-
-## About Miduner Framework
-
-Miduner Framework is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Miduner Framework attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
-
-Miduner Framework is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
-
-## Learning Miduner Framework
-
-Miduner Framework has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Miduner Framework documentation](https://miduner.com/docs) is building.
-
-## Contributing
-
-Thank you for considering contributing to the Miduner Framework !
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Miduner, please send an e-mail to [Dang Anh](https://facebook.com/underspected) from danganh.dev@gmail.com. All security vulnerabilities will be promptly addressed.
-
-## Some features from Miduner Framework
-
-*Require PHP Version >= `7.4.10`*
-
-Let's run `php hustle list` to see all available supported commands. Here is some available feature.
-
-**You're wanna making some things ?**
+Create a new project with Composer:
 
 ```bash
-   php hustle make:command {Command name}
-   php hustle make:controller {Controller name}
-   php hustle make:model {Model name}
-   php hustle make:request {Request name}
-   php hustle make:migration --table={Table name}
+composer create-project danganh97/miduner:dev-master your-project-folder
 ```
 
-**Or just wanna refresh caching ?**
+## Quick Start
+
+From your project directory:
 
 ```bash
-   php hustle config:cache
+cp .env.example .env
+php hustle key:generate
+php hustle config:cache
+php hustle serve
 ```
 
-**Generate application key !**
+Run the server with a custom host and port:
 
 ```bash
-   php hustle key:generate
+php hustle serve --host=192.168.1.1 --port=1997
 ```
 
-or install `Json Web Tokens` for the application ?
+Use `--open` to launch the application in your browser automatically.
+
+## CLI Commands
+
+List all available commands:
 
 ```bash
-   php hustle jwt:install
+php hustle list
 ```
 
->Then remember refresh caching to register new application key !
-
-**Run migration ?** 
-so easy
+### Code Generation
 
 ```bash
-   php hustle migrate
+php hustle make:command {CommandName}
+php hustle make:controller {ControllerName}
+php hustle make:model {ModelName}
+php hustle make:request {RequestName}
+php hustle make:migration --table={TableName}
 ```
-or just rollback all of them
+
+### Application Setup
 
 ```bash
-   php hustle migrate:rollback
+php hustle config:cache
+php hustle key:generate
+php hustle jwt:install
 ```
 
-**Let's run the seeder**
+After generating or updating keys, refresh cached configuration:
 
 ```bash
-   php hustle db:seed
+php hustle config:cache
 ```
 
-**Live run query, why not ?**
+### Database Operations
 
 ```bash
-   php hustle exec:query --query="select * from users"
+php hustle migrate
+php hustle migrate:rollback
+php hustle db:seed
 ```
-You just wanna make a test ? Ok please give --test=true, like:
+
+### Query Execution
 
 ```bash
-   php hustle exec:query --query="select * from users" --test=true
+php hustle exec:query --query="select * from users"
+php hustle exec:query --query="select * from users" --test=true
 ```
 
-**You don't know list of your defined route ?**
-```bash
-   php hustle route:list
-```
-Or view under ```json``` or ```array```
-```bash
-   php hustle route:list --format=json/array
-```
-
-**And of course, you can begin run live code with Miduner**
-*Code with terminal like with a file*
+### Routing and Interactive Tools
 
 ```bash
-   php hustle live:code
+php hustle route:list
+php hustle route:list --format=json
+php hustle route:list --format=array
+php hustle live:code
 ```
 
-Aw shit ! I can't remember all that shit. Give helper
+For command-specific help:
 
-*Don't be worry, we're know that, please choose your command and give argument **--help** to get a cup of coffee*
-
->Here is example: ```php hustle serve --help```
+```bash
+php hustle serve --help
+```
 
 ## Task Scheduling
 
-Just add to your crontab
+Add this entry to your crontab:
 
-`* * * * * cd miduner && php hustle schedule:run >> /dev/null 2>&1`
+```cron
+* * * * * cd miduner && php hustle schedule:run >> /dev/null 2>&1
+```
 
-Example using in `App\Console\Kernel`
+Example schedule configuration in `App\Console\Kernel`:
 
 ```php
 <?php
@@ -133,16 +119,16 @@ use Midun\Console\Scheduling\Schedule;
 class Kernel extends ConsoleKernel
 {
     /**
-     * List of commands
+     * List of commands.
+     *
      * @var array $commands
      */
     protected array $commands = [
-        ExampleCommand::class
+        ExampleCommand::class,
     ];
 
     public function schedule(Schedule $schedule): void
     {
-        // Normal using
         $schedule->command(ExampleCommand::class)->daily();
         $schedule->command(ExampleCommand::class)->weekly();
         $schedule->command(ExampleCommand::class)->monthly();
@@ -150,63 +136,57 @@ class Kernel extends ConsoleKernel
         $schedule->command(ExampleCommand::class)->dailyAt('13:30');
         $schedule->command(ExampleCommand::class)->cron('* * * * *');
 
-        // Run with custom output log and cli
         $schedule->command(ExampleCommand::class)
-               ->everyMinute()
-               ->output(storage_path('logs/schedule.log'))
-               ->cli('/usr/bin/php'); 
+            ->everyMinute()
+            ->output(storage_path('logs/schedule.log'))
+            ->cli('/usr/bin/php');
     }
 }
 ```
 
-## How to start ?
+## Docker Setup
+
+If PHP is not installed locally, you can run Miduner with Docker:
 
 ```bash
-cp .env.example .env
-   php hustle key:generate
-   php hustle config:cache
-   php hustle serve
+docker build ./docker
+docker-compose up -d
 ```
-or run with ip and port custom
+
+Or build and start in one command:
 
 ```bash
-   php hustle serve --host=192.168.1.1 --port=1997
+docker-compose up --build -d
 ```
-*Note: you can using argument --open to open it up on browser*
 
->Now your app is running at [127.0.0.1:8000](127.0.0.1:8000)
+Then add the following entry to your `/etc/hosts` file:
 
-**F*ck i don't install php on my local**
+```text
+127.0.0.1 miduner.local
+```
 
-Okay, got it.
+## Documentation
 
-If the php is not installed on your local. Don't worry just follow my pants
+Documentation is in progress at: [https://miduner.com/docs](https://miduner.com/docs)
+
+## Contributing
+
+Thank you for considering a contribution to Miduner Framework.
+
+To enable development mode:
 
 ```bash
-   docker build ./docker
-   docker-compose up -d
-```
-   or only this shit if you're a lazy guy
-```bash
-   docker-compose up --build -d
+php hustle development:enable
 ```
 
->Now, add **127.0.0.1 &emsp; miduner.local** to your **/etc/hosts**
+## Security
 
-If you have no idea for this step, please google search for setup virtual host.
+If you discover a security vulnerability, please contact:
 
-And still many things can't be write down here. Please leave a message if you want to take this
-
+- **Dang Anh**
+- Email: `danganh.dev@gmail.com`
+- Facebook: [https://facebook.com/underspected](https://facebook.com/underspected)
 
 ## License
 
-The Miduner Framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
-*(Just a kidding)*
-
-So, this is the fake framework, please use or not and don't facking leave a blame
-
-If you wanna become contributor, let's run:
-
-```bash
-   php hustle development:enable
-```
+Miduner Framework is open-source software licensed under the [MIT License](http://opensource.org/licenses/MIT).
